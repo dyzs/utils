@@ -5,6 +5,9 @@ import android.graphics.Paint;
  * Created by maidou on 2016/3/24.
  */
 public class FontMatrixUtils {
+    private FontMatrixUtils() {
+        throw new UnsupportedOperationException("toast util can't be initialized");
+    }
     /**
      * @details 准确的计算画笔绘制文字的Y轴的正确坐标，这个坐标计算的基础为 paint X = 0，y = 0
      * @param paint
