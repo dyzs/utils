@@ -1,4 +1,4 @@
-package com.dyzs.utils;
+package com.dyzs.common;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

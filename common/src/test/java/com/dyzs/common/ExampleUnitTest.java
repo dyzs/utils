@@ -1,4 +1,4 @@
-package com.dyzs.utils;
+package com.dyzs.common;
 
 import org.junit.Test;
 
