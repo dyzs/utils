@@ -8,6 +8,9 @@ import android.widget.Toast;
  * 单例模式的 Toast
  */
 public class ToastUtil {
+	private ToastUtil() {
+		throw new UnsupportedOperationException("toast util can't be initialized");
+	}
 	private static Toast toast;
 	public static void makeText(Context context, String text){
 		if (toast == null) {
