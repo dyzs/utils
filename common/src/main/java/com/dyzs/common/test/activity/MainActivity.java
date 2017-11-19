@@ -1,5 +1,6 @@
 package com.dyzs.common.test.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dyzs.common.R;
+import com.dyzs.common.base.BaseActivity;
+import com.dyzs.common.test.service.CBMonitorService;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -37,11 +40,24 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
+    public void initView() {
+
+
+    }
+
+    @Override
+    public void initData() {
+        Intent intent = new Intent(this, CBMonitorService.class);
+        startService(intent);
     }
 
     @Override
@@ -56,7 +72,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -99,5 +114,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

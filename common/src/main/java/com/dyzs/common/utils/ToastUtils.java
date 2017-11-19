@@ -7,8 +7,8 @@ import android.widget.Toast;
  * Created by maidou on 2015/3/24.
  * 单例模式的 Toast
  */
-public class ToastUtil {
-	private ToastUtil() {
+public class ToastUtils {
+	private ToastUtils() {
 		throw new UnsupportedOperationException("toast util can't be initialized");
 	}
 	private static Toast toast;
