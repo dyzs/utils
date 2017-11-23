@@ -1,14 +1,19 @@
 package com.dyzs.common.test.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Process;
 
+import com.dyzs.common.R;
 import com.dyzs.common.utils.LogUtils;
 
 /**
@@ -62,11 +67,12 @@ public class CBMonitorService extends Service{
                     if (copyText != null) {
                         /* send a notification message */
                         LogUtils.i(TAG, "copied text: " + copyText);
-                        Intent intent = new Intent();
+                        sendThisNotification();
+                        /*Intent intent = new Intent();
                         intent.setAction("com.dyzs.common.action.TEST");
                         intent.setPackage(CBMonitorService.this.getPackageName());
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        startActivity(intent);*/
                     }
                 }
             }
@@ -99,11 +105,35 @@ public class CBMonitorService extends Service{
                 public void run() {
                     /* main UI */
                     System.out.println(TAG + " update ui.....");
+                    i ++;
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.e(TAG, e.getMessage());
         }
+    }
+
+    private void sendThisNotification() {
+        Intent intent = new Intent();
+        intent.setAction("com.dyzs.common.action.TEST");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setPackage(CBMonitorService.this.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(CBMonitorService.this, 0, intent, 0);
+
+        Notification.Builder builder = new Notification.Builder(CBMonitorService.this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+        builder.setContentIntent(pendingIntent);
+        builder.setContentTitle("familiar");
+        builder.setContentText("content text");
+        builder.setWhen(System.currentTimeMillis());
+        builder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+        builder.setAutoCancel(true);
+        Notification notification = builder.build();
+
+        NotificationManager nm = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
+        nm.notify(i, notification);
     }
 }
