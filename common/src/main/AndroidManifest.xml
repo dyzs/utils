@@ -29,6 +29,15 @@
         </activity>
 
         <service android:name=".test.service.CBMonitorService"/>
+
+        <receiver android:name=".test.widget.ClockWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@layout/layout_app_widget_provider" />
+        </receiver>
     </application>
 
 </manifest>

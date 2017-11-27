@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/layout_widget_clock"
+    android:minHeight="200.0dip"
+    android:minWidth="200.0dip"
+    android:updatePeriodMillis="0"
+    android:resizeMode="horizontal|vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:initialKeyguardLayout="@layout/layout_widget_clock"
+    />
+
+    <!--
+        android:previewImage="@drawable/preview"
+        android:initialKeyguardLayout="@layout/example_keyguard"
+        android:initialKeyguardLayout="@layout/example_keyguard"
+     -->
+    <!--
+            minWidth、minHeight:最小的宽高
+            updatePeriodMillis : 更新时间，毫秒值，最小不能小于30分钟,0跟30分钟的效果一模一样
+            previewImage:预览图片
+            initialLayout ： widget布局文件中
+            configure ： 可选属性，创建widget的时候启动的activity
+            resizeMode : 设置widget显示尺寸规则，屏幕横屏和竖屏切换的保存样式风格不变
+            widgetCategory ： widget可以显示什么地方，home_screen ：桌面  ，keyguard:键盘，低版本中没有属性
+            initialKeyguardLayout ： 设置锁屏的时候widget显示的样式
+            Configure ：一般不用
+            previewImage ： 一般也是默认的
+            InitiaKey......：一般也不用
+
+    -->
