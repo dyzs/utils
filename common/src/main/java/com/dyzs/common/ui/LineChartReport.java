@@ -39,11 +39,10 @@ public class LineChartReport extends View {
     private int mScore3rd = 200;
     private int mScoreMin = 0;
 
-    private int monthCount  = 6;
-    private int selectMonth = 6;//选中的月份
-
     private String[] monthText = new String[]{"1月", "2月", "3月", "4月", "5月", "6月"};
-    private int[]    score     = new int[]{0, 663, 300, 150, 850, 520};
+    private int[]    score     = new int[]{0, 663, 300}; //150, 850, 520
+    private int monthCount  = score.length;
+    private int selectMonth = score.length;//选中的月份
 
     private List<Point> scorePoints;
 
@@ -144,11 +143,12 @@ public class LineChartReport extends View {
 
         float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         int   coordinateX;
+        monthCount = score.length;
         mAverageWidth = newWith / monthCount - 1;
         for(int i = 0; i < score.length; i++) {
             Log.v(TAG, "initData: " + score[i]);
             Point point = new Point();
-            coordinateX = (int) (newWith * ((float) (i) / (monthCount - 1)) + (viewWith * mStartX));
+            coordinateX = (int) (newWith * ((float) (i) / (monthText.length - 1)) + (viewWith * mStartX));
             point.x = coordinateX + offsetXCount;
             point.y = (int) (((float) (mScoreMax - score[i]) / (mScoreMax)) * (minScoreYCoordinate - maxScoreYCoordinate) + maxScoreYCoordinate);
             scorePoints.add(point);
@@ -225,14 +225,14 @@ public class LineChartReport extends View {
             Log.v(TAG, "right to left");
 
         }
-        if (offsetXCount > mAverageWidth * tempCount) {
+        /*if (offsetXCount > mAverageWidth * tempCount) {
             selectMonth -= 1;
             tempCount += 1;
         }
         if (offsetXCount < mAverageWidth * tempCount) {
             selectMonth += 1;
             tempCount -= 1;
-        }
+        }*/
         offsetXCount += offsetX;
         invalidate();
         downX = moveX;
@@ -266,7 +266,7 @@ public class LineChartReport extends View {
         float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         float validTouchX[] = new float[monthText.length];
         for(int i = 0; i < monthText.length; i++) {
-            validTouchX[i] = newWith * ((float) (i) / (monthCount - 1)) + (viewWith * mStartX);
+            validTouchX[i] = newWith * ((float) (i) / (monthText.length - 1)) + (viewWith * mStartX);
         }
 
         if(y > monthTouchY) {
@@ -329,8 +329,8 @@ public class LineChartReport extends View {
 
         float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         float coordinateX;//分隔线X坐标
-        for(int i = 0; i < monthCount; i++) {
-            coordinateX = newWith * ((float) (i) / (monthCount - 1)) + (viewWith * mStartX) + offsetXCount;
+        for(int i = 0; i < monthText.length; i++) {
+            coordinateX = newWith * ((float) (i) / (monthText.length - 1)) + (viewWith * mStartX) + offsetXCount;
             canvas.drawLine(coordinateX, viewHeight * mMonthLinePercent, coordinateX, viewHeight * mMonthLinePercent + dipToPx(4), straightPaint);
         }
     }
@@ -389,7 +389,7 @@ public class LineChartReport extends View {
         textPaint.setColor(textNormalColor);
         textSize = (int) textPaint.getTextSize();
         for(int i = 0; i < monthText.length; i++) {
-            coordinateX = newWith * ((float) (i) / (monthCount - 1)) + (viewWith * mStartX);
+            coordinateX = newWith * ((float) (i) / (monthText.length - 1)) + (viewWith * mStartX);
             coordinateX += offsetXCount;
             if(i == selectMonth - 1) {
                 textPaint.setStyle(Paint.Style.STROKE);
