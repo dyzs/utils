@@ -9,15 +9,6 @@
     tools:showIn="@layout/app_bar_main"
     tools:context=".test.activity.MainActivity">
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:timePickerMode="clock"
-        android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-        />
-
     <com.dyzs.common.ui.LineChartReport
         android:id="@+id/lineChartReport"
         android:background="#000000"

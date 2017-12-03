@@ -63,6 +63,7 @@ public class LineChartReport extends View {
     private float mDottedLine4th = 0.88f;
 
     private float mStartX = 0.15f;
+    private float mAverageWidth;
     public LineChartReport(Context context) {
         this(context, null);
     }
@@ -143,7 +144,7 @@ public class LineChartReport extends View {
 
         float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         int   coordinateX;
-
+        mAverageWidth = newWith / monthCount - 1;
         for(int i = 0; i < score.length; i++) {
             Log.v(TAG, "initData: " + score[i]);
             Point point = new Point();
@@ -173,8 +174,7 @@ public class LineChartReport extends View {
         drawMonthLine(canvas);
         drawBrokenLine(canvas);
 
-        reCalcPoint();
-
+        initData();
         drawPoint(canvas);
     }
 
@@ -195,27 +195,7 @@ public class LineChartReport extends View {
                 firstDownY = (int) event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                int moveX = (int) event.getX();
-                int moveY = (int) event.getY();
-                offsetX = moveX - downX;
-                offsetY = moveY - downY;
-                /* 表示当前手指向右边滑动并且超过 100, 同时上下偏移不超过 100 */
-                int absY = Math.abs(downY - firstDownY);
-                /*if (offsetX > 0 && (moveX - firstDownX) > 100 && absY < 100) {
-                    Log.v(TAG, "left to right");
-                    offsetXCount += offsetX;
-                    invalidate();
-                }
-                if (offsetX < 0 && (firstDownX - moveX) > 100 && absY < 100) {
-                    Log.v(TAG, "right to left");
-                    offsetXCount += offsetX;
-                    invalidate();
-                }*/
-                offsetXCount += offsetX;
-                invalidate();
-
-                downX = moveX;
-                downY = moveY;
+                onActionMove(event);
                 break;
             case MotionEvent.ACTION_UP:
                 onActionUpEvent(event);
@@ -226,6 +206,37 @@ public class LineChartReport extends View {
                 break;
         }
         return true;
+    }
+
+    private int tempCount = 1;
+    private int totalMoveXSize;
+    private void onActionMove(MotionEvent event) {
+        int moveX = (int) event.getX();
+        int moveY = (int) event.getY();
+        offsetX = moveX - downX;
+        offsetY = moveY - downY;
+                /* 表示当前手指向右边滑动并且超过 100, 同时上下偏移不超过 100 */
+        int absY = Math.abs(downY - firstDownY);
+        if (offsetX > 0 && (moveX - firstDownX) > 100 && absY < 100) {
+            Log.v(TAG, "left to right");
+
+        }
+        if (offsetX < 0 && (firstDownX - moveX) > 100 && absY < 100) {
+            Log.v(TAG, "right to left");
+
+        }
+        if (offsetXCount > mAverageWidth * tempCount) {
+            selectMonth -= 1;
+            tempCount += 1;
+        }
+        if (offsetXCount < mAverageWidth * tempCount) {
+            selectMonth += 1;
+            tempCount -= 1;
+        }
+        offsetXCount += offsetX;
+        invalidate();
+        downX = moveX;
+        downY = moveY;
     }
 
     private void onActionUpEvent(MotionEvent event) {
@@ -250,12 +261,12 @@ public class LineChartReport extends View {
 
         //月份触摸区域
         //计算每个月份X坐标的中心点
-        float monthTouchY = viewHeight * 0.7f - dipToPx(3);//减去dipToPx(3)增大触摸面积
+        float monthTouchY = viewHeight * mMonthLinePercent - dipToPx(3);//减去dipToPx(3)增大触摸面积
 
-        float newWith = viewWith - (viewWith * 0.15f) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
+        float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         float validTouchX[] = new float[monthText.length];
         for(int i = 0; i < monthText.length; i++) {
-            validTouchX[i] = newWith * ((float) (i) / (monthCount - 1)) + (viewWith * 0.15f);
+            validTouchX[i] = newWith * ((float) (i) / (monthCount - 1)) + (viewWith * mStartX);
         }
 
         if(y > monthTouchY) {
@@ -272,13 +283,6 @@ public class LineChartReport extends View {
         return false;
     }
 
-    protected void reCalcPoint() {
-        if(scorePoints == null) {
-            return;
-        }
-
-    }
-
 
     //绘制折线穿过的点
     protected void drawPoint(Canvas canvas) {
@@ -288,14 +292,14 @@ public class LineChartReport extends View {
         brokenPaint.setStrokeWidth(dipToPx(1));
         int pointX;
         for(int i = 0; i < scorePoints.size(); i++) {
-            pointX = scorePoints.get(i).x + offsetXCount;
+            pointX = scorePoints.get(i).x;
             brokenPaint.setColor(brokenLineColor);
             brokenPaint.setStyle(Paint.Style.STROKE);
             canvas.drawCircle(pointX, scorePoints.get(i).y, dipToPx(3), brokenPaint);
             brokenPaint.setColor(Color.WHITE);
             brokenPaint.setStyle(Paint.Style.FILL);
             if(i == selectMonth - 1) {
-                pointX = scorePoints.get(i).x + offsetXCount;
+                pointX = scorePoints.get(i).x;
                 brokenPaint.setColor(0xffd0f3f2);
                 canvas.drawCircle(pointX, scorePoints.get(i).y, dipToPx(8f), brokenPaint);
                 brokenPaint.setColor(0xff81dddb);
@@ -340,9 +344,9 @@ public class LineChartReport extends View {
             return;
         }
         Log.v(TAG, "drawBrokenLine: " + scorePoints.get(0));
-        brokenPath.moveTo(scorePoints.get(0).x + offsetXCount, scorePoints.get(0).y);
+        brokenPath.moveTo(scorePoints.get(0).x, scorePoints.get(0).y);
         for(int i = 0; i < scorePoints.size(); i++) {
-            brokenPath.lineTo(scorePoints.get(i).x + offsetXCount, scorePoints.get(i).y);
+            brokenPath.lineTo(scorePoints.get(i).x, scorePoints.get(i).y);
         }
         canvas.drawPath(brokenPath, brokenPaint);
 
@@ -386,20 +390,21 @@ public class LineChartReport extends View {
         textSize = (int) textPaint.getTextSize();
         for(int i = 0; i < monthText.length; i++) {
             coordinateX = newWith * ((float) (i) / (monthCount - 1)) + (viewWith * mStartX);
+            coordinateX += offsetXCount;
             if(i == selectMonth - 1) {
                 textPaint.setStyle(Paint.Style.STROKE);
                 textPaint.setColor(brokenLineColor);
                 RectF r2 = new RectF();
-                r2.left = coordinateX - textSize - dipToPx(4) + offsetXCount;
+                r2.left = coordinateX - textSize - dipToPx(4);
                 r2.top = viewHeight * mMonthLinePercent + dipToPx(4) + textSize / 2;
-                r2.right = coordinateX + textSize + dipToPx(4) + offsetXCount;
+                r2.right = coordinateX + textSize + dipToPx(4);
                 r2.bottom = viewHeight * mMonthLinePercent + dipToPx(4) + textSize + dipToPx(8);
                 canvas.drawRoundRect(r2, 10, 10, textPaint);
             }
             //绘制月份
             canvas.drawText(
                     monthText[i],
-                    coordinateX + offsetXCount,
+                    coordinateX,
                     viewHeight * mMonthLinePercent + dipToPx(4) + textSize + dipToPx(5),
                     textPaint);
 
