@@ -15,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.dyzs.common.R;
-import com.dyzs.common.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +39,8 @@ public class LineChartReport extends View {
     private int mScore3rd = 200;
     private int mScoreMin = 0;
 
-    private String[] monthText = new String[]{"1月", "2月", "3月", "4月", "5月", "6月"};
-    private int[]    score     = new int[]{0, 663, 300}; //150, 850, 520
+    private String[] mMonthText = new String[]{"1月", "2月", "3月", "4月", "5月", "6月"};
+    private int[] score = new int[]{0, 600, 300};
     private int monthCount  = score.length;
     private int selectMonth = score.length;//选中的月份
 
@@ -74,32 +73,21 @@ public class LineChartReport extends View {
 
     public LineChartReport(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initConfig(context,attrs);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LineChartReport);
+        mScoreMax = a.getInt(R.styleable.LineChartReport_max_score, mScoreMax);
+        mScoreMin = a.getInt(R.styleable.LineChartReport_min_score, mScoreMin);
+        brokenLineColor = a.getColor(R.styleable.LineChartReport_broken_line_color,brokenLineColor);
+        a.recycle();
+        initConfig();
         init();
     }
 
     /**
      * 初始化布局配置
-     * @param context
-     * @param attrs
      */
-    private void initConfig(Context context, AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LineChartReport);
-
-        mScoreMax = a.getInt(R.styleable.LineChartReport_max_score, mScoreMax);
-        mScoreMin = a.getInt(R.styleable.LineChartReport_min_score, mScoreMin);
-        brokenLineColor = a.getColor(R.styleable.LineChartReport_broken_line_color,brokenLineColor);
-        a.recycle();
-
-        for (int i = 0; i < score.length; i++) {
-            mScoreMax = mScoreMax > score[i] ? mScoreMax : score[i];
-        }
-        mScore2nd = mScoreMax / 3 * 2;
-        mScore3rd = mScoreMax / 3;
-    }
-
-    private void reInitConfig() {
+    private void initConfig() {
         if (score.length == 0) {return;}
+        this.selectMonth = score.length;
         for (int i = 0; i < score.length; i++) {
             mScoreMax = mScoreMax > score[i] ? mScoreMax : score[i];
         }
@@ -158,7 +146,7 @@ public class LineChartReport extends View {
         for(int i = 0; i < score.length; i++) {
             Log.v(TAG, "initData: " + score[i]);
             Point point = new Point();
-            coordinateX = (int) (newWith * ((float) (i) / (monthText.length - 1)) + (viewWith * mStartX));
+            coordinateX = (int) (newWith * ((float) (i) / (mMonthText.length - 1)) + (viewWith * mStartX));
             point.x = coordinateX + offsetXCount;
             point.y = (int) (((float) (mScoreMax - score[i]) / (mScoreMax)) * (minScoreYCoordinate - maxScoreYCoordinate) + maxScoreYCoordinate);
             scorePoints.add(point);
@@ -274,9 +262,9 @@ public class LineChartReport extends View {
         float monthTouchY = viewHeight * mMonthLinePercent - dipToPx(3);//减去dipToPx(3)增大触摸面积
 
         float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
-        float validTouchX[] = new float[monthText.length];
-        for(int i = 0; i < monthText.length; i++) {
-            validTouchX[i] = newWith * ((float) (i) / (monthText.length - 1)) + (viewWith * mStartX);
+        float validTouchX[] = new float[mMonthText.length];
+        for(int i = 0; i < mMonthText.length; i++) {
+            validTouchX[i] = newWith * ((float) (i) / (mMonthText.length - 1)) + (viewWith * mStartX);
         }
 
         if(y > monthTouchY) {
@@ -339,8 +327,8 @@ public class LineChartReport extends View {
 
         float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         float coordinateX;//分隔线X坐标
-        for(int i = 0; i < monthText.length; i++) {
-            coordinateX = newWith * ((float) (i) / (monthText.length - 1)) + (viewWith * mStartX) + offsetXCount;
+        for(int i = 0; i < mMonthText.length; i++) {
+            coordinateX = newWith * ((float) (i) / (mMonthText.length - 1)) + (viewWith * mStartX) + offsetXCount;
             canvas.drawLine(coordinateX, viewHeight * mMonthLinePercent, coordinateX, viewHeight * mMonthLinePercent + dipToPx(4), straightPaint);
         }
     }
@@ -398,8 +386,8 @@ public class LineChartReport extends View {
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(textNormalColor);
         textSize = (int) textPaint.getTextSize();
-        for(int i = 0; i < monthText.length; i++) {
-            coordinateX = newWith * ((float) (i) / (monthText.length - 1)) + (viewWith * mStartX);
+        for(int i = 0; i < mMonthText.length; i++) {
+            coordinateX = newWith * ((float) (i) / (mMonthText.length - 1)) + (viewWith * mStartX);
             coordinateX += offsetXCount;
             if(i == selectMonth - 1) {
                 textPaint.setStyle(Paint.Style.STROKE);
@@ -413,7 +401,7 @@ public class LineChartReport extends View {
             }
             //绘制月份
             canvas.drawText(
-                    monthText[i],
+                    mMonthText[i],
                     coordinateX,
                     viewHeight * mMonthLinePercent + dipToPx(4) + textSize + dipToPx(5),
                     textPaint);
@@ -496,11 +484,10 @@ public class LineChartReport extends View {
 
     public void setScore(int[] score) {
         if (score == null) {
-            LogUtils.e(TAG, "score arr can not be null");
-            return;
+            score = new int[]{0};
         }
         this.score = score;
-        this.selectMonth = score.length;
+        initConfig();
         initData();
     }
 
@@ -511,6 +498,10 @@ public class LineChartReport extends View {
     public void setScoreMin(int mScoreMin)
     {
         this.mScoreMin = mScoreMin;
+    }
+
+    public void setMonthText(String[] mMonthText) {
+        this.mMonthText = mMonthText;
     }
 
     /**
