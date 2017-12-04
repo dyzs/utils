@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.dyzs.common.R;
+import com.dyzs.common.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +91,15 @@ public class LineChartReport extends View {
         brokenLineColor = a.getColor(R.styleable.LineChartReport_broken_line_color,brokenLineColor);
         a.recycle();
 
+        for (int i = 0; i < score.length; i++) {
+            mScoreMax = mScoreMax > score[i] ? mScoreMax : score[i];
+        }
+        mScore2nd = mScoreMax / 3 * 2;
+        mScore3rd = mScoreMax / 3;
+    }
+
+    private void reInitConfig() {
+        if (score.length == 0) {return;}
         for (int i = 0; i < score.length; i++) {
             mScoreMax = mScoreMax > score[i] ? mScoreMax : score[i];
         }
@@ -195,7 +205,7 @@ public class LineChartReport extends View {
                 firstDownY = (int) event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                onActionMove(event);
+                // onActionMove(event);
                 break;
             case MotionEvent.ACTION_UP:
                 onActionUpEvent(event);
@@ -480,14 +490,17 @@ public class LineChartReport extends View {
     }
 
 
-    public int[] getScore()
-    {
+    public int[] getScore() {
         return score;
     }
 
-    public void setScore(int[] score)
-    {
+    public void setScore(int[] score) {
+        if (score == null) {
+            LogUtils.e(TAG, "score arr can not be null");
+            return;
+        }
         this.score = score;
+        this.selectMonth = score.length;
         initData();
     }
 
