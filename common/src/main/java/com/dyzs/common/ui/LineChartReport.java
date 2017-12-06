@@ -8,11 +8,15 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Interpolator;
 
 import com.dyzs.common.R;
 
@@ -25,7 +29,7 @@ import java.util.List;
 
 public class LineChartReport extends View {
     private static final String TAG = LineChartReport.class.getSimpleName();
-    private float viewWith;
+    private int viewWith;
     private float viewHeight;
 
     private float brokenLineWith = 0.5f;
@@ -39,12 +43,16 @@ public class LineChartReport extends View {
     private int mScore3rd = 200;
     private int mScoreMin = 0;
 
-    private String[] mMonthText = new String[]{"1月", "2月", "3月", "4月", "5月", "6月"};
-    private int[] score = new int[]{0, 600, 300};
-    private int monthCount  = score.length;
-    private int selectMonth = score.length;//选中的月份
+    private ArrayList<String> mAllMonth = new ArrayList<>();
+    private ArrayList<String> mMonthText = new ArrayList<>();
+    @Deprecated
+    private ArrayList<Integer> mAllScore = new ArrayList<>();
+    private ArrayList<Integer> mScore = new ArrayList<>();
+    private int monthCount  = 5;
+    private int selectMonth = 0;//选中的月份
 
-    private List<Point> scorePoints;
+    private List<Point> scorePoints;// 总的点数
+    private ArrayList<Point> mDrawPoints;// 需要画的点数
 
     private int textSize = dipToPx(15);
 
@@ -52,6 +60,7 @@ public class LineChartReport extends View {
     private Paint straightPaint;
     private Paint dottedPaint;
     private Paint textPaint;
+    private Paint mCoverPaint;       // cover 左右两边的折线值
 
     private Path brokenPath;
 
@@ -61,8 +70,16 @@ public class LineChartReport extends View {
     private float mDottedLine3rd = 0.66f;
     private float mDottedLine4th = 0.88f;
 
-    private float mStartX = 0.15f;
+    private float mStartX = 0.1f;
+    private float mStartTextX = 0.1f;//mStartX * 4 / 5;
+    private int mStartXWidth = 0;
+    private int mChartWidth = 0;
     private float mAverageWidth;
+    private int mTotalBackoffX = 0;  // score size 大于显示数量 month count 时, 计算后退偏移量
+
+    private Interpolator mInterpolator;
+    private Animation mAnimation;
+    private Context mContext;
     public LineChartReport(Context context) {
         this(context, null);
     }
@@ -78,18 +95,18 @@ public class LineChartReport extends View {
         mScoreMin = a.getInt(R.styleable.LineChartReport_min_score, mScoreMin);
         brokenLineColor = a.getColor(R.styleable.LineChartReport_broken_line_color,brokenLineColor);
         a.recycle();
+        mContext = context;
+        mScore = new ArrayList<>();
+        mDrawPoints = new ArrayList<>();
         initConfig();
         init();
     }
 
-    /**
-     * 初始化布局配置
-     */
     private void initConfig() {
-        if (score.length == 0) {return;}
-        this.selectMonth = score.length;
-        for (int i = 0; i < score.length; i++) {
-            mScoreMax = mScoreMax > score[i] ? mScoreMax : score[i];
+        if (mScore.size() == 0) {return;}
+        selectMonth = mScore.size() - 1;
+        for (int i = 0; i < mScore.size(); i++) {
+            mScoreMax = mScoreMax > mScore.get(i) ? mScoreMax : mScore.get(i);
         }
         mScore2nd = mScoreMax / 3 * 2;
         mScore3rd = mScoreMax / 3;
@@ -125,7 +142,9 @@ public class LineChartReport extends View {
         textPaint.setColor((textNormalColor));
         textPaint.setTextSize(dipToPx(15));
 
-
+        mCoverPaint = new Paint();
+        mCoverPaint.setColor(ContextCompat.getColor(mContext, R.color.blue));
+        mCoverPaint.setAntiAlias(true);
     }
 
     /**
@@ -134,22 +153,46 @@ public class LineChartReport extends View {
      */
     private void initData() {
         scorePoints = new ArrayList<>();
+        mDrawPoints = new ArrayList<>();
         float maxScoreYCoordinate = viewHeight * mDottedLine1st;
         float minScoreYCoordinate = viewHeight * mDottedLine4th;
-
-        Log.v(TAG, "initData: " + maxScoreYCoordinate);
-
-        float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
+        mStartXWidth = (int) (viewWith * mStartX);
+        mChartWidth = viewWith - mStartXWidth * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         int   coordinateX;
-        monthCount = score.length;
-        mAverageWidth = newWith / monthCount - 1;
-        for(int i = 0; i < score.length; i++) {
-            Log.v(TAG, "initData: " + score[i]);
-            Point point = new Point();
-            coordinateX = (int) (newWith * ((float) (i) / (mMonthText.length - 1)) + (viewWith * mStartX));
-            point.x = coordinateX + offsetXCount;
-            point.y = (int) (((float) (mScoreMax - score[i]) / (mScoreMax)) * (minScoreYCoordinate - maxScoreYCoordinate) + maxScoreYCoordinate);
-            scorePoints.add(point);
+        // monthCount = mScore.length;
+        mAverageWidth = mChartWidth / (monthCount - 1);
+        if(mScore.size() > 5) {
+            mTotalBackoffX = (int) (mAverageWidth * (mScore.size() - monthCount));
+            for(int i = 0; i < mScore.size(); i++) {
+                Point point = new Point();
+                coordinateX = (int) (mChartWidth * ((float) (i) / (mMonthText.size() - 1)) + (viewWith * mStartX));
+                point.x = coordinateX + offsetXCount - mTotalBackoffX;
+                point.y = (int) (((float) (mScoreMax - mScore.get(i)) / (mScoreMax)) * (minScoreYCoordinate - maxScoreYCoordinate) + maxScoreYCoordinate);
+                scorePoints.add(point);
+                if (i >= mScore.size() - monthCount) {
+                    mDrawPoints.add(point);
+                }
+            }
+            if (scorePoints.get(0).x > mStartXWidth) {
+                scorePoints.get(0).x = mStartXWidth;
+                isAllowMoveL2R = false;
+                isAllowMoveR2L = true;
+            }
+            if (scorePoints.get(mScore.size() - 1).x < (mChartWidth + mStartXWidth)) {
+                scorePoints.get(mScore.size() - 1).x = (mChartWidth + mStartXWidth);
+                isAllowMoveL2R = true;
+                isAllowMoveR2L = false;
+            }
+        } else {
+            mTotalBackoffX = 0;
+            for(int i = 0; i < mScore.size(); i++) {
+                Point point = new Point();
+                coordinateX = (int) (mChartWidth * ((float) (i) / (mMonthText.size() - 1)) + (viewWith * mStartX));
+                point.x = coordinateX + offsetXCount;
+                point.y = (int) (((float) (mScoreMax - mScore.get(i)) / (mScoreMax)) * (minScoreYCoordinate - maxScoreYCoordinate) + maxScoreYCoordinate);
+                scorePoints.add(point);
+                mDrawPoints.add(point);
+            }
         }
     }
 
@@ -158,6 +201,7 @@ public class LineChartReport extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         viewWith = w;
         viewHeight = h;
+        Log.v(TAG, "on size changed");
         initData();
     }
 
@@ -168,12 +212,61 @@ public class LineChartReport extends View {
         drawDottedLine(canvas, viewWith * mStartX, viewHeight * mDottedLine2nd, viewWith, viewHeight * mDottedLine2nd);
         drawDottedLine(canvas, viewWith * mStartX, viewHeight * mDottedLine3rd, viewWith, viewHeight * mDottedLine3rd);
 
-        drawText(canvas);
+        restoreData();
+
         drawMonthLine(canvas);
         drawBrokenLine(canvas);
 
-        initData();
+        drawFakeCover(canvas);
+
+        drawText(canvas);
+
         drawPoint(canvas);
+
+        // drawRequestPoint(canvas);
+    }
+
+    private void restoreData() {
+        if (mScore == null) {return;}
+        int coordinateX;
+        if(mScore.size() > 5) {
+            mDrawPoints = new ArrayList<>();
+            for(int i = 0; i < mScore.size(); i++) {
+                Point point = scorePoints.get(i);
+                // coordinateX = (int) (mChartWidth * ((float) (i) / (mMonthText.size() - 1)) + (viewWith * mStartX));
+                // point.x = coordinateX + offsetXCount - mTotalBackoffX;
+                point.x += offsetX;
+                if (i + temp >= mScore.size() - monthCount ) {
+                    mDrawPoints.add(point);
+                }
+            }
+            if (scorePoints.get(0).x > mStartXWidth) {
+                // scorePoints.get(0).x = mStartXWidth;
+                /*for(int i = 0; i < mScore.size(); i++) {
+                    Point point = scorePoints.get(i);
+                    point.x = (int) (mStartXWidth + mAverageWidth * i);
+                    if (i >= mScore.size() - monthCount) {
+                        mDrawPoints.add(point);
+                    }
+                }*/
+                isAllowMoveL2R = false;
+                isAllowMoveR2L = true;
+                return;
+            }
+            if (scorePoints.get(mScore.size() - 1).x < (mChartWidth + mStartXWidth)) {
+                // scorePoints.get(mScore.size() - 1).x = (mChartWidth + mStartXWidth);
+                /*for(int i = mScore.size(); i > 0; i--) {
+                    Point point = scorePoints.get(i - 1);
+                    point.x = (int) (mStartXWidth + mChartWidth - mAverageWidth * (mScore.size() - i));
+                    if (i >= mScore.size() - monthCount) {
+                        mDrawPoints.add(point);
+                    }
+                }*/
+                isAllowMoveL2R = true;
+                isAllowMoveR2L = false;
+                return;
+            }
+        }
     }
 
 
@@ -191,11 +284,14 @@ public class LineChartReport extends View {
                 downY = (int) event.getY();
                 firstDownX = (int) event.getX();
                 firstDownY = (int) event.getY();
+                isAllowMoveL2R = true;
+                isAllowMoveR2L = true;
                 break;
             case MotionEvent.ACTION_MOVE:
-                // onActionMove(event);
+                onActionMove(event);
                 break;
             case MotionEvent.ACTION_UP:
+                onActionUpRestore(event);
                 onActionUpEvent(event);
                 this.getParent().requestDisallowInterceptTouchEvent(false);
                 break;
@@ -206,35 +302,74 @@ public class LineChartReport extends View {
         return true;
     }
 
-    private int tempCount = 1;
-    private int totalMoveXSize;
+    private int l2RCount = 1, r2LCount = 1;
+    private boolean isAllowMoveL2R = true, isAllowMoveR2L = true;
+    private boolean isLeft2Right = false;
+    private int temp = 0;
+    // TODO: 2017/12/4 偏移时计算偏移数量
     private void onActionMove(MotionEvent event) {
         int moveX = (int) event.getX();
         int moveY = (int) event.getY();
-        offsetX = moveX - downX;
         offsetY = moveY - downY;
-                /* 表示当前手指向右边滑动并且超过 100, 同时上下偏移不超过 100 */
-        int absY = Math.abs(downY - firstDownY);
-        if (offsetX > 0 && (moveX - firstDownX) > 100 && absY < 100) {
-            Log.v(TAG, "left to right");
-
+        int absY = Math.abs(moveY - firstDownY);
+        int absX = moveX - firstDownX;
+        offsetX = moveX - downX;
+        if (isAllowMoveL2R && absX > 100 && absY < 100) {
+            // Log.v(TAG, "left to right");
+            isLeft2Right = true;
+            // offsetX = moveX - downX;
         }
-        if (offsetX < 0 && (firstDownX - moveX) > 100 && absY < 100) {
-            Log.v(TAG, "right to left");
-
+        if (isAllowMoveR2L && absX < -100 && absY < 100) {
+            // Log.v(TAG, "right to left");
+            isLeft2Right = false;
+            // offsetX = moveX - downX;
         }
-        /*if (offsetXCount > mAverageWidth * tempCount) {
+
+        /*if (isAllowMoveL2R && isLeft2Right && offsetXCount > mAverageWidth * l2RCount) {
+            l2RCount = (int) (offsetXCount / mAverageWidth);
             selectMonth -= 1;
-            tempCount += 1;
+            l2RCount += 1;
         }
-        if (offsetXCount < mAverageWidth * tempCount) {
+        if (isAllowMoveR2L && !isLeft2Right && offsetXCount < -mAverageWidth * r2LCount) {
+            r2LCount = (int) (Math.abs(offsetXCount) / mAverageWidth);
             selectMonth += 1;
-            tempCount -= 1;
+            r2LCount += 1;
         }*/
+
+        temp = (int) (offsetXCount / mAverageWidth);
+
+        Log.v(TAG, "offsetX:.." + offsetX);
+        Log.v(TAG, "offsetXCount:....." + offsetXCount);
         offsetXCount += offsetX;
-        invalidate();
         downX = moveX;
         downY = moveY;
+        invalidate();
+    }
+
+    /**
+     * 重置 offsetXCount 的值，重置为平均值的固定倍数
+     */
+    private void onActionUpRestore(MotionEvent event) {
+        if (isAllowMoveL2R == false && isAllowMoveR2L) {
+            offsetXCount = Math.abs(mTotalBackoffX);
+            invalidate();
+            return;
+        }
+        if (isAllowMoveR2L == false && isAllowMoveL2R) {
+            offsetXCount = 0;
+            invalidate();
+            return;
+        }
+        // temp = (int) (offsetXCount / mAverageWidth);
+        offsetXCount = (int) (mAverageWidth * temp);
+        selectMonth += temp;
+        /*if (selectMonth < 1) {
+            selectMonth = 1;
+        }
+        if (selectMonth >= mScore.size() - 1) {
+            selectMonth = mScore.size() - 1;
+        }*/
+        invalidate();
     }
 
     private void onActionUpEvent(MotionEvent event) {
@@ -257,14 +392,14 @@ public class LineChartReport extends View {
             }
         }
 
-        //月份触摸区域
+        /*//月份触摸区域
         //计算每个月份X坐标的中心点
         float monthTouchY = viewHeight * mMonthLinePercent - dipToPx(3);//减去dipToPx(3)增大触摸面积
 
         float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
-        float validTouchX[] = new float[mMonthText.length];
-        for(int i = 0; i < mMonthText.length; i++) {
-            validTouchX[i] = newWith * ((float) (i) / (mMonthText.length - 1)) + (viewWith * mStartX);
+        float validTouchX[] = new float[mScore.size()];
+        for(int i = 0; i < mScore.size(); i++) {
+            validTouchX[i] = newWith * ((float) (i) / (mMonthText.size() - 1)) + (viewWith * mStartX);
         }
 
         if(y > monthTouchY) {
@@ -276,11 +411,55 @@ public class LineChartReport extends View {
                     return true;
                 }
             }
-        }
+        }*/
 
         return false;
     }
 
+    private void drawFakeCover(Canvas canvas) {
+        Rect rect = new Rect();
+        rect.set(0, 0, mStartXWidth, (int) (viewHeight * mMonthLinePercent));
+        canvas.drawRect(rect, mCoverPaint);
+        rect = new Rect();
+        rect.set((mChartWidth + mStartXWidth), 0, viewWith, (int) (viewHeight * mMonthLinePercent));
+        canvas.drawRect(rect, mCoverPaint);
+    }
+
+    //绘制折线穿过的点
+    protected void drawRequestPoint(Canvas canvas) {
+        if(mDrawPoints == null) {
+            return;
+        }
+        brokenPaint.setStrokeWidth(dipToPx(1));
+        int pointX;
+        for(int i = 0; i < mDrawPoints.size(); i++) {
+            pointX = mDrawPoints.get(i).x;
+            brokenPaint.setColor(brokenLineColor);
+            brokenPaint.setStyle(Paint.Style.STROKE);
+            canvas.drawCircle(pointX, mDrawPoints.get(i).y, dipToPx(3), brokenPaint);
+            brokenPaint.setColor(Color.WHITE);
+            brokenPaint.setStyle(Paint.Style.FILL);
+            if(i == selectMonth - 1) {
+                pointX = mDrawPoints.get(i).x;
+                brokenPaint.setColor(0xffd0f3f2);
+                canvas.drawCircle(pointX, mDrawPoints.get(i).y, dipToPx(8f), brokenPaint);
+                brokenPaint.setColor(0xff81dddb);
+                canvas.drawCircle(pointX, mDrawPoints.get(i).y, dipToPx(5f), brokenPaint);
+
+                //绘制浮动文本背景框
+                drawFloatTextBackground(canvas, pointX, mDrawPoints.get(i).y - dipToPx(8f));
+
+                textPaint.setColor(0xffffffff);
+                //绘制浮动文字
+                canvas.drawText(String.valueOf(mScore.get(i)), pointX, mDrawPoints.get(i).y - dipToPx(5f) - textSize, textPaint);
+            }
+            brokenPaint.setColor(0xffffffff);
+            canvas.drawCircle(pointX, mDrawPoints.get(i).y, dipToPx(1.5f), brokenPaint);
+            brokenPaint.setStyle(Paint.Style.STROKE);
+            brokenPaint.setColor(brokenLineColor);
+            canvas.drawCircle(pointX, mDrawPoints.get(i).y, dipToPx(2.5f), brokenPaint);
+        }
+    }
 
     //绘制折线穿过的点
     protected void drawPoint(Canvas canvas) {
@@ -308,7 +487,7 @@ public class LineChartReport extends View {
 
                 textPaint.setColor(0xffffffff);
                 //绘制浮动文字
-                canvas.drawText(String.valueOf(score[i]), pointX, scorePoints.get(i).y - dipToPx(5f) - textSize, textPaint);
+                canvas.drawText(String.valueOf(mScore.get(i)), pointX, scorePoints.get(i).y - dipToPx(5f) - textSize, textPaint);
             }
             brokenPaint.setColor(0xffffffff);
             canvas.drawCircle(pointX, scorePoints.get(i).y, dipToPx(1.5f), brokenPaint);
@@ -327,8 +506,8 @@ public class LineChartReport extends View {
 
         float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         float coordinateX;//分隔线X坐标
-        for(int i = 0; i < mMonthText.length; i++) {
-            coordinateX = newWith * ((float) (i) / (mMonthText.length - 1)) + (viewWith * mStartX) + offsetXCount;
+        for(int i = 0; i < mMonthText.size(); i++) {
+            coordinateX = newWith * ((float) (i) / (mMonthText.size() - 1)) + (viewWith * mStartX);// + offsetXCount;
             canvas.drawLine(coordinateX, viewHeight * mMonthLinePercent, coordinateX, viewHeight * mMonthLinePercent + dipToPx(4), straightPaint);
         }
     }
@@ -338,10 +517,10 @@ public class LineChartReport extends View {
         brokenPath.reset();
         brokenPaint.setColor(brokenLineColor);
         brokenPaint.setStyle(Paint.Style.STROKE);
-        if(score.length == 0) {
+        if(mScore.size() == 0) {
             return;
         }
-        Log.v(TAG, "drawBrokenLine: " + scorePoints.get(0));
+        // Log.v(TAG, "drawBrokenLine: " + scorePoints.get(0));
         brokenPath.moveTo(scorePoints.get(0).x, scorePoints.get(0).y);
         for(int i = 0; i < scorePoints.size(); i++) {
             brokenPath.lineTo(scorePoints.get(i).x, scorePoints.get(i).y);
@@ -357,38 +536,32 @@ public class LineChartReport extends View {
         textPaint.setTextSize(dipToPx(12));
         textPaint.setColor(textNormalColor);
 
-        canvas.drawText(
+        /*canvas.drawText(
                 String.valueOf(mScoreMax),
-                viewWith * 0.1f - dipToPx(10),
+                viewWith * mStartTextX - dipToPx(10),
                 viewHeight * mDottedLine1st + textSize * 0.25f,
                 textPaint);
         canvas.drawText(
                 String.valueOf(mScore2nd),
-                viewWith * 0.1f - dipToPx(10),
+                viewWith * mStartTextX - dipToPx(10),
                 viewHeight * mDottedLine2nd + textSize * 0.25f,
                 textPaint);
         canvas.drawText(
                 String.valueOf(mScore3rd),
-                viewWith * 0.1f - dipToPx(10),
+                viewWith * mStartTextX - dipToPx(10),
                 viewHeight * mDottedLine3rd + textSize * 0.25f,
-                textPaint);
-        canvas.drawText(
-                String.valueOf(mScoreMin),
-                viewWith * 0.1f - dipToPx(10),
-                viewHeight * mDottedLine3rd + textSize * 0.25f,
-                textPaint);
+                textPaint);*/
 
         textPaint.setColor(0xff7c7c7c);
 
-        float newWith = viewWith - (viewWith * mStartX) * 2;//分隔线距离最左边和最右边的距离是0.15倍的viewWith
         float coordinateX;//分隔线X坐标
         textPaint.setTextSize(dipToPx(12));
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(textNormalColor);
         textSize = (int) textPaint.getTextSize();
-        for(int i = 0; i < mMonthText.length; i++) {
-            coordinateX = newWith * ((float) (i) / (mMonthText.length - 1)) + (viewWith * mStartX);
-            coordinateX += offsetXCount;
+        for(int i = 0; i < mMonthText.size(); i++) {
+            coordinateX = mChartWidth * ((float) (i) / (mMonthText.size() - 1)) + (viewWith * mStartX);
+            coordinateX += offsetXCount - mTotalBackoffX;
             if(i == selectMonth - 1) {
                 textPaint.setStyle(Paint.Style.STROKE);
                 textPaint.setColor(brokenLineColor);
@@ -401,7 +574,7 @@ public class LineChartReport extends View {
             }
             //绘制月份
             canvas.drawText(
-                    mMonthText[i],
+                    mMonthText.get(i),
                     coordinateX,
                     viewHeight * mMonthLinePercent + dipToPx(4) + textSize + dipToPx(5),
                     textPaint);
@@ -477,31 +650,36 @@ public class LineChartReport extends View {
 
     }
 
-
-    public int[] getScore() {
-        return score;
-    }
-
-    public void setScore(int[] score) {
-        if (score == null) {
-            score = new int[]{0};
+    public void setScore(ArrayList<Integer> score) {
+        if (mScore == null) {
+            mScore = new ArrayList<>();
         }
-        this.score = score;
+        this.mScore = score;
         initConfig();
         initData();
+        invalidate();
     }
 
-    public void setScoreMax(int mScoreMax) {
-        this.mScoreMax = mScoreMax;
+    public void setMonthText(ArrayList<String> monthText) {
+        this.mMonthText.clear();
+        this.mMonthText = monthText;
+        this.monthCount = mMonthText.size();
     }
 
-    public void setScoreMin(int mScoreMin)
-    {
-        this.mScoreMin = mScoreMin;
+    public void setAllMonth(ArrayList<String> allMonth) {
+        this.mAllMonth = allMonth;
     }
 
-    public void setMonthText(String[] mMonthText) {
-        this.mMonthText = mMonthText;
+    public void setAllScore(ArrayList<Integer> allScore) {
+        this.mAllScore = allScore;
+        mScore = new ArrayList<>();
+        if (mAllScore != null && mAllScore.size() > 0) {
+            for (int i = 0; i < 5; i ++) {
+                mScore.add(mAllScore.get(mAllScore.size() - 5 + i));
+            }
+        }
+        initConfig();
+        initData();
     }
 
     /**
