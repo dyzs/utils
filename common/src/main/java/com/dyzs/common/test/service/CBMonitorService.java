@@ -5,7 +5,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -43,6 +46,7 @@ public class CBMonitorService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         initClipBoard();
+        initScreenService();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -135,5 +139,11 @@ public class CBMonitorService extends Service{
 
         NotificationManager nm = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         nm.notify(i, notification);
+    }
+
+    private void initScreenService() {
+        Intent intent = new Intent(CBMonitorService.this, ScreenUnLockMonitorService.class);
+        // CBMonitorService.this.bindService(intent, new ScreenUnLockMonitorService.MyConn(), Context.BIND_AUTO_CREATE);
+        CBMonitorService.this.startService(intent);
     }
 }

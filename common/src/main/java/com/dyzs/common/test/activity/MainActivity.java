@@ -9,7 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +18,7 @@ import com.dyzs.common.base.BaseActivity;
 import com.dyzs.common.test.service.CBMonitorService;
 import com.dyzs.common.ui.LineChartReport;
 
+import java.util.ArrayList;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     LineChartReport lcr;
@@ -58,8 +58,20 @@ public class MainActivity extends BaseActivity
 
     private void initLCR() {
         lcr = (LineChartReport) findViewById(R.id.lineChartReport);
-
-        lcr.setScore(null);
+        ArrayList<Integer> allScore = new ArrayList<>();
+        allScore.add(254);
+        allScore.add(100);
+        allScore.add(4000);
+        allScore.add(10);
+        allScore.add(600);
+        allScore.add(901);
+        allScore.add(3789);
+        allScore.add(123);
+        allScore.add(789);
+        allScore.add(789);
+        allScore.add(789);
+        allScore.add(1589);
+        lcr.setScore(allScore);
     }
 
     @Override

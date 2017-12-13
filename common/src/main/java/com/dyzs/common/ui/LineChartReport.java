@@ -103,7 +103,7 @@ public class LineChartReport extends View {
     }
 
     private void initConfig() {
-        if (mScore.size() == 0) {return;}
+        if (mScore == null)return;
         selectMonth = mScore.size() - 1;
         for (int i = 0; i < mScore.size(); i++) {
             mScoreMax = mScoreMax > mScore.get(i) ? mScoreMax : mScore.get(i);
@@ -143,7 +143,7 @@ public class LineChartReport extends View {
         textPaint.setTextSize(dipToPx(15));
 
         mCoverPaint = new Paint();
-        mCoverPaint.setColor(ContextCompat.getColor(mContext, R.color.blue));
+        mCoverPaint.setColor(ContextCompat.getColor(mContext, R.color.green));
         mCoverPaint.setAntiAlias(true);
     }
 

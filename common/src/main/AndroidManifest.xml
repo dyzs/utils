@@ -38,6 +38,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@layout/layout_app_widget_provider" />
         </receiver>
+
+        <service android:name=".test.service.ScreenUnLockMonitorService" />
     </application>
 
 </manifest>
