@@ -21,7 +21,6 @@ import com.dyzs.common.ui.LineChartReport;
 import java.util.ArrayList;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    LineChartReport lcr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,31 +46,12 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        initLCR();
 
     }
 
     @Override
     public void initView() {
 
-    }
-
-    private void initLCR() {
-        lcr = (LineChartReport) findViewById(R.id.lineChartReport);
-        ArrayList<Integer> allScore = new ArrayList<>();
-        allScore.add(254);
-        allScore.add(100);
-        allScore.add(4000);
-        allScore.add(10);
-        allScore.add(600);
-        allScore.add(901);
-        allScore.add(3789);
-        allScore.add(123);
-        allScore.add(789);
-        allScore.add(789);
-        allScore.add(789);
-        allScore.add(1589);
-        lcr.setScore(allScore);
     }
 
     @Override

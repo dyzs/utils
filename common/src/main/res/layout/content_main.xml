@@ -9,12 +9,10 @@
     tools:showIn="@layout/app_bar_main"
     tools:context=".test.activity.MainActivity">
 
-    <com.dyzs.common.ui.LineChartReport
-        android:id="@+id/lineChartReport"
-        android:background="#000000"
+    <com.dyzs.common.ui.MultiPlayerView
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="250dp"
+        android:layout_height="100dp"
+        android:background="@color/blue"
         />
 
 </android.support.constraint.ConstraintLayout>
