@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 
 
@@ -27,6 +28,7 @@ public class MultiPlayerView extends View{
     private ArrayList<ViewItem> mList;
 
     private ArrayList<Point> mListPoints;
+    private ArrayList<Rect> mListRoundRect;
     private Paint mLinePaint;
     private Paint mTextPaint;
     private Paint mRoundRectPaint;
@@ -70,6 +72,7 @@ public class MultiPlayerView extends View{
     private void initialize() {
         mList = new ArrayList<>();
         mListPoints = new ArrayList<>();
+        mListRoundRect = new ArrayList<>();
 
         mLinePaint = new Paint();
         mLinePaint.setAntiAlias(true);
@@ -117,6 +120,9 @@ public class MultiPlayerView extends View{
         // points 点的存在范围应该在 line 中，所以开始结束向内缩小 0.05f
         float totalCalcWidth = lineWidth - startX * 2;
         float aPieceOfTotal = totalCalcWidth / mList.get(mList.size() - 1).getPeople();
+        for (int i = 0; i < mList.get(mList.size() - 1).getPeople(); i++) {
+            canvas.drawCircle(aPieceOfTotal * (i + 1) + startX + startX, startY, 5f, mTextPaint);
+        }
         mListPoints.clear();
         for (int i = 0; i < mList.size(); i ++) {
             Point point = new Point();
@@ -169,6 +175,7 @@ public class MultiPlayerView extends View{
      */
     private void drawPriceAndRect(Canvas canvas, float startX, float startY) {
         if (mListPoints == null || mListPoints.size() <= 0) {return;}
+        mListRoundRect.clear();
         mTextPaint.setTextSize(dp2Px(10));
         float currencySymbolWidth = mTextPaint.measureText("￥");
         mTextPaint.setTextSize(dp2Px(15));
@@ -189,6 +196,7 @@ public class MultiPlayerView extends View{
             int b = (int) (pointPriceY + textHeight * 3 / 2);
             rect.set(l, t, r, b);
             canvas.drawRoundRect(new RectF(rect), dp2Px(5), dp2Px(5), mRoundRectPaint);
+            mListRoundRect.add(rect);
 
             // 绘一个矩形，中心点是 b，然后旋转 90 °
             canvas.save();
@@ -223,6 +231,44 @@ public class MultiPlayerView extends View{
 
             // draw test center point
             canvas.drawPoint(mListPoints.get(i).x, pointPriceY, mTestPoint);
+        }
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // getParent().requestDisallowInterceptTouchEvent(true);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+
+                break;
+            case MotionEvent.ACTION_MOVE:
+
+
+                break;
+            case MotionEvent.ACTION_UP:
+                handleActionUp(event);
+                break;
+            case MotionEvent.ACTION_CANCEL:
+
+                break;
+        }
+        return true;
+    }
+
+    private boolean isMoving = false;
+    private void handleActionUp(MotionEvent event) {
+        if (isMoving == false) {
+            int upx = (int) event.getX();
+            int upy = (int) event.getY();
+            for (int i = 0; i < mListRoundRect.size(); i++) {
+                Rect rect = mListRoundRect.get(i);
+                if (upx > rect.left && upx < rect.right) {
+                    if (upy > rect.top && upy < rect.bottom) {
+                        System.out.println("click item:" + (i + 1));
+                    }
+                }
+            }
         }
     }
 

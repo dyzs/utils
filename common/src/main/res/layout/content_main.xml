@@ -12,7 +12,7 @@
     <com.dyzs.common.ui.MultiPlayerView
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@color/blue"
+        android:background="@drawable/shape_gradient_mask"
         />
 
 </android.support.constraint.ConstraintLayout>
