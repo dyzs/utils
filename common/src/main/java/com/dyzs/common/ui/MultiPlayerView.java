@@ -38,6 +38,10 @@ public class MultiPlayerView extends View{
 
     private float mViewWidth, mViewHeight;
 
+    private float offsetX = 0f, downX;
+
+    private int selection = 0;
+
     public MultiPlayerView(Context context) {
         this(context, null);
     }
@@ -127,6 +131,9 @@ public class MultiPlayerView extends View{
         for (int i = 0; i < mList.size(); i ++) {
             Point point = new Point();
             point.x = (int) (mList.get(i).getPeople() * aPieceOfTotal + startX + startX);
+            if (i == selection) {
+                point.x += offsetX;
+            }
             point.y = (int) startY;
             mListPoints.add(point);
         }
@@ -240,11 +247,10 @@ public class MultiPlayerView extends View{
         // getParent().requestDisallowInterceptTouchEvent(true);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-
+                downX = event.getX();
                 break;
             case MotionEvent.ACTION_MOVE:
-
-
+                handleActionMove(event);
                 break;
             case MotionEvent.ACTION_UP:
                 handleActionUp(event);
@@ -270,6 +276,23 @@ public class MultiPlayerView extends View{
                 }
             }
         }
+    }
+
+    private void handleActionMove(MotionEvent event) {
+            int upx = (int) event.getX();
+            int upy = (int) event.getY();
+            for (int i = 0; i < mListRoundRect.size(); i++) {
+                Rect rect = mListRoundRect.get(i);
+                if (upx > rect.left && upx < rect.right) {
+                    if (upy > rect.top && upy < rect.bottom) {
+                        selection = i;
+                        float moveX = event.getX();
+                        offsetX += moveX - downX;
+                        downX = moveX;
+                        invalidate();
+                    }
+                }
+            }
     }
 
     private float dp2Px(float dp) {
