@@ -37,10 +37,14 @@ public class MultiPlayerView extends View{
     private Paint mTestPoint;
 
     private float mViewWidth, mViewHeight;
+    private float mStartX = 10f;// line start x
+    private float mStartY = 10f;// line start y
+    private int selection = -1;// init selection
+    private float mLineWidth = 100f;// total line width
+    private float mTotalPointsWidth = 90f;// total points width
+    private float mPointSpacingWidth = 10f;// the width between point and point
 
     private float offsetX = 0f, downX;
-
-    private int selection = -1;
 
     public MultiPlayerView(Context context) {
         this(context, null);
@@ -104,64 +108,70 @@ public class MultiPlayerView extends View{
         mTestPoint.setStrokeWidth(4f);
     }
 
+    /**
+     * calc initialize value
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mViewWidth = getMeasuredWidth() * 1.0f;
         mViewHeight = getMeasuredHeight() * 1.0f;
+        mStartX = mViewWidth * 0.05f;
+        mStartY = mViewHeight * 0.6f;
+        mLineWidth = mViewWidth - mStartX * 2;
+        // 计算 points, points 点的存在范围应该在 line 中，所以开始结束向内缩小 0.05f
+        mTotalPointsWidth = mLineWidth - mStartX * 2;
+        mPointSpacingWidth = mTotalPointsWidth / mList.get(mList.size() - 1).getPeople();
+        mLinePaint.setStrokeWidth(mViewHeight * 0.1f);
 
+        // 计算点数据的距离
+        if (mList != null && mList.size() > 0) {
+            mListPoints.clear();
+            Point point;
+            for (int i = 0; i < mList.size(); i ++) {
+                point = new Point();
+                point.x = (int) (mList.get(i).getPeople() * mPointSpacingWidth + mStartX * 2);
+                point.y = (int) mStartY;
+                mListPoints.add(point);
+            }
+        }
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        float startX = mViewWidth * 0.05f;
-        float startY = mViewHeight * 0.6f;
-        drawLine(canvas, startX, startY);
-
-        // 计算 points
-        float lineWidth = mViewWidth - startX * 2;
-        // points 点的存在范围应该在 line 中，所以开始结束向内缩小 0.05f
-        float totalCalcWidth = lineWidth - startX * 2;
-        float aPieceOfTotal = totalCalcWidth / mList.get(mList.size() - 1).getPeople();
-        for (int i = 0; i < mList.get(mList.size() - 1).getPeople(); i++) {
-            canvas.drawCircle(aPieceOfTotal * (i + 1) + startX + startX, startY, 5f, mTextPaint);
-        }
-        mListPoints.clear();
-        for (int i = 0; i < mList.size(); i ++) {
-            Point point = new Point();
-            if (i == selection) {
-                point.x = (int) (mList.get(i).getPeople() * aPieceOfTotal + startX + startX + offsetX);
-            } else {
-                point.x = (int) (mList.get(i).getPeople() * aPieceOfTotal + startX + startX);
+        drawLineAndPoints(canvas);
+        /* calc point include offset */
+        if (mListPoints != null && mListPoints.size() > 0) {
+            for (int i = 0; i < mListPoints.size(); i ++) {
+                if (i == selection) {
+                    mListPoints.get(i).x += offsetX;
+                }
             }
-            point.y = (int) startY;
-            mListPoints.add(point);
         }
-
-        drawPeople(canvas, startX, startY);
-        drawPriceAndRect(canvas, startX, startY);
-
+        drawPeople(canvas);
+        drawPriceAndRect(canvas);
     }
 
     /**
      * 画黄色横线
      * @param canvas
-     * @param startX
-     * @param startY
      */
-    private void drawLine(Canvas canvas, float startX, float startY) {
-        mLinePaint.setStrokeWidth(mViewHeight * 0.1f);
-        canvas.drawLine(startX, startY, mViewWidth - startX, startY, mLinePaint);
+    private void drawLineAndPoints(Canvas canvas) {
+        canvas.drawLine(mStartX, mStartY, mViewWidth - mStartX, mStartY, mLinePaint);
+        if (mList != null && mList.size() > 0) {
+            for (int i = 0; i < mList.get(mList.size() - 1).getPeople(); i++) {
+                canvas.drawCircle(mPointSpacingWidth * (i + 1) + mStartX * 2, mStartY, 5f, mTextPaint);
+            }
+        }
     }
 
     /**
      * 画人数文字
      * @param canvas
-     * @param startX
-     * @param startY
      */
-    private void drawPeople(Canvas canvas, float startX, float startY) {
+    private void drawPeople(Canvas canvas) {
         if (mListPoints == null || mListPoints.size() <= 0) {return;}
         for (int i = 0; i < mListPoints.size(); i ++) {
             String text = mList.get(i).getPeople() + "人";
@@ -178,10 +188,8 @@ public class MultiPlayerView extends View{
     /**
      * todo 计算圆角 rect 画出来
      * @param canvas
-     * @param startX
-     * @param startY
      */
-    private void drawPriceAndRect(Canvas canvas, float startX, float startY) {
+    private void drawPriceAndRect(Canvas canvas) {
         if (mListPoints == null || mListPoints.size() <= 0) {return;}
         mListRoundRect.clear();
         mTextPaint.setTextSize(dp2Px(10));
@@ -189,7 +197,7 @@ public class MultiPlayerView extends View{
         mTextPaint.setTextSize(dp2Px(15));
         String text;
         float textTotalWidth;
-        float pointPriceY = startY / 2;// 中心点为 line 向上的一半
+        float pointPriceY = mStartY / 2;// 中心点为 line 向上的一半
         float textHeight = FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint);
         Rect rect;
         for (int i = 0; i < mListPoints.size(); i ++) {
@@ -270,6 +278,7 @@ public class MultiPlayerView extends View{
 
     private boolean isMoving = false;
     private void handleActionUp(MotionEvent event) {
+        offsetX = 0f;
         if (isMoving == false) {
             int upx = (int) event.getX();
             int upy = (int) event.getY();
@@ -293,7 +302,7 @@ public class MultiPlayerView extends View{
                 if (upy > rect.top && upy < rect.bottom) {
                     selection = i;
                     float moveX = event.getX();
-                    offsetX += moveX - downX;
+                    offsetX = moveX - downX;
                     downX = moveX;
                     invalidate();
                 }
