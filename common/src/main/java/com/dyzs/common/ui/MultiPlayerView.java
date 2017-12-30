@@ -39,6 +39,8 @@ public class MultiPlayerView extends View{
     private float mViewWidth, mViewHeight;
     private float mStartX = 10f;// line start x
     private float mStartY = 10f;// line start y
+    private float mPointStartX = 11f;// point start X
+    private float mPointEndX = 99f;// point end x
     private int selection = -1;// init selection
     private float mLineWidth = 100f;// total line width
     private float mTotalPointsWidth = 90f;// total points width
@@ -116,13 +118,18 @@ public class MultiPlayerView extends View{
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mViewWidth = getMeasuredWidth() * 1.0f;
         mViewHeight = getMeasuredHeight() * 1.0f;
+
+        mLinePaint.setStrokeWidth(mViewHeight * 0.1f);
+
         mStartX = mViewWidth * 0.05f;
         mStartY = mViewHeight * 0.6f;
         mLineWidth = mViewWidth - mStartX * 2;
         // 计算 points, points 点的存在范围应该在 line 中，所以开始结束向内缩小 0.05f
         mTotalPointsWidth = mLineWidth - mStartX * 2;
         mPointSpacingWidth = mTotalPointsWidth / mList.get(mList.size() - 1).getPeople();
-        mLinePaint.setStrokeWidth(mViewHeight * 0.1f);
+
+        mPointStartX = mPointSpacingWidth * 1 + mStartX * 2;
+        mPointEndX = mTotalPointsWidth;
 
         // 计算点数据的距离
         if (mList != null && mList.size() > 0) {
@@ -273,7 +280,18 @@ public class MultiPlayerView extends View{
     }
 
     private void handleActionDown(MotionEvent event) {
-
+        selection = -1;
+        int dX = (int) event.getX();
+        int dY = (int) event.getY();
+        for (int i = 0; i < mListRoundRect.size(); i++) {
+            Rect rect = mListRoundRect.get(i);
+            if (dX > rect.left && dX < rect.right) {
+                if (dY > rect.top && dY < rect.bottom) {
+                    selection = i;
+                    break;
+                }
+            }
+        }
     }
 
     private boolean isMoving = false;
@@ -294,20 +312,10 @@ public class MultiPlayerView extends View{
     }
 
     private void handleActionMove(MotionEvent event) {
-        int upx = (int) event.getX();
-        int upy = (int) event.getY();
-        for (int i = 0; i < mListRoundRect.size(); i++) {
-            Rect rect = mListRoundRect.get(i);
-            if (upx > rect.left && upx < rect.right) {
-                if (upy > rect.top && upy < rect.bottom) {
-                    selection = i;
-                    float moveX = event.getX();
-                    offsetX = moveX - downX;
-                    downX = moveX;
-                    invalidate();
-                }
-            }
-        }
+        float moveX = event.getX();
+        offsetX = moveX - downX;
+        downX = moveX;
+        invalidate();
     }
 
     private float dp2Px(float dp) {
