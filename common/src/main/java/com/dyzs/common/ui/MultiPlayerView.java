@@ -17,6 +17,7 @@ import android.view.View;
 
 
 import com.dyzs.common.utils.FontMatrixUtils;
+import com.dyzs.common.utils.ToastUtils;
 
 import java.util.ArrayList;
 
@@ -193,7 +194,6 @@ public class MultiPlayerView extends View{
     }
 
     /**
-     * todo 计算圆角 rect 画出来
      * @param canvas
      */
     private void drawPriceAndRect(Canvas canvas) {
@@ -275,6 +275,9 @@ public class MultiPlayerView extends View{
             case MotionEvent.ACTION_CANCEL:
 
                 break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+
+                break;
         }
         return true;
     }
@@ -288,7 +291,6 @@ public class MultiPlayerView extends View{
             if (dX > rect.left && dX < rect.right) {
                 if (dY > rect.top && dY < rect.bottom) {
                     selection = i;
-                    break;
                 }
             }
         }
@@ -304,7 +306,7 @@ public class MultiPlayerView extends View{
                 Rect rect = mListRoundRect.get(i);
                 if (upx > rect.left && upx < rect.right) {
                     if (upy > rect.top && upy < rect.bottom) {
-                        System.out.println("click item:" + (i + 1));
+                        ToastUtils.makeText(mCtx, "click item:" + (i + 1));
                     }
                 }
             }
