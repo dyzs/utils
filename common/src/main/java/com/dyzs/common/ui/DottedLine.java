@@ -1,6 +1,7 @@
 package com.dyzs.common.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
@@ -13,7 +14,8 @@ import android.view.View;
 import com.dyzs.common.R;
 
 /**
- * Created by maidou on 2018/1/2.
+ * @author dyzs
+ * Created on 2018/1/2.
  */
 
 public class DottedLine extends View{
@@ -22,7 +24,9 @@ public class DottedLine extends View{
     private float mDashWidth = 10f;
     private int mType = 0;// 0 vertical, 1 horizontal
     private Paint mPaint;
+    private Path mPath;
     private float mWidth, mHeight;
+    private int mDotColor = R.color.colorPrimary;
     public DottedLine(Context context) {
         this(context, null);
     }
@@ -34,16 +38,20 @@ public class DottedLine extends View{
     public DottedLine(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mCtx = context;
-        initialized(attrs, defStyleAttr);
+        initialized(context, attrs, defStyleAttr);
     }
 
-    private void initialized(AttributeSet attrs, int defStyleAttr) {
+    private void initialized(Context context, AttributeSet attrs, int defStyleAttr) {
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.DottedLine);
+        mType = ta.getInteger(R.styleable.DottedLine_lineType, 0);
+        mDotColor = ta.getColor(R.styleable.DottedLine_lineDotColor, ContextCompat.getColor(mCtx, R.color.oxygen_grey));
+        ta.recycle();
+
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(5);
-        mPaint.setColor(ContextCompat.getColor(mCtx, R.color.oxygen_grey));
-
+        mPaint.setColor(mDotColor);
         PathEffect effects = new DashPathEffect(new float[] { 0, 3, 10, 0}, 1);
         mPaint.setPathEffect(effects);
     }
@@ -59,30 +67,25 @@ public class DottedLine extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        drawDash(canvas);
+    }
+
+    private void drawDash(Canvas canvas) {
+        mPath = new Path();
         switch (mType) {
             case 0:
-                drawDashVertical(canvas);
+                mPaint.setStrokeWidth(mWidth);
+                mPath.moveTo(mWidth / 2, 0);
+                mPath.lineTo(mWidth / 2, mHeight);
                 break;
             case 1:
-                drawDashHorizontal(canvas);
+                mPaint.setStrokeWidth(mHeight);
+                mPath = new Path();
+                mPath.moveTo(0, mHeight / 2);
+                mPath.lineTo(mWidth, mHeight / 2);
                 break;
         }
-    }
-
-    private void drawDashVertical(Canvas canvas) {
-        mPaint.setStrokeWidth(mWidth);
-        Path path = new Path();
-        path.moveTo(mWidth / 2, 0);
-        path.lineTo(mWidth / 2, mHeight);
-        canvas.drawPath(path, mPaint);
-    }
-
-    private void drawDashHorizontal(Canvas canvas) {
-        mPaint.setStrokeWidth(mHeight);
-        Path path = new Path();
-        path.moveTo(0, mHeight / 2);
-        path.lineTo(mWidth, mHeight / 2);
-        canvas.drawPath(path, mPaint);
+        canvas.drawPath(mPath, mPaint);
     }
 
     public void setType(int type) {

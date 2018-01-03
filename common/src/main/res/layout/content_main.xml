@@ -9,10 +9,23 @@
     tools:showIn="@layout/app_bar_main"
     tools:context=".test.activity.MainActivity">
 
-    <com.dyzs.common.ui.MultiPlayerView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@drawable/shape_gradient_mask"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <com.dyzs.common.ui.MultiPlayerView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/shape_gradient_mask"
+            />
+
+        <com.dyzs.common.ui.DottedLine
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:lineType="1"
+            />
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

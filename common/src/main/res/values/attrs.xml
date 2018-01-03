@@ -5,4 +5,9 @@
         <attr name="min_score" format="integer"/>
         <attr name="broken_line_color" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="DottedLine">
+        <attr name="lineType" format="integer"/>
+        <attr name="lineDotColor" format="color"/>
+    </declare-styleable>
 </resources>
