@@ -22,6 +22,7 @@ public class DottedLine extends View{
     private float mDashWidth = 10f;
     private int mType = 0;// 0 vertical, 1 horizontal
     private Paint mPaint;
+    private float mWidth, mHeight;
     public DottedLine(Context context) {
         this(context, null);
     }
@@ -51,6 +52,8 @@ public class DottedLine extends View{
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mWidth = getMeasuredWidth();
+        mHeight = getMeasuredHeight();
     }
 
     @Override
@@ -67,18 +70,23 @@ public class DottedLine extends View{
     }
 
     private void drawDashVertical(Canvas canvas) {
-        mPaint.setStrokeWidth(getMeasuredWidth());
+        mPaint.setStrokeWidth(mWidth);
         Path path = new Path();
-        path.moveTo(getMeasuredWidth() / 2, 0);
-        path.lineTo(getMeasuredWidth() / 2, getMeasuredHeight());
+        path.moveTo(mWidth / 2, 0);
+        path.lineTo(mWidth / 2, mHeight);
         canvas.drawPath(path, mPaint);
     }
 
     private void drawDashHorizontal(Canvas canvas) {
-        mPaint.setStrokeWidth(getMeasuredHeight());
+        mPaint.setStrokeWidth(mHeight);
         Path path = new Path();
-        path.moveTo(0, getMeasuredHeight() / 2);
-        path.lineTo(getMeasuredWidth(), getMeasuredHeight() / 2);
+        path.moveTo(0, mHeight / 2);
+        path.lineTo(mWidth, mHeight / 2);
         canvas.drawPath(path, mPaint);
+    }
+
+    public void setType(int type) {
+        this.mType = type;
+        invalidate();
     }
 }
