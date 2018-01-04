@@ -42,6 +42,7 @@
                 android:layout_height="100dp"
                 app:lineType="2"
                 />
+            
         </RelativeLayout>
     </LinearLayout>
 
