@@ -19,13 +19,41 @@
             android:layout_height="100dp"
             android:background="@drawable/shape_gradient_mask"
             />
-
-        <com.dyzs.common.ui.DottedLine
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            app:lineType="1"
-            />
-    </LinearLayout>
+            >
+            <com.dyzs.common.ui.DottedLine
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:lineType="0"
+                app:lineDotColor="@color/green"
+                app:lineDashGap="3dp"
+                app:lineDashWidth="6dp"
+                />
+            <!--<com.dyzs.common.ui.DottedLine
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:lineType="1"
+                app:lineDotColor="@color/red"
+                />-->
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            >
+            <com.dyzs.common.ui.DottedLine
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:lineType="2"
+                />
+            <!--<com.dyzs.common.ui.DottedLine
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:lineType="3"
+                />-->
+        </RelativeLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

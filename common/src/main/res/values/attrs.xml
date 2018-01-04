@@ -9,5 +9,7 @@
     <declare-styleable name="DottedLine">
         <attr name="lineType" format="integer"/>
         <attr name="lineDotColor" format="color"/>
+        <attr name="lineDashGap" format="dimension"/>
+        <attr name="lineDashWidth" format="dimension"/>
     </declare-styleable>
 </resources>
