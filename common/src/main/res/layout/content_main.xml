@@ -31,12 +31,6 @@
                 app:lineDashGap="3dp"
                 app:lineDashWidth="6dp"
                 />
-            <!--<com.dyzs.common.ui.DottedLine
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                app:lineType="1"
-                app:lineDotColor="@color/red"
-                />-->
         </RelativeLayout>
 
         <RelativeLayout
@@ -48,11 +42,6 @@
                 android:layout_height="100dp"
                 app:lineType="2"
                 />
-            <!--<com.dyzs.common.ui.DottedLine
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                app:lineType="3"
-                />-->
         </RelativeLayout>
     </LinearLayout>
 
