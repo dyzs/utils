@@ -56,6 +56,7 @@ public class DottedLine extends View{
         mPaint.setColor(mDotColor);
         PathEffect effects = new DashPathEffect(new float[] { 0, mDashGap, mDashWidth, 0}, 1);
         mPaint.setPathEffect(effects);
+        mPath = new Path();
     }
 
     @Override
@@ -73,7 +74,7 @@ public class DottedLine extends View{
     }
 
     private void drawDash(Canvas canvas) {
-        mPath = new Path();
+        mPath.reset();
         switch (mType) {
             case 0:
                 mPaint.setStrokeWidth(mWidth);
@@ -82,19 +83,16 @@ public class DottedLine extends View{
                 break;
             case 1:
                 mPaint.setStrokeWidth(mHeight);
-                mPath = new Path();
                 mPath.moveTo(0, mHeight / 2);
                 mPath.lineTo(mWidth, mHeight / 2);
                 break;
             case 2:
                 mPaint.setStrokeWidth(Float.parseFloat(Math.sqrt(mWidth * mWidth + mHeight * mHeight) + ""));
-                mPath = new Path();
                 mPath.moveTo(0, 0);
                 mPath.lineTo(mWidth, mHeight);
                 break;
             case 3:
                 mPaint.setStrokeWidth(Float.parseFloat(Math.sqrt(mWidth * mWidth + mHeight * mHeight) + ""));
-                mPath = new Path();
                 mPath.moveTo(0, mHeight);
                 mPath.lineTo(mWidth, 0);
                 break;
