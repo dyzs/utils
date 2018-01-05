@@ -44,6 +44,18 @@
                 />
             
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            >
+            <com.dyzs.common.ui.EclipseLoading
+                android:id="@+id/eclipse_loading"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                />
+
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

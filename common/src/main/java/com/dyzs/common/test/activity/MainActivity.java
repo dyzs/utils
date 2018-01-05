@@ -16,11 +16,11 @@ import android.view.MenuItem;
 import com.dyzs.common.R;
 import com.dyzs.common.base.BaseActivity;
 import com.dyzs.common.test.service.CBMonitorService;
-import com.dyzs.common.ui.LineChartReport;
+import com.dyzs.common.ui.EclipseLoading;
 
-import java.util.ArrayList;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public EclipseLoading eclipse_loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +46,19 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        initView();
     }
 
     @Override
     public void initView() {
-
+        eclipse_loading = (EclipseLoading) findViewById(R.id.eclipse_loading);
+        eclipse_loading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eclipse_loading.setProgress(90);
+                eclipse_loading.drawAnimation();
+            }
+        });
     }
 
     @Override
