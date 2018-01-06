@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity
         eclipse_loading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eclipse_loading.setProgress(90);
+                eclipse_loading.setProgress(100);
                 eclipse_loading.drawAnimation();
             }
         });

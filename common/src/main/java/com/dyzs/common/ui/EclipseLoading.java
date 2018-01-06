@@ -1,16 +1,16 @@
 package com.dyzs.common.ui;
 
 import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 
 /**
  * @author dyzs
@@ -20,10 +20,18 @@ import android.view.animation.DecelerateInterpolator;
 public class EclipseLoading extends View{
     private Paint mPaint;
     private float mWidth, mHeight;
-    private float mArcStartAngle = -90;
-    private float mArcSweepAngle = 0f;
-    private int mProgress = 27;
+    private float l, t, r, b;
+    private float mCirclePadding = 10f;
+    private float mCircleRadius = 10f;
+    private float[] mCirclePoint = new float[2];
+    private float mStartAngle = -90;
+    private float mSweepAngle = 0f;
+    private int mProgress = 0;
 
+    private STEP mStep = STEP.SF;
+    private ValueAnimator mAnimator;
+    private Path mPath;
+    private RectF mRectF;
     public EclipseLoading(Context context) {
         this(context, null);
     }
@@ -37,32 +45,93 @@ public class EclipseLoading extends View{
         init(context, attrs, defStyleAttr);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mWidth = getMeasuredWidth();
-        mHeight = getMeasuredHeight();
-    }
-
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         mPaint = new Paint();
         mPaint.setStrokeWidth(5f);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.DKGRAY);
-
+        mPath = new Path();
+        mStep = STEP.SF;
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mWidth = getMeasuredWidth();
+        mHeight = getMeasuredHeight();
+        mCirclePoint[0] = mWidth / 2;
+        mCirclePoint[1] = mHeight / 2;
+        if (mWidth >= mHeight) {
+            mCirclePadding = mHeight * 0.05f;
+            mCircleRadius = mHeight / 2 - mCirclePadding;
+        } else {
+            mCirclePadding = mWidth * 0.05f;
+            mCircleRadius = mWidth / 2 - mCirclePadding;
+        }
+        mCircleRadius = mHeight / 2 - 10f;
+        l = mWidth / 2 - mCircleRadius;
+        t = mHeight / 2 - mCircleRadius;
+        r = mWidth / 2 + mCircleRadius;
+        b = mHeight / 2 + mCircleRadius;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        // canvas.drawCircle(mWidth/2, mHeight/2, 20f, mPaint);
-        /*Path path = new Path();
-        path.addCircle(mWidth/2, mHeight/2, mHeight/2 - 10f, Path.Direction.CW);
-        canvas.drawPath(path, mPaint);*/
-
-        RectF rectF = new RectF(50, 50, 200, 200);
-        mArcSweepAngle = mProgress * 360f / 100;
-        canvas.drawArc(rectF, mArcStartAngle, mArcSweepAngle, true, mPaint);
+        /*mRectF = new RectF(50, 50, 200, 200);
+        canvas.drawArc(mRectF, mStartAngle, mSweepAngle, true, mPaint);*/
+        // mPath.addCircle(mWidth/2, mHeight/2, mHeight/2 - 10f, Path.Direction.CW);
+        // mRectF = new RectF(mWidth/2 - mHeight/2 + 50f, 50f, mWidth/2 + mHeight/2-50f, mHeight-50f);
+        // mPath.addRoundRect(mRectF, mSweepAngle, mHeight/2, Path.Direction.CW);
+        mPath.reset();
+        mRectF = new RectF(l, t, r, b);
+        if (mStep == STEP.SF) {
+            mSweepAngle = mProgress * 360f / 100;
+            mPaint.setColor(Color.DKGRAY);
+            mPaint.setStyle(Paint.Style.STROKE);
+            mPath.addArc(mRectF, mStartAngle, -mSweepAngle);
+            canvas.drawPath(mPath, mPaint);
+        }
+        if (mStep == STEP.SS) {
+            mSweepAngle = (100 - mProgress) * 360f / 100;
+            mPaint.setColor(Color.DKGRAY);
+            mPaint.setStyle(Paint.Style.STROKE);
+            mPath.addArc(mRectF, mStartAngle, mSweepAngle);
+            canvas.drawPath(mPath, mPaint);
+        }
+        if (mStep == STEP.ST) {
+            mPaint.setColor(Color.YELLOW);
+            mPaint.setStyle(Paint.Style.FILL);
+            canvas.drawCircle(
+                    mCirclePoint[0],
+                    mCirclePoint[1],
+                    mCircleRadius,
+                    mPaint);
+            mPaint.setColor(Color.WHITE);
+            float offset = mCircleRadius * 2 / 100 * mProgress;
+            canvas.drawCircle(
+                    mCirclePoint[0] - offset,
+                    mCirclePoint[1],
+                    mCircleRadius,
+                    mPaint);
+        }
+        if (mStep == STEP.SFOUR) {
+            mPaint.setColor(Color.YELLOW);
+            mPaint.setStyle(Paint.Style.FILL);
+            canvas.drawCircle(
+                    mCirclePoint[0],
+                    mCirclePoint[1],
+                    mCircleRadius,
+                    mPaint);
+            mPaint.setColor(Color.WHITE);
+            float offset = mCircleRadius * 2 / 100 * mProgress;
+            canvas.drawCircle(
+                    mCirclePoint[0] + mCircleRadius * 2 - offset,
+                    mCirclePoint[1],
+                    mCircleRadius,
+                    mPaint);
+        }
     }
 
     public void setProgress(int progress) {
@@ -81,10 +150,12 @@ public class EclipseLoading extends View{
     }
 
     public void drawAnimation() {
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, getProgress());
-        valueAnimator.setDuration(1000);
-        valueAnimator.setInterpolator(new DecelerateInterpolator());
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        mAnimator = ValueAnimator.ofFloat(0, getProgress());
+        mAnimator.setDuration(1000);
+        mAnimator.setInterpolator(new LinearInterpolator());
+        // valueAnimator.setRepeatCount(-1);
+        // valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
@@ -92,7 +163,7 @@ public class EclipseLoading extends View{
                 postInvalidate();
             }
         });
-        valueAnimator.addListener(new Animator.AnimatorListener() {
+        mAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -100,7 +171,16 @@ public class EclipseLoading extends View{
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
+                if (mStep == STEP.SF) {
+                    mStep = STEP.SS;
+                } else if (mStep == STEP.SS) {
+                    mStep = STEP.ST;
+                } else if (mStep == STEP.ST) {
+                    mStep = STEP.SFOUR;
+                } else if (mStep == STEP.SFOUR) {
+                    mStep = STEP.SF;
+                }
+                drawAnimation();
             }
 
             @Override
@@ -113,6 +193,10 @@ public class EclipseLoading extends View{
 
             }
         });
-        valueAnimator.start();
+        mAnimator.start();
+    }
+
+    private enum STEP{
+        SF, SS, ST, SFOUR
     }
 }
