@@ -26,12 +26,13 @@ public class EclipseLoading extends View{
     private float[] mCirclePoint = new float[2];
     private float mStartAngle = -90;
     private float mSweepAngle = 0f;
-    private int mProgress = 0;
+    private int mProgress = 100;
 
-    private STEP mStep = STEP.SF;
+    private STEP mStep = STEP.STEP_1ST;
     private ValueAnimator mAnimator;
     private Path mPath;
     private RectF mRectF;
+    private boolean interrupt = false;
     public EclipseLoading(Context context) {
         this(context, null);
     }
@@ -43,6 +44,7 @@ public class EclipseLoading extends View{
     public EclipseLoading(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs, defStyleAttr);
+        startAnimation();
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -52,7 +54,7 @@ public class EclipseLoading extends View{
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.DKGRAY);
         mPath = new Path();
-        mStep = STEP.SF;
+        mStep = STEP.STEP_1ST;
     }
 
     @Override
@@ -69,7 +71,6 @@ public class EclipseLoading extends View{
             mCirclePadding = mWidth * 0.05f;
             mCircleRadius = mWidth / 2 - mCirclePadding;
         }
-        mCircleRadius = mHeight / 2 - 10f;
         l = mWidth / 2 - mCircleRadius;
         t = mHeight / 2 - mCircleRadius;
         r = mWidth / 2 + mCircleRadius;
@@ -86,21 +87,21 @@ public class EclipseLoading extends View{
         // mPath.addRoundRect(mRectF, mSweepAngle, mHeight/2, Path.Direction.CW);
         mPath.reset();
         mRectF = new RectF(l, t, r, b);
-        if (mStep == STEP.SF) {
+        if (mStep == STEP.STEP_1ST) {
             mSweepAngle = mProgress * 360f / 100;
             mPaint.setColor(Color.DKGRAY);
             mPaint.setStyle(Paint.Style.STROKE);
             mPath.addArc(mRectF, mStartAngle, -mSweepAngle);
             canvas.drawPath(mPath, mPaint);
         }
-        if (mStep == STEP.SS) {
+        if (mStep == STEP.STEP_2ND) {
             mSweepAngle = (100 - mProgress) * 360f / 100;
             mPaint.setColor(Color.DKGRAY);
             mPaint.setStyle(Paint.Style.STROKE);
             mPath.addArc(mRectF, mStartAngle, mSweepAngle);
             canvas.drawPath(mPath, mPaint);
         }
-        if (mStep == STEP.ST) {
+        if (mStep == STEP.STEP_3RD) {
             mPaint.setColor(Color.YELLOW);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(
@@ -116,7 +117,7 @@ public class EclipseLoading extends View{
                     mCircleRadius,
                     mPaint);
         }
-        if (mStep == STEP.SFOUR) {
+        if (mStep == STEP.STEP_4TH) {
             mPaint.setColor(Color.YELLOW);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(
@@ -149,12 +150,13 @@ public class EclipseLoading extends View{
         return this.mProgress;
     }
 
-    public void drawAnimation() {
+    public void startAnimation() {
+        if (interrupt)return;
         mAnimator = ValueAnimator.ofFloat(0, getProgress());
         mAnimator.setDuration(1000);
         mAnimator.setInterpolator(new LinearInterpolator());
-        // valueAnimator.setRepeatCount(-1);
-        // valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        // mAnimator.setRepeatCount(-1);
+        // mAnimator.setRepeatMode(ValueAnimator.REVERSE);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -171,16 +173,16 @@ public class EclipseLoading extends View{
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (mStep == STEP.SF) {
-                    mStep = STEP.SS;
-                } else if (mStep == STEP.SS) {
-                    mStep = STEP.ST;
-                } else if (mStep == STEP.ST) {
-                    mStep = STEP.SFOUR;
-                } else if (mStep == STEP.SFOUR) {
-                    mStep = STEP.SF;
+                if (mStep == STEP.STEP_1ST) {
+                    mStep = STEP.STEP_2ND;
+                } else if (mStep == STEP.STEP_2ND) {
+                    mStep = STEP.STEP_3RD;
+                } else if (mStep == STEP.STEP_3RD) {
+                    mStep = STEP.STEP_4TH;
+                } else if (mStep == STEP.STEP_4TH) {
+                    mStep = STEP.STEP_1ST;
                 }
-                drawAnimation();
+                startAnimation();
             }
 
             @Override
@@ -196,7 +198,11 @@ public class EclipseLoading extends View{
         mAnimator.start();
     }
 
+    public void setInterruptAnimation(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+
     private enum STEP{
-        SF, SS, ST, SFOUR
+        STEP_1ST, STEP_2ND, STEP_3RD, STEP_4TH
     }
 }
