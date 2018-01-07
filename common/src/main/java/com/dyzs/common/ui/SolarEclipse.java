@@ -25,14 +25,14 @@ import com.dyzs.common.R;
  * 18.01.07 13.18 : add color sunrise and sunset
  */
 
-public class EclipseLoading extends View{
+public class SolarEclipse extends View{
     private Context mCtx;
     private Paint mPaint;
     private float mWidth, mHeight;
     private float l, t, r, b;
     private float mCirclePadding = 10f;
     private float mCircleRadius = 10f;
-    private float[] mCirclePoint = new float[2];
+    private float[] mCircleCenter = new float[2];
     private float mStartAngle = -90;
     private float mSweepAngle = 0f;
     private int mProgress = 100;
@@ -51,15 +51,15 @@ public class EclipseLoading extends View{
     public static final int STEP_3RD = 3;
     public static final int STEP_4TH = 4;
     private int mStep = STEP_1ST;
-    public EclipseLoading(Context context) {
+    public SolarEclipse(Context context) {
         this(context, null);
     }
 
-    public EclipseLoading(Context context, AttributeSet attrs) {
+    public SolarEclipse(Context context, AttributeSet attrs) {
         this(context, attrs, -1);
     }
 
-    public EclipseLoading(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SolarEclipse(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mCtx = context;
         init(context, attrs, defStyleAttr);
@@ -67,10 +67,10 @@ public class EclipseLoading extends View{
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EclipseLoading);
-        mPaintStrokeWidth = ta.getDimension(R.styleable.EclipseLoading_elStrokeWidth, 5f);
-        mArcColor = ta.getColor(R.styleable.EclipseLoading_elArcColor, ContextCompat.getColor(context, R.color.oxygen_yellow));
-        mSunColor = ta.getColor(R.styleable.EclipseLoading_elSunColor, ContextCompat.getColor(context, R.color.oxygen_yellow));
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SolarEclipse);
+        mPaintStrokeWidth = ta.getDimension(R.styleable.SolarEclipse_elStrokeWidth, 5f);
+        mArcColor = ta.getColor(R.styleable.SolarEclipse_elArcColor, ContextCompat.getColor(context, R.color.oxygen_yellow));
+        mSunColor = ta.getColor(R.styleable.SolarEclipse_elSunColor, ContextCompat.getColor(context, R.color.oxygen_yellow));
         ta.recycle();
 
         mPaint = new Paint();
@@ -87,8 +87,8 @@ public class EclipseLoading extends View{
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
-        mCirclePoint[0] = mWidth / 2;
-        mCirclePoint[1] = mHeight / 2;
+        mCircleCenter[0] = mWidth / 2;
+        mCircleCenter[1] = mHeight / 2;
         if (mWidth >= mHeight) {
             mCirclePadding = mHeight * 0.05f;
             mCircleRadius = mHeight / 2 - mCirclePadding;
@@ -130,15 +130,15 @@ public class EclipseLoading extends View{
             mPaint.setColor(mSunColor);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(
-                    mCirclePoint[0],
-                    mCirclePoint[1],
+                    mCircleCenter[0],
+                    mCircleCenter[1],
                     mCircleRadius,
                     mPaint);
             mPaint.setColor(mSunriseColor);
             float offset = mCircleRadius * 2 / 100 * mProgress;
             canvas.drawCircle(
-                    mCirclePoint[0] - offset,
-                    mCirclePoint[1],
+                    mCircleCenter[0] - offset,
+                    mCircleCenter[1],
                     mCircleRadius,
                     mPaint);
         }
@@ -146,15 +146,15 @@ public class EclipseLoading extends View{
             mPaint.setColor(mSunColor);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(
-                    mCirclePoint[0],
-                    mCirclePoint[1],
+                    mCircleCenter[0],
+                    mCircleCenter[1],
                     mCircleRadius,
                     mPaint);
             mPaint.setColor(mSunsetColor);//ContextCompat.getColor(mCtx, R.color.white));
             float offset = mCircleRadius * 2 / 100 * mProgress;
             canvas.drawCircle(
-                    mCirclePoint[0] + mCircleRadius * 2 - offset,
-                    mCirclePoint[1],
+                    mCircleCenter[0] + mCircleRadius * 2 - offset,
+                    mCircleCenter[1],
                     mCircleRadius,
                     mPaint);
         }

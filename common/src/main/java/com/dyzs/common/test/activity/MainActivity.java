@@ -12,16 +12,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.dyzs.common.R;
 import com.dyzs.common.base.BaseActivity;
 import com.dyzs.common.test.service.CBMonitorService;
-import com.dyzs.common.ui.EclipseLoading;
+import com.dyzs.common.ui.SolarEclipse;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
-    public EclipseLoading eclipse_loading;
+    public SolarEclipse eclipse_loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +51,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initView() {
-        eclipse_loading = (EclipseLoading) findViewById(R.id.eclipse_loading);
+        eclipse_loading = (SolarEclipse) findViewById(R.id.eclipse_loading);
         eclipse_loading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
