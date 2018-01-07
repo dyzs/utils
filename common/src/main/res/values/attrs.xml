@@ -12,4 +12,10 @@
         <attr name="lineDashGap" format="dimension"/>
         <attr name="lineDashWidth" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="EclipseLoading">
+        <attr name="elStrokeWidth" format="dimension" />
+        <attr name="elArcColor" format="color"/>
+        <attr name="elSunColor" format="color"/>
+    </declare-styleable>
 </resources>

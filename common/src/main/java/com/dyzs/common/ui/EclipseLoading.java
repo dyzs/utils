@@ -3,14 +3,17 @@ package com.dyzs.common.ui;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+
+import com.dyzs.common.R;
 
 /**
  * @author dyzs
@@ -18,6 +21,7 @@ import android.view.animation.LinearInterpolator;
  */
 
 public class EclipseLoading extends View{
+    private Context mCtx;
     private Paint mPaint;
     private float mWidth, mHeight;
     private float l, t, r, b;
@@ -31,6 +35,11 @@ public class EclipseLoading extends View{
     private Path mPath;
     private RectF mRectF;
     private boolean interrupt = false;
+    private float mPaintStrokeWidth = 5f;
+    private int mArcColor;
+    private int mSunColor;
+    private int mSunriseColor;
+    private int mSunsetColor;
 
     public static final int STEP_1ST = 1;
     public static final int STEP_2ND = 2;
@@ -47,16 +56,23 @@ public class EclipseLoading extends View{
 
     public EclipseLoading(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mCtx = context;
         init(context, attrs, defStyleAttr);
         startAnimation();
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EclipseLoading);
+        mPaintStrokeWidth = ta.getDimension(R.styleable.EclipseLoading_elStrokeWidth, 5f);
+        mArcColor = ta.getColor(R.styleable.EclipseLoading_elArcColor, ContextCompat.getColor(context, R.color.oxygen_yellow));
+        mSunColor = ta.getColor(R.styleable.EclipseLoading_elSunColor, ContextCompat.getColor(context, R.color.oxygen_yellow));
+        ta.recycle();
+
         mPaint = new Paint();
-        mPaint.setStrokeWidth(5f);
+        mPaint.setStrokeWidth(mPaintStrokeWidth);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setColor(Color.DKGRAY);
+        mPaint.setColor(mArcColor);
         mPath = new Path();
         mStep = STEP_1ST;
     }
@@ -93,27 +109,27 @@ public class EclipseLoading extends View{
         mPath.reset();
         if (mStep == STEP_1ST) {
             mSweepAngle = mProgress * 360f / 100;
-            mPaint.setColor(Color.DKGRAY);
+            mPaint.setColor(mArcColor);
             mPaint.setStyle(Paint.Style.STROKE);
             mPath.addArc(mRectF, mStartAngle, -mSweepAngle);
             canvas.drawPath(mPath, mPaint);
         }
         if (mStep == STEP_2ND) {
             mSweepAngle = (100 - mProgress) * 360f / 100;
-            mPaint.setColor(Color.DKGRAY);
+            mPaint.setColor(mArcColor);
             mPaint.setStyle(Paint.Style.STROKE);
             mPath.addArc(mRectF, mStartAngle, mSweepAngle);
             canvas.drawPath(mPath, mPaint);
         }
         if (mStep == STEP_3RD) {
-            mPaint.setColor(Color.YELLOW);
+            mPaint.setColor(mSunColor);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(
                     mCirclePoint[0],
                     mCirclePoint[1],
                     mCircleRadius,
                     mPaint);
-            mPaint.setColor(Color.WHITE);
+            mPaint.setColor(ContextCompat.getColor(mCtx, R.color.white));
             float offset = mCircleRadius * 2 / 100 * mProgress;
             canvas.drawCircle(
                     mCirclePoint[0] - offset,
@@ -122,14 +138,14 @@ public class EclipseLoading extends View{
                     mPaint);
         }
         if (mStep == STEP_4TH) {
-            mPaint.setColor(Color.YELLOW);
+            mPaint.setColor(mSunColor);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(
                     mCirclePoint[0],
                     mCirclePoint[1],
                     mCircleRadius,
                     mPaint);
-            mPaint.setColor(Color.WHITE);
+            mPaint.setColor(ContextCompat.getColor(mCtx, R.color.white));
             float offset = mCircleRadius * 2 / 100 * mProgress;
             canvas.drawCircle(
                     mCirclePoint[0] + mCircleRadius * 2 - offset,
@@ -139,25 +155,10 @@ public class EclipseLoading extends View{
         }
     }
 
-    public void setProgress(int progress) {
-        if (progress < 0) {
-            progress = 0;
-        }
-        if (progress > 100) {
-            progress = 100;
-        }
-        this.mProgress = progress;
-        postInvalidate();
-    }
-
-    public int getProgress() {
-        return this.mProgress;
-    }
-
     public void startAnimation() {
         if (interrupt)return;
         mAnimator = ValueAnimator.ofFloat(0, getProgress());
-        mAnimator.setDuration(1000);
+        mAnimator.setDuration(getDuration());
         mAnimator.setInterpolator(new LinearInterpolator());
         // mAnimator.setRepeatCount(-1);
         // mAnimator.setRepeatMode(ValueAnimator.REVERSE);
@@ -206,4 +207,22 @@ public class EclipseLoading extends View{
         this.interrupt = interrupt;
     }
 
+    private int getProgress() {
+        return this.mProgress;
+    }
+
+    private long getDuration() {
+        long duration = -1L;
+        switch (mStep) {
+            case STEP_1ST:
+            case STEP_2ND:
+                duration = 500;
+                break;
+            case STEP_3RD:
+            case STEP_4TH:
+                duration = 800;
+                break;
+        }
+        return duration;
+    }
 }
