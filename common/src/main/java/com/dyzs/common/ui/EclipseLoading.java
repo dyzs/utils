@@ -1,16 +1,19 @@
 package com.dyzs.common.ui;
 
 import android.animation.Animator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import com.dyzs.common.R;
@@ -18,6 +21,8 @@ import com.dyzs.common.R;
 /**
  * @author dyzs
  * Created on 2018/1/5.
+ * 18.01.07 12.50 : modify animation interpolator
+ * 18.01.07 13.18 : add color sunrise and sunset
  */
 
 public class EclipseLoading extends View{
@@ -129,7 +134,7 @@ public class EclipseLoading extends View{
                     mCirclePoint[1],
                     mCircleRadius,
                     mPaint);
-            mPaint.setColor(ContextCompat.getColor(mCtx, R.color.white));
+            mPaint.setColor(mSunriseColor);
             float offset = mCircleRadius * 2 / 100 * mProgress;
             canvas.drawCircle(
                     mCirclePoint[0] - offset,
@@ -145,7 +150,7 @@ public class EclipseLoading extends View{
                     mCirclePoint[1],
                     mCircleRadius,
                     mPaint);
-            mPaint.setColor(ContextCompat.getColor(mCtx, R.color.white));
+            mPaint.setColor(mSunsetColor);//ContextCompat.getColor(mCtx, R.color.white));
             float offset = mCircleRadius * 2 / 100 * mProgress;
             canvas.drawCircle(
                     mCirclePoint[0] + mCircleRadius * 2 - offset,
@@ -159,7 +164,7 @@ public class EclipseLoading extends View{
         if (interrupt)return;
         mAnimator = ValueAnimator.ofFloat(0, getProgress());
         mAnimator.setDuration(getDuration());
-        mAnimator.setInterpolator(new LinearInterpolator());
+        mAnimator.setInterpolator(getInterpolator());
         // mAnimator.setRepeatCount(-1);
         // mAnimator.setRepeatMode(ValueAnimator.REVERSE);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -167,6 +172,7 @@ public class EclipseLoading extends View{
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
                 mProgress = (int) value;
+                setSunriseAndSunsetReverse(mProgress);
                 postInvalidate();
             }
         });
@@ -216,13 +222,67 @@ public class EclipseLoading extends View{
         switch (mStep) {
             case STEP_1ST:
             case STEP_2ND:
-                duration = 500;
+                duration = 400;
                 break;
             case STEP_3RD:
             case STEP_4TH:
-                duration = 800;
+                duration = 2000;
                 break;
         }
         return duration;
+    }
+
+    private LinearInterpolator linearInterpolator;
+    private DecelerateInterpolator decelerateInterpolator;
+    private TimeInterpolator getInterpolator() {
+        TimeInterpolator interpolator;
+        switch (mStep) {
+            case STEP_1ST:
+            case STEP_2ND:
+                if (decelerateInterpolator == null) {
+                    decelerateInterpolator = new DecelerateInterpolator();
+                }
+                interpolator = decelerateInterpolator;
+                break;
+            case STEP_3RD:
+            case STEP_4TH:
+                if (linearInterpolator == null) {
+                    linearInterpolator = new LinearInterpolator();
+                }
+                interpolator = linearInterpolator;
+                break;
+            default:
+                interpolator = new LinearInterpolator();
+                break;
+        }
+        return interpolator;
+    }
+
+
+    private void setSunriseAndSunsetReverse(int value) {
+        switch (mStep) {
+            case STEP_1ST:
+            case STEP_2ND:
+                setBackgroundColor(ContextCompat.getColor(mCtx, R.color.black));
+                break;
+            case STEP_3RD:
+                mSunriseColor = getSunriseColor(value);
+                setBackgroundColor(mSunriseColor);
+                break;
+            case STEP_4TH:
+                mSunsetColor = getSunsetColor(value);
+                setBackgroundColor(mSunsetColor);
+                break;
+        }
+    }
+
+    private int getSunriseColor(int value) {
+        int color = (int) (value * 255 * 1.0f / 100);
+        return Color.rgb(color, color, color);
+    }
+
+    private int getSunsetColor(int value) {
+        int color = (int) ((100 - value) * 255 * 1.0f / 100);
+        return Color.rgb(color, color, color);
     }
 }
