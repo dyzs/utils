@@ -27,12 +27,16 @@ public class EclipseLoading extends View{
     private float mStartAngle = -90;
     private float mSweepAngle = 0f;
     private int mProgress = 100;
-
-    private STEP mStep = STEP.STEP_1ST;
     private ValueAnimator mAnimator;
     private Path mPath;
     private RectF mRectF;
     private boolean interrupt = false;
+
+    public static final int STEP_1ST = 1;
+    public static final int STEP_2ND = 2;
+    public static final int STEP_3RD = 3;
+    public static final int STEP_4TH = 4;
+    private int mStep = STEP_1ST;
     public EclipseLoading(Context context) {
         this(context, null);
     }
@@ -54,7 +58,7 @@ public class EclipseLoading extends View{
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.DKGRAY);
         mPath = new Path();
-        mStep = STEP.STEP_1ST;
+        mStep = STEP_1ST;
     }
 
     @Override
@@ -75,6 +79,7 @@ public class EclipseLoading extends View{
         t = mHeight / 2 - mCircleRadius;
         r = mWidth / 2 + mCircleRadius;
         b = mHeight / 2 + mCircleRadius;
+        mRectF = new RectF(l, t, r, b);
     }
 
     @Override
@@ -86,22 +91,21 @@ public class EclipseLoading extends View{
         // mRectF = new RectF(mWidth/2 - mHeight/2 + 50f, 50f, mWidth/2 + mHeight/2-50f, mHeight-50f);
         // mPath.addRoundRect(mRectF, mSweepAngle, mHeight/2, Path.Direction.CW);
         mPath.reset();
-        mRectF = new RectF(l, t, r, b);
-        if (mStep == STEP.STEP_1ST) {
+        if (mStep == STEP_1ST) {
             mSweepAngle = mProgress * 360f / 100;
             mPaint.setColor(Color.DKGRAY);
             mPaint.setStyle(Paint.Style.STROKE);
             mPath.addArc(mRectF, mStartAngle, -mSweepAngle);
             canvas.drawPath(mPath, mPaint);
         }
-        if (mStep == STEP.STEP_2ND) {
+        if (mStep == STEP_2ND) {
             mSweepAngle = (100 - mProgress) * 360f / 100;
             mPaint.setColor(Color.DKGRAY);
             mPaint.setStyle(Paint.Style.STROKE);
             mPath.addArc(mRectF, mStartAngle, mSweepAngle);
             canvas.drawPath(mPath, mPaint);
         }
-        if (mStep == STEP.STEP_3RD) {
+        if (mStep == STEP_3RD) {
             mPaint.setColor(Color.YELLOW);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(
@@ -117,7 +121,7 @@ public class EclipseLoading extends View{
                     mCircleRadius,
                     mPaint);
         }
-        if (mStep == STEP.STEP_4TH) {
+        if (mStep == STEP_4TH) {
             mPaint.setColor(Color.YELLOW);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(
@@ -173,14 +177,14 @@ public class EclipseLoading extends View{
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (mStep == STEP.STEP_1ST) {
-                    mStep = STEP.STEP_2ND;
-                } else if (mStep == STEP.STEP_2ND) {
-                    mStep = STEP.STEP_3RD;
-                } else if (mStep == STEP.STEP_3RD) {
-                    mStep = STEP.STEP_4TH;
-                } else if (mStep == STEP.STEP_4TH) {
-                    mStep = STEP.STEP_1ST;
+                if (mStep == STEP_1ST) {
+                    mStep = STEP_2ND;
+                } else if (mStep == STEP_2ND) {
+                    mStep = STEP_3RD;
+                } else if (mStep == STEP_3RD) {
+                    mStep = STEP_4TH;
+                } else if (mStep == STEP_4TH) {
+                    mStep = STEP_1ST;
                 }
                 startAnimation();
             }
@@ -202,7 +206,4 @@ public class EclipseLoading extends View{
         this.interrupt = interrupt;
     }
 
-    private enum STEP{
-        STEP_1ST, STEP_2ND, STEP_3RD, STEP_4TH
-    }
 }

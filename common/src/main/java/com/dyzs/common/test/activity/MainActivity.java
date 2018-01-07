@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.dyzs.common.R;
 import com.dyzs.common.base.BaseActivity;
@@ -19,7 +20,7 @@ import com.dyzs.common.test.service.CBMonitorService;
 import com.dyzs.common.ui.EclipseLoading;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
     public EclipseLoading eclipse_loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,8 @@ public class MainActivity extends BaseActivity
                 eclipse_loading.setInterruptAnimation(true);
             }
         });
+
+        findViewById(R.id.custom_view).setOnClickListener(this);
     }
 
     @Override
@@ -125,5 +128,15 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.custom_view:
+                Intent intent = new Intent(MainActivity.this, CustomViewActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".test.activity.TestActivity" >
+        <activity android:name=".test.activity.CustomViewActivity" >
             <intent-filter>
                 <action android:name="com.dyzs.common.action.TEST" />
                 <category android:name="android.intent.category.DEFAULT" />

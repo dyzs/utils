@@ -9,12 +9,12 @@ import com.dyzs.common.base.BaseActivity;
  * Created by maidou on 2017/11/20.
  */
 
-public class TestActivity extends BaseActivity {
+public class CustomViewActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_test);
+        setContentView(R.layout.act_custion_view);
     }
 
     @Override
