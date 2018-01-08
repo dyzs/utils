@@ -20,7 +20,6 @@ import com.dyzs.common.ui.SolarEclipse;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public SolarEclipse eclipse_loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +50,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initView() {
-        eclipse_loading = (SolarEclipse) findViewById(R.id.eclipse_loading);
-        eclipse_loading.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                eclipse_loading.setInterruptAnimation(true);
-            }
-        });
+
     }
 
     @Override
