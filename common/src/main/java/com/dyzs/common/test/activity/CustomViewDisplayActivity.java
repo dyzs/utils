@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 
 import com.dyzs.common.R;
 import com.dyzs.common.base.BaseActivity;
+import com.dyzs.common.test.fragment.DottedLineFragment;
 import com.dyzs.common.test.fragment.SolarEclipseFragment;
 import com.dyzs.common.test.fragment.YinJiMultiPlayerFragment;
 
@@ -36,6 +37,9 @@ public class CustomViewDisplayActivity extends BaseActivity{
                 break;
             case "YinJiMultiPlayer":
                 transaction.add(R.id.container, new YinJiMultiPlayerFragment(), viewName);
+                break;
+            case "DottedLine":
+                transaction.add(R.id.container, new DottedLineFragment(), viewName);
                 break;
         }
         transaction.commit();
