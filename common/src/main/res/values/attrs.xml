@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="DropIndicator">
+        <attr name="color1" format="color"></attr>
+        <attr name="color2" format="color"></attr>
+        <attr name="color3" format="color"></attr>
+        <attr name="color4" format="color"></attr>
+        <attr name="click_color" format="color"></attr>
+        <attr name="circle_color" format="color"></attr>
+        <attr name="radius" format="dimension"></attr>
+        <attr name="scale" format="float"></attr>
+        <attr name="duration" format="integer"></attr>
+    </declare-styleable>
+
     <declare-styleable name="LineChartReport">
         <attr name="max_score" format="integer"/>
         <attr name="min_score" format="integer"/>
@@ -14,8 +26,20 @@
     </declare-styleable>
 
     <declare-styleable name="SolarEclipse">
-        <attr name="elStrokeWidth" format="dimension" />
+        <attr name="elStrokeWidth" format="dimension"/>
         <attr name="elArcColor" format="color"/>
         <attr name="elSunColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="ChasingLoading">
+        <attr name="clDfmWidth" format="dimension"/>
+        <attr name="clDfmSpacing" format="dimension"/>
+        <attr name="clDsRate" format="integer"/>
+        <attr name="clFsRate" format="integer"/>
+        <attr name="clMsRate" format="integer"/>
+        <attr name="clDsAngle" format="integer"/>
+        <attr name="clFsAngle" format="integer"/>
+        <attr name="clMsAngle" format="integer"/>
+        <attr name="clChasing" format="boolean"/>
     </declare-styleable>
 </resources>

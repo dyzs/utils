@@ -9,18 +9,18 @@
     tools:showIn="@layout/app_bar_main"
     tools:context=".test.activity.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="center"
         >
 
         <com.dyzs.common.ui.ChasingLoading
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

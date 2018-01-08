@@ -1,19 +1,40 @@
 package com.dyzs.common.ui;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.Region;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.CycleInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
+
+import com.dyzs.common.R;
 
 import java.util.ArrayList;
 
 /**
- * Created by maidou on 2018/1/8.
+ * @author dyzs
+ * Created on 2018/1/8.
+ * InterPolator:
+ * LinearInterPolator   以常量速率改变
+ * DecelerateInterpolator   在动画开始的地方快然后慢
+ * AccelerateInterpolator   在动画开始的地方速率改变比较慢，然后开始加速
+ * AccelerateDecelerateInterpolator     在动画开始与介绍的地方速率改变比较慢，在中间的时候加速
+ * AnticipateInterpolator   开始的时候向后然后向前甩
+ * AnticipateOvershootInterpolator      开始的时候向后然后向前甩一定值后返回最后的值
+ * BounceInterpolator   动画结束的时候弹起
+ * CycleInterpolator    动画循环播放特定的次数，速率改变沿着正弦曲线
+ * OvershootInterpolator    向前甩一定值后再回到原来位置
  */
 
 public class ChasingLoading extends View{
@@ -25,10 +46,14 @@ public class ChasingLoading extends View{
     private ArrayList<Float> mDfmRadians;
     private float mDarkRadian, mFlameRadian, mMasterRadian;
     private float mDfmWidth, mDfmSpacing, mPadding;
-    private float mStartAngle = -90;
+    private float mDarkStartAngle, mFlameStartAngle, mMasterStartAngle;
+    private int mDarkSpeedRate, mFlameSpeedRate, mMasterSpeedRate;
+    private ArrayList<Float> mStartAngleValues;
 
     private Path mDfmPath;
     private ArrayList<RectF> rectFs;
+    private boolean mChasing;
+    private ValueAnimator mAnimator;
     public ChasingLoading(Context context) {
         this(context, null);
     }
@@ -38,42 +63,61 @@ public class ChasingLoading extends View{
     }
 
     public ChasingLoading(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, -1);
     }
 
-    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
-        this.mCtx = context;
-        this.mDfmWidth = 10f;
-        this.mDfmSpacing = 5f;
-        this.mDarkRadian = 360f / 100 * 35;
-        this.mFlameRadian = 360f / 100 * 30;
-        this.mMasterRadian = 360f / 100 * 25;
+    public ChasingLoading(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        mCtx = context;
+        init(context, attrs);
+        startDarkFlameMaster();
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ChasingLoading);
+        mDfmWidth = ta.getDimension(R.styleable.ChasingLoading_clDfmWidth, 10f);
+        mDfmSpacing = ta.getDimension(R.styleable.ChasingLoading_clDfmSpacing, 10f);
+        mDarkSpeedRate = ta.getInteger(R.styleable.ChasingLoading_clDsRate, 4);
+        mFlameSpeedRate = ta.getInteger(R.styleable.ChasingLoading_clFsRate, 5);
+        mMasterSpeedRate = ta.getInteger(R.styleable.ChasingLoading_clMsRate, 6);
+        mDarkStartAngle =  ta.getInteger(R.styleable.ChasingLoading_clDsAngle, 0);
+        mFlameStartAngle =  ta.getInteger(R.styleable.ChasingLoading_clFsAngle, 135);
+        mMasterStartAngle =  ta.getInteger(R.styleable.ChasingLoading_clMsAngle, 260);
+        mChasing = ta.getBoolean(R.styleable.ChasingLoading_clChasing, true);
+        ta.recycle();
+        mDarkRadian = 360f / 100 * 30 % 360;
+        mFlameRadian = 360f / 100 * 25 % 360;
+        mMasterRadian = 360f / 100 * 20 % 360;
         mDfmRadians = new ArrayList();
         mDfmRadians.add(mDarkRadian);
         mDfmRadians.add(mFlameRadian);
         mDfmRadians.add(mMasterRadian);
 
+        mStartAngleValues = new ArrayList<>();
+        mStartAngleValues.add(mDarkStartAngle);
+        mStartAngleValues.add(mFlameStartAngle);
+        mStartAngleValues.add(mMasterStartAngle);
+
         mDark = new Paint();
         mDark.setAntiAlias(true);
-        mDark.setStyle(Paint.Style.FILL);
+        mDark.setStyle(Paint.Style.STROKE);
         mDark.setStrokeWidth(mDfmWidth);
         mDark.setStrokeCap(Paint.Cap.ROUND);
         mDark.setColor(Color.RED);
 
         mFlame = new Paint();
         mFlame.setAntiAlias(true);
-        mFlame.setStyle(Paint.Style.FILL);
+        mFlame.setStyle(Paint.Style.STROKE);
         mFlame.setStrokeWidth(mDfmWidth);
         mFlame.setStrokeCap(Paint.Cap.ROUND);
         mFlame.setColor(Color.CYAN);
 
         mMaster = new Paint();
         mMaster.setAntiAlias(true);
-        mMaster.setStyle(Paint.Style.FILL);
+        mMaster.setStyle(Paint.Style.STROKE);
         mMaster.setStrokeWidth(mDfmWidth);
         mMaster.setStrokeCap(Paint.Cap.ROUND);
-        mMaster.setColor(Color.CYAN);
+        mMaster.setColor(Color.BLACK);
 
         mDfmPaints = new ArrayList<>();
         mDfmPaints.add(mDark);
@@ -118,12 +162,36 @@ public class ChasingLoading extends View{
         if (rectFs == null)return;
         for (int i = 0; i < rectFs.size(); i++) {
             mDfmPath.reset();
-            mDfmPath.addArc(rectFs.get(i), mStartAngle, mDfmRadians.get(i));
+            mDfmPath.addArc(rectFs.get(i), mStartAngleValues.get(i), mDfmRadians.get(i));
             canvas.drawPath(mDfmPath, mDfmPaints.get(i));
         }
     }
 
     private void startDarkFlameMaster() {
+        if (!mChasing)return;
+        mAnimator = ValueAnimator.ofFloat(360);
+        mAnimator.setDuration(5000);
+        mAnimator.setRepeatCount(-1);
+        mAnimator.setInterpolator(new LinearInterpolator());
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                mStartAngleValues.clear();
+                mStartAngleValues.add(mDarkStartAngle + value * mDarkSpeedRate % 360);
+                mStartAngleValues.add(mFlameStartAngle + value * mFlameSpeedRate % 360);
+                mStartAngleValues.add(mMasterStartAngle + value * mMasterSpeedRate % 360);
+                postInvalidate();
+            }
+        });
+        mAnimator.start();
+    }
 
+    public void setChasingStop() {
+        mChasing = false;
+        if (mAnimator != null && mAnimator.isRunning()) {
+            mAnimator.cancel();
+            mAnimator = null;
+        }
     }
 }
