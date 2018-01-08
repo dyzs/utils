@@ -19,7 +19,7 @@ import com.dyzs.common.test.service.CBMonitorService;
 import com.dyzs.common.ui.SolarEclipse;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
     public SolarEclipse eclipse_loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +58,6 @@ public class MainActivity extends BaseActivity
                 eclipse_loading.setInterruptAnimation(true);
             }
         });
-
-        findViewById(R.id.custom_view).setOnClickListener(this);
     }
 
     @Override
@@ -107,6 +105,8 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            Intent intent = new Intent(MainActivity.this, CustomViewActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -127,15 +127,5 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.custom_view:
-                Intent intent = new Intent(MainActivity.this, CustomViewActivity.class);
-                startActivity(intent);
-                break;
-        }
     }
 }

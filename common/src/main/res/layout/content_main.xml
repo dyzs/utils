@@ -29,12 +29,6 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/custom_view"
-            style="@style/CommonTextViewItem"
-            android:text="Custom View"
-            />
-
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
