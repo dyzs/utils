@@ -40,6 +40,8 @@
         </receiver>
 
         <service android:name=".test.service.ScreenUnLockMonitorService" />
+
+        <activity android:name=".test.activity.CustomViewDisplayActivity" />
     </application>
 
 </manifest>
