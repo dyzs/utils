@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/solar_eclipse_loading"
-        style="@style/CommonTextViewItem"
-        android:text="Solar Eclipse Loading"
-        />
+        <TextView
+            android:id="@+id/solar_eclipse_loading"
+            style="@style/CommonTextViewItem"
+            android:text="Solar Eclipse Loading"
+            />
 
-    <TextView
-        android:id="@+id/multi_player"
-        style="@style/CommonTextViewItem"
-        android:text="YinJi Multi Player"
-        />
+        <TextView
+            android:id="@+id/chasing_loading"
+            style="@style/CommonTextViewItem"
+            android:text="Chasing Loading"
+            />
 
-    <TextView
-        android:id="@+id/dotted_line"
-        style="@style/CommonTextViewItem"
-        android:text="Dotted Line View"
-        />
+        <TextView
+            android:id="@+id/multi_player"
+            style="@style/CommonTextViewItem"
+            android:text="YinJi Multi Player"
+            />
 
+        <TextView
+            android:id="@+id/dotted_line"
+            style="@style/CommonTextViewItem"
+            android:text="Dotted Line View"
+            />
 
-</LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

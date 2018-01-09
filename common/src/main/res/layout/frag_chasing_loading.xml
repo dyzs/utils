@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    >
+
+    <com.dyzs.common.ui.ChasingLoading
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <com.dyzs.common.ui.ChasingLoading
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:clChasing="false" />
+
+    <com.dyzs.common.ui.ChasingLoading
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:clDfmSpacing="10dp"
+        app:clDsRate="4"
+        app:clFsRate="4"
+        app:clMsRate="4"
+        />
+
+</LinearLayout>

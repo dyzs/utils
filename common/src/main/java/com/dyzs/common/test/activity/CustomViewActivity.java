@@ -23,6 +23,7 @@ public class CustomViewActivity extends BaseActivity implements View.OnClickList
     @Override
     public void initView() {
         findViewById(R.id.solar_eclipse_loading).setOnClickListener(this);
+        findViewById(R.id.chasing_loading).setOnClickListener(this);
         findViewById(R.id.multi_player).setOnClickListener(this);
         findViewById(R.id.dotted_line).setOnClickListener(this);
     }
@@ -39,6 +40,10 @@ public class CustomViewActivity extends BaseActivity implements View.OnClickList
             case R.id.solar_eclipse_loading:
                 intent = new Intent(this, CustomViewDisplayActivity.class);
                 intent.putExtra("viewName", "SolarEclipse");
+                break;
+            case R.id.chasing_loading:
+                intent = new Intent(this, CustomViewDisplayActivity.class);
+                intent.putExtra("viewName", "ChasingLoading");
                 break;
             case R.id.multi_player:
                 intent = new Intent(this, CustomViewDisplayActivity.class);
