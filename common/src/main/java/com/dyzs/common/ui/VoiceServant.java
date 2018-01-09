@@ -2,10 +2,8 @@ package com.dyzs.common.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathEffect;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -24,11 +22,12 @@ public class VoiceServant extends View{
     private float mWidth, mHeight, mPadding, mSpacing;
     private float[] mCircleCenter = new float[2];
     private float mRadius, mPointerRadius, mTickRadius, mOxygenRadius;
-    private float mRadian, mPointerRadian, mMinRadian, mMaxRadian;
+    private float mDegree, mAPieceOfDegree, mPointerDegree, mMinDegree, mMaxDegree;
     private RectF mPointerRectF, mTickRectF, mOxygenRectF;
-    private float mCircleWidth, mTickWidth, mOxygenWidth;
+    private float mCircleWidth, mTickLength, mTickWidth, mOxygenWidth;
     private Paint mDarkPaint, mFlamePaint, mMasterPaint;
     private float mStartAngle;
+    private int dBType = 119;
 
     public VoiceServant(Context context) {
         this(context, null);
@@ -49,12 +48,14 @@ public class VoiceServant extends View{
 
     private void init(Context context) {
         mPadding = 10f;
-        mSpacing = 25f;
-        mRadian = 280f;
-        mStartAngle = (360f - mRadian) / 2 + 90f;
-        mPointerRadian = 120f; mMinRadian = 60f; mMaxRadian = 180f; // def value
+        mSpacing = 15f;
+        mDegree = 280f;
+        mAPieceOfDegree = mDegree / dBType;
+        mStartAngle = (360f - mDegree) / 2 + 90f;
+        mPointerDegree = 125f; mMinDegree = 60f; mMaxDegree = 180f; // def degree value
         mCircleWidth = 20f;
-        mTickWidth = 100f;
+        mTickLength = 70f;
+        mTickWidth = 3f;
         mOxygenWidth = 10f;
 
         mDarkPaint = new Paint();
@@ -81,13 +82,13 @@ public class VoiceServant extends View{
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mWidth = getMeasuredWidth();mHeight = getMeasuredHeight();
         if (mWidth >= mHeight) {
-            mRadius = mHeight / 2;// - mPadding;
+            mRadius = mHeight / 2 - mPadding;
         } else {
-            mRadius = mWidth / 2;// - mPadding;
+            mRadius = mWidth / 2 - mPadding;
         }
         mCircleCenter[0] = mWidth / 2; mCircleCenter[1] = mHeight / 2;
 
-        mPointerRadius = mRadius;
+        mPointerRadius = mRadius - mCircleWidth / 2;
         float l, t, r, b;
         l = mCircleCenter[0] - mPointerRadius;
         t = mCircleCenter[1] - mPointerRadius;
@@ -95,14 +96,14 @@ public class VoiceServant extends View{
         b = mCircleCenter[1] + mPointerRadius;
         mPointerRectF = new RectF(l, t, r, b);
 
-        mTickRadius = mRadius - mCircleWidth / 2 - mTickWidth / 2;// - spacing;
+        mTickRadius = mRadius - mCircleWidth - mTickLength / 2 - mSpacing;
         l = mCircleCenter[0] - mTickRadius;
         t = mCircleCenter[1] - mTickRadius;
         r = mCircleCenter[0] + mTickRadius;
         b = mCircleCenter[1] + mTickRadius;
         mTickRectF = new RectF(l, t, r, b);
 
-        mOxygenRadius = mRadius - mCircleWidth / 2 - mTickWidth - mOxygenWidth / 2;// -spacing
+        mOxygenRadius = mRadius - mCircleWidth - mTickLength - mOxygenWidth / 2 - mSpacing * 2;
         l = mCircleCenter[0] - mOxygenRadius;
         t = mCircleCenter[1] - mOxygenRadius;
         r = mCircleCenter[0] + mOxygenRadius;
@@ -113,36 +114,27 @@ public class VoiceServant extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawDark(canvas);
-        drawFlame(canvas);
-        drawMaster(canvas);
+        drawDarkFlameMaster(canvas);
     }
 
-    /* draw circle */
-    private void drawDark(Canvas canvas) {
-        canvas.drawCircle(mCircleCenter[0], mCircleCenter[1], mRadius, mDarkPaint);
-    }
+    private void drawDarkFlameMaster(Canvas canvas) {
+        /* draw circle */
+        canvas.drawCircle(mCircleCenter[0], mCircleCenter[1], mPointerRadius, mDarkPaint);
 
-    /* draw tick mark, triangle mark and color pointer */
-    private void drawFlame(Canvas canvas) {
-        float degree = (float) (180 / Math.PI * mRadian / 10);
-        // canvas.rotate(0, mCircleCenter[0], mCircleCenter[1]);
-        // canvas.drawLine(mCircleCenter[0], mTickRectF.top - mTickWidth / 2, mCircleCenter[0], mTickRectF.top + mTickWidth / 2, mFlamePaint);
-        /*canvas.save();
-        for (int i = 0; i < 10; i++) {
+        /* draw tick mark, triangle mark and color pointer */
+        for (int i = 0; i <= dBType; i++) {
+            canvas.save();
+            canvas.rotate(90 + mAPieceOfDegree * i, mCircleCenter[0], mCircleCenter[1]);
+            canvas.drawLine(mCircleCenter[0], mTickRectF.top - mTickLength / 2, mCircleCenter[0], mTickRectF.top + mTickLength / 2, mFlamePaint);
+            canvas.restore();
         }
-        canvas.restore();*/
-        Path path = new Path();
-        path.addArc(mTickRectF, mStartAngle, mRadian);
-        canvas.drawPath(path, mFlamePaint);
+        /*Path path = new Path();
+        path.addArc(mTickRectF, mStartAngle, mDegree);
+        canvas.drawPath(path, mFlamePaint);*/
 
-    }
-
-    /* draw colorful gradient */
-    private void drawMaster(Canvas canvas) {
+        /* draw colorful gradient */
         Path path = new Path();
-        path.addArc(mOxygenRectF, mStartAngle, mRadian);
+        path.addArc(mOxygenRectF, 0, mDegree);
         canvas.drawPath(path, mMasterPaint);
     }
-
 }
