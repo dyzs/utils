@@ -2,11 +2,16 @@ package com.dyzs.common.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.SweepGradient;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.dyzs.common.R;
@@ -145,7 +150,7 @@ public class VoiceServant extends View{
         int dBPointer = (int) (mPointerDegree * 119 / mGalaxyDegree);
         for (int i = 0; i <= dBType; i++) {
             canvas.save();
-            canvas.rotate(mStartAngle + 90 + mAPieceOfDegree * i, mCircleCenter[0], mCircleCenter[1]);
+            canvas.rotate(90 + mAPieceOfDegree * i, mCircleCenter[0], mCircleCenter[1]);
             if (i < dBPointer) {
                 mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.oxygen_green));
                 canvas.drawLine(
@@ -175,8 +180,15 @@ public class VoiceServant extends View{
         }
 
         /* draw colorful gradient */
+
+        Shader shader = new SweepGradient(
+                mCircleCenter[0],
+                mCircleCenter[1],
+                ContextCompat.getColor(mCtx, R.color.girl_pink),
+                ContextCompat.getColor(mCtx, R.color.oxygen_green));
+        mMasterPaint.setShader(shader);
         Path path = new Path();
-        path.addArc(mOxygenRectF, mStartAngle, mGalaxyDegree);
+        path.addArc(mOxygenRectF, 0, mGalaxyDegree);
         canvas.drawPath(path, mMasterPaint);
     }
 
@@ -187,5 +199,16 @@ public class VoiceServant extends View{
             this.mPointerDegree = degree;
             invalidate();
         }
+    }
+
+    public void getPointerColor() {
+        int startColor = ContextCompat.getColor(mCtx, R.color.girl_pink);
+        int endColor = ContextCompat.getColor(mCtx, R.color.oxygen_green);
+        // int startHexadecimal = Integer.toHexString()
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 }
