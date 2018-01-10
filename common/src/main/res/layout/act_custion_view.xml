@@ -22,6 +22,12 @@
             />
 
         <TextView
+            android:id="@+id/voice_servant"
+            style="@style/CommonTextViewItem"
+            android:text="Voice Servant Compass"
+            />
+
+        <TextView
             android:id="@+id/multi_player"
             style="@style/CommonTextViewItem"
             android:text="YinJi Multi Player"

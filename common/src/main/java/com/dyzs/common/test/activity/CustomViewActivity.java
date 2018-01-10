@@ -26,6 +26,7 @@ public class CustomViewActivity extends BaseActivity implements View.OnClickList
         findViewById(R.id.chasing_loading).setOnClickListener(this);
         findViewById(R.id.multi_player).setOnClickListener(this);
         findViewById(R.id.dotted_line).setOnClickListener(this);
+        findViewById(R.id.voice_servant).setOnClickListener(this);
     }
 
     @Override
@@ -44,6 +45,10 @@ public class CustomViewActivity extends BaseActivity implements View.OnClickList
             case R.id.chasing_loading:
                 intent = new Intent(this, CustomViewDisplayActivity.class);
                 intent.putExtra("viewName", "ChasingLoading");
+                break;
+            case R.id.voice_servant:
+                intent = new Intent(this, CustomViewDisplayActivity.class);
+                intent.putExtra("viewName", "VoiceServant");
                 break;
             case R.id.multi_player:
                 intent = new Intent(this, CustomViewDisplayActivity.class);

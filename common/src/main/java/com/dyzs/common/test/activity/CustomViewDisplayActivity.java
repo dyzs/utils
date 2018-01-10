@@ -9,6 +9,7 @@ import com.dyzs.common.base.BaseActivity;
 import com.dyzs.common.test.fragment.ChasingLoadingFragment;
 import com.dyzs.common.test.fragment.DottedLineFragment;
 import com.dyzs.common.test.fragment.SolarEclipseFragment;
+import com.dyzs.common.test.fragment.VoiceServantFragment;
 import com.dyzs.common.test.fragment.YinJiMultiPlayerFragment;
 
 /**
@@ -36,14 +37,17 @@ public class CustomViewDisplayActivity extends BaseActivity{
             case "SolarEclipse":
                 transaction.add(R.id.container, new SolarEclipseFragment(), viewName);
                 break;
+            case "ChasingLoading":
+                transaction.add(R.id.container, new ChasingLoadingFragment(), viewName);
+                break;
+            case "VoiceServant":
+                transaction.add(R.id.container, new VoiceServantFragment(), viewName);
+                break;
             case "YinJiMultiPlayer":
                 transaction.add(R.id.container, new YinJiMultiPlayerFragment(), viewName);
                 break;
             case "DottedLine":
                 transaction.add(R.id.container, new DottedLineFragment(), viewName);
-                break;
-            case "ChasingLoading":
-                transaction.add(R.id.container, new ChasingLoadingFragment(), viewName);
                 break;
         }
         transaction.commit();

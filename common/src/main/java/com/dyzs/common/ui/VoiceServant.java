@@ -19,13 +19,14 @@ import com.dyzs.common.R;
  */
 
 public class VoiceServant extends View{
+    private static final String TAG = VoiceServant.class.getSimpleName();
     private Context mCtx;// god of the universal
     private float mWidth, mHeight;
     private float mPadding;// the strength of the triangle point
     private float mSpacing;// the abyss between tick mark and outer circle
     private float[] mCircleCenter = new float[2];// center of the universal
     private float mRadius, mPointerRadius, mTickRadius, mOxygenRadius;
-    private float mDegree, mAPieceOfDegree, mPointerDegree, mMinDegree, mMaxDegree;
+    private float mGalaxyDegree, mAPieceOfDegree, mPointerDegree, mMinDegree, mMaxDegree;
     private RectF mPointerRectF, mTickRectF, mOxygenRectF;
     private float mCircleWidth;// outer circle width
     private float mTickLength;// tick mark pointer length
@@ -39,6 +40,7 @@ public class VoiceServant extends View{
     private float mStartAngle;
     private int dBType = 119;// decibel
 
+    // add servant trick
     public VoiceServant(Context context) {
         this(context, null);
     }
@@ -60,9 +62,9 @@ public class VoiceServant extends View{
         mCtx = context;
         mPadding = 10f;
         mSpacing = 15f;
-        mDegree = 280f;
-        mAPieceOfDegree = mDegree / dBType;
-        mStartAngle = (360f - mDegree) / 2 + 90f;
+        mGalaxyDegree = 280f;
+        mAPieceOfDegree = mGalaxyDegree / dBType;
+        mStartAngle = (360f - mGalaxyDegree) / 2 + 90f;
         mPointerDegree = 125f; mMinDegree = 60f; mMaxDegree = 180f; // def degree value
         mCircleWidth = 20f;
         mTickLength = 80f;
@@ -140,10 +142,10 @@ public class VoiceServant extends View{
         canvas.drawCircle(mCircleCenter[0], mCircleCenter[1], mPointerRadius, mDarkPaint);
 
         /* draw tick mark, triangle mark and color pointer */
-        int dBPointer = (int) (mPointerDegree * 119 / mDegree);
+        int dBPointer = (int) (mPointerDegree * 119 / mGalaxyDegree);
         for (int i = 0; i <= dBType; i++) {
             canvas.save();
-            canvas.rotate(90 + mAPieceOfDegree * i, mCircleCenter[0], mCircleCenter[1]);
+            canvas.rotate(mStartAngle + 90 + mAPieceOfDegree * i, mCircleCenter[0], mCircleCenter[1]);
             if (i < dBPointer) {
                 mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.oxygen_green));
                 canvas.drawLine(
@@ -155,7 +157,7 @@ public class VoiceServant extends View{
                 if (i == dBPointer - 1) {
                     canvas.drawLine(
                             mCircleCenter[0],
-                            mCircleCenter[0] - mRadius,
+                            mPadding,
                             mCircleCenter[0],
                             mTickRectF.top + mTickLength / 2,
                             mMoriSummerPaint);
@@ -174,7 +176,16 @@ public class VoiceServant extends View{
 
         /* draw colorful gradient */
         Path path = new Path();
-        path.addArc(mOxygenRectF, 0, mDegree);
+        path.addArc(mOxygenRectF, mStartAngle, mGalaxyDegree);
         canvas.drawPath(path, mMasterPaint);
+    }
+
+    public void setPointerDecibel(int value) {
+        if (dBType == 119) {
+            value = value % 119;
+            float degree = mGalaxyDegree * value / 119;
+            this.mPointerDegree = degree;
+            invalidate();
+        }
     }
 }
