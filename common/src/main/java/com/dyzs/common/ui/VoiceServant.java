@@ -19,15 +19,25 @@ import com.dyzs.common.R;
  */
 
 public class VoiceServant extends View{
-    private float mWidth, mHeight, mPadding, mSpacing;
-    private float[] mCircleCenter = new float[2];
+    private Context mCtx;// god of the universal
+    private float mWidth, mHeight;
+    private float mPadding;// the strength of the triangle point
+    private float mSpacing;// the abyss between tick mark and outer circle
+    private float[] mCircleCenter = new float[2];// center of the universal
     private float mRadius, mPointerRadius, mTickRadius, mOxygenRadius;
     private float mDegree, mAPieceOfDegree, mPointerDegree, mMinDegree, mMaxDegree;
     private RectF mPointerRectF, mTickRectF, mOxygenRectF;
-    private float mCircleWidth, mTickLength, mTickWidth, mOxygenWidth;
-    private Paint mDarkPaint, mFlamePaint, mMasterPaint;
+    private float mCircleWidth;// outer circle width
+    private float mTickLength;// tick mark pointer length
+    private float mTickWidth;// tick mark pointer width
+    private float mOxygenWidth;// color gradient width
+    private float mMoriSummerWidth;// pointer width
+    private Paint mDarkPaint;// outer circle paint
+    private Paint mFlamePaint;// tick mark paint
+    private Paint mMasterPaint;// color gradient paint
+    private Paint mMoriSummerPaint;// pointer paint
     private float mStartAngle;
-    private int dBType = 119;
+    private int dBType = 119;// decibel
 
     public VoiceServant(Context context) {
         this(context, null);
@@ -47,6 +57,7 @@ public class VoiceServant extends View{
     }
 
     private void init(Context context) {
+        mCtx = context;
         mPadding = 10f;
         mSpacing = 15f;
         mDegree = 280f;
@@ -54,9 +65,10 @@ public class VoiceServant extends View{
         mStartAngle = (360f - mDegree) / 2 + 90f;
         mPointerDegree = 125f; mMinDegree = 60f; mMaxDegree = 180f; // def degree value
         mCircleWidth = 20f;
-        mTickLength = 70f;
+        mTickLength = 80f;
         mTickWidth = 3f;
         mOxygenWidth = 10f;
+        mMoriSummerWidth = 10f;
 
         mDarkPaint = new Paint();
         mDarkPaint.setAntiAlias(true);
@@ -68,13 +80,19 @@ public class VoiceServant extends View{
         mFlamePaint.setAntiAlias(true);
         mFlamePaint.setStyle(Paint.Style.STROKE);
         mFlamePaint.setStrokeWidth(mTickWidth);
-        mFlamePaint.setColor(ContextCompat.getColor(context, R.color.oxygen_green));
+        mFlamePaint.setColor(ContextCompat.getColor(context, R.color.oxygen_grey));
 
         mMasterPaint = new Paint();
         mMasterPaint.setAntiAlias(true);
         mMasterPaint.setStyle(Paint.Style.STROKE);
         mMasterPaint.setStrokeWidth(mOxygenWidth);
         mMasterPaint.setColor(ContextCompat.getColor(context, R.color.girl_pink));
+
+        mMoriSummerPaint = new Paint();
+        mMoriSummerPaint.setAntiAlias(true);
+        mMoriSummerPaint.setStyle(Paint.Style.STROKE);
+        mMoriSummerPaint.setStrokeWidth(mMoriSummerWidth);
+        mMoriSummerPaint.setColor(ContextCompat.getColor(context, R.color.alice_blue));
     }
 
     @Override
@@ -122,15 +140,37 @@ public class VoiceServant extends View{
         canvas.drawCircle(mCircleCenter[0], mCircleCenter[1], mPointerRadius, mDarkPaint);
 
         /* draw tick mark, triangle mark and color pointer */
+        int dBPointer = (int) (mPointerDegree * 119 / mDegree);
         for (int i = 0; i <= dBType; i++) {
             canvas.save();
             canvas.rotate(90 + mAPieceOfDegree * i, mCircleCenter[0], mCircleCenter[1]);
-            canvas.drawLine(mCircleCenter[0], mTickRectF.top - mTickLength / 2, mCircleCenter[0], mTickRectF.top + mTickLength / 2, mFlamePaint);
+            if (i < dBPointer) {
+                mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.oxygen_green));
+                canvas.drawLine(
+                        mCircleCenter[0],
+                        mTickRectF.top - mTickLength / 2,
+                        mCircleCenter[0],
+                        mTickRectF.top + mTickLength / 2,
+                        mFlamePaint);
+                if (i == dBPointer - 1) {
+                    canvas.drawLine(
+                            mCircleCenter[0],
+                            mCircleCenter[0] - mRadius,
+                            mCircleCenter[0],
+                            mTickRectF.top + mTickLength / 2,
+                            mMoriSummerPaint);
+                }
+            } else {
+                mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.oxygen_grey));
+                canvas.drawLine(
+                        mCircleCenter[0],
+                        mTickRectF.top - mTickLength / 2,
+                        mCircleCenter[0],
+                        mTickRectF.top + mTickLength / 2,
+                        mFlamePaint);
+            }
             canvas.restore();
         }
-        /*Path path = new Path();
-        path.addArc(mTickRectF, mStartAngle, mDegree);
-        canvas.drawPath(path, mFlamePaint);*/
 
         /* draw colorful gradient */
         Path path = new Path();
