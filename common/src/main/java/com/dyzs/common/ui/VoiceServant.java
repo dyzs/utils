@@ -67,7 +67,7 @@ public class VoiceServant extends View{
         mCtx = context;
         mPadding = 10f;
         mSpacing = 15f;
-        mGalaxyDegree = 280f;
+        mGalaxyDegree = 233f;
         mAPieceOfDegree = mGalaxyDegree / dBType;
         mStartAngle = (360f - mGalaxyDegree) / 2 + 90f;
         mPointerDegree = 125f; mMinDegree = 60f; mMaxDegree = 180f; // def degree value
