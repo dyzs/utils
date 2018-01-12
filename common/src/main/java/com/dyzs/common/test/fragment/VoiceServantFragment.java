@@ -56,7 +56,7 @@ public class VoiceServantFragment extends Fragment{
                 if (msg.what == TIME_DOWNING && i > 0) {
                     doWithMainUI();
                     i--;
-                    mLooper.sendEmptyMessageDelayed(TIME_DOWNING, 500);
+                    mLooper.sendEmptyMessageDelayed(TIME_DOWNING, 1500);
                 }
             }
         };
@@ -67,7 +67,8 @@ public class VoiceServantFragment extends Fragment{
             mUIHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    int iRandom = (int) (Math.random() * 360 % 360);
+                    Double d = Math.random() * 89;
+                    int iRandom = d.intValue() + 30;
                     voice_servant.setPointerDecibel(iRandom);
                 }
             });

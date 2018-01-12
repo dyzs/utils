@@ -1,5 +1,7 @@
 package com.dyzs.common.ui;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import com.dyzs.common.R;
 
@@ -59,6 +62,7 @@ public class VoiceServant extends View{
     public VoiceServant(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
+        startPointerAnim();
     }
 
     private void init(Context context) {
@@ -79,13 +83,13 @@ public class VoiceServant extends View{
         mDarkPaint.setAntiAlias(true);
         mDarkPaint.setStyle(Paint.Style.STROKE);
         mDarkPaint.setStrokeWidth(mCircleWidth);
-        mDarkPaint.setColor(ContextCompat.getColor(context, R.color.stone_grey));
+        mDarkPaint.setColor(ContextCompat.getColor(context, R.color.blair_grey));
 
         mFlamePaint = new Paint();
         mFlamePaint.setAntiAlias(true);
         mFlamePaint.setStyle(Paint.Style.STROKE);
         mFlamePaint.setStrokeWidth(mTickWidth);
-        mFlamePaint.setColor(ContextCompat.getColor(context, R.color.oxygen_grey));
+        mFlamePaint.setColor(ContextCompat.getColor(context, R.color.emma_grey));
 
         mMasterPaint = new Paint();
         mMasterPaint.setAntiAlias(true);
@@ -148,9 +152,11 @@ public class VoiceServant extends View{
         int dBPointer = (int) (mPointerDegree * 119 / mGalaxyDegree);
         for (int i = 0; i <= mDecibel; i++) {
             canvas.save();
-            canvas.rotate(mStartAngle + 90 + mAPieceOfDegree * i, mCircleCenter[0], mCircleCenter[1]);
+            float rotateDegree;
+            rotateDegree = mStartAngle + 90 + mAPieceOfDegree * i;
+            canvas.rotate(rotateDegree, mCircleCenter[0], mCircleCenter[1]);
             if (i < dBPointer) {
-                mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.oxygen_green));
+                mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.blair_grey));
                 canvas.drawLine(
                         mCircleCenter[0],
                         mTickRectF.top - mTickLength / 2,
@@ -167,7 +173,7 @@ public class VoiceServant extends View{
                             mMoriSummerPaint);
                 }
             } else {
-                mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.oxygen_grey));
+                mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.emma_grey));
                 canvas.drawLine(
                         mCircleCenter[0],
                         mTickRectF.top - mTickLength / 2,
@@ -182,7 +188,7 @@ public class VoiceServant extends View{
         SweepGradient sweepGradient = new SweepGradient(
                 mCircleCenter[0],
                 mCircleCenter[1],
-                ContextCompat.getColor(mCtx, R.color.cinnabar_red),
+                ContextCompat.getColor(mCtx, R.color.white),
                 ContextCompat.getColor(mCtx, R.color.oxygen_green));
         mMasterPaint.setShader(sweepGradient);
         Path path = new Path();
@@ -196,14 +202,16 @@ public class VoiceServant extends View{
     public void setPointerDecibel(int value) {
         if (mDecibel == 119) {
             value = value % 119;
+            System.out.println("======= value:" + value);
             float degree = mGalaxyDegree * value / 119;
             this.mPointerDegree = degree;
-            invalidate();
+            startPointerAnim();
+            // invalidate();
         }
     }
 
     public int getPointerColor(int dBPointer) {
-        int sc = ContextCompat.getColor(mCtx, R.color.cinnabar_red);
+        int sc = ContextCompat.getColor(mCtx, R.color.white);
         int ec = ContextCompat.getColor(mCtx, R.color.oxygen_green);
         int rS = Color.red(sc);
         int gS = Color.green(sc);
@@ -215,6 +223,25 @@ public class VoiceServant extends View{
         int g = (int) (gS + (gE - gS) * 1f / (mDecibel + 1) * dBPointer);
         int b = (int) (bS + (bE - bS) * 1f / (mDecibel + 1) * dBPointer);
         return Color.argb(255, r, g, b);
+    }
+
+    private ValueAnimator mAnimator;
+    private float mLastValue = 0f;
+    private float mCurrentValue = 100f;
+    private boolean b = false;
+    private void startPointerAnim() {
+        mAnimator = ValueAnimator.ofFloat(mLastValue, mPointerDegree);
+        mAnimator.setDuration(1000);
+        mAnimator.setInterpolator(new DecelerateInterpolator());
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                mPointerDegree = value;
+                postInvalidate();
+            }
+        });
+        mAnimator.start();
     }
 
     @Override

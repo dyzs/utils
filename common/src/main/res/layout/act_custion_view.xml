@@ -24,7 +24,7 @@
         <TextView
             android:id="@+id/voice_servant"
             style="@style/CommonTextViewItem"
-            android:text="Voice Servant Compass"
+            android:text="Servant Compass"
             />
 
         <TextView
