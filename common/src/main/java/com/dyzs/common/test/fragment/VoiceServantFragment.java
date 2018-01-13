@@ -40,7 +40,7 @@ public class VoiceServantFragment extends Fragment implements VoiceServant.Serva
         super.onViewCreated(view, savedInstanceState);
         voice_servant = (VoiceServant) view.findViewById(R.id.voice_servant);
         voice_servant.setServantListener(this);
-        voice_servant.setPointerDecibel(123);
+        voice_servant.setPointerDecibel(118);
         // mLooper.sendEmptyMessage(TIME_DOWNING);
     }
 

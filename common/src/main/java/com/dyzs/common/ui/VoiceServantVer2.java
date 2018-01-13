@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -26,8 +25,8 @@ import com.dyzs.common.R;
  * decibel(dB) use range 0~150 or 0~120
  */
 
-public class VoiceServant extends View{
-    private static final String TAG = VoiceServant.class.getSimpleName();
+public class VoiceServantVer2 extends View{
+    private static final String TAG = VoiceServantVer2.class.getSimpleName();
     private Context mCtx;// god of the universal
     private float mWidth, mHeight;
     private float mPadding;// the strength of the triangle point
@@ -50,19 +49,19 @@ public class VoiceServant extends View{
     private int[] mGalaxyColors;
     private float[] mGalaxyPositions;
 
-    public VoiceServant(Context context) {
+    public VoiceServantVer2(Context context) {
         this(context, null);
     }
 
-    public VoiceServant(Context context, AttributeSet attrs) {
+    public VoiceServantVer2(Context context, AttributeSet attrs) {
         this(context, attrs, -1);
     }
 
-    public VoiceServant(Context context, AttributeSet attrs, int defStyleAttr) {
+    public VoiceServantVer2(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, -1);
     }
 
-    public VoiceServant(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public VoiceServantVer2(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
         // startPointerAnim();
@@ -164,7 +163,7 @@ public class VoiceServant extends View{
             rotateDegree = mStartAngle + 90 + mAPieceOfDegree * i;
             canvas.rotate(rotateDegree, mCircleCenter[0], mCircleCenter[1]);
             if (i <= dBPointer) {
-                mFlamePaint.setColor(getPointerColor(i));//ContextCompat.getColor(mCtx, R.color.blair_grey));
+                mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.blair_grey));
                 canvas.drawLine(
                         mCircleCenter[0],
                         mTickRectF.top - mTickLength / 2,
@@ -221,17 +220,38 @@ public class VoiceServant extends View{
     }
 
     public int getPointerColor(int pointerTick) {
-        int sc = mGalaxyColors[0];
-        int ec = mGalaxyColors[1];
+        float degreeRate = mGalaxyDegree / 360f;
+        float pointerDegreeRate = pointerTick * 1f / (mDecibel) * mGalaxyDegree * degreeRate;
+        int resSColor = ContextCompat.getColor(mCtx, R.color.white);
+        int resEColor = ContextCompat.getColor(mCtx, R.color.oxygen_green);
+        float rangeColorRate = 0f;
+        for (int i = 0 ; i < mGalaxyPositions.length; i++) {
+            if (i == 0) {
+                continue;
+            }
+            if (pointerDegreeRate < mGalaxyPositions[i]) {
+                float s = mGalaxyPositions[i-1];
+                float e = mGalaxyPositions[i];
+                rangeColorRate = (pointerDegreeRate - s) / (e - s);
+                resSColor = mGalaxyColors[i-1];
+                resEColor = mGalaxyColors[i];
+                break;
+            }
+        }
+        int sc = resSColor;
+        int ec = resEColor;
         int rS = Color.red(sc);
         int gS = Color.green(sc);
         int bS = Color.blue(sc);
         int rE = Color.red(ec);
         int gE = Color.green(ec);
         int bE = Color.blue(ec);
-        int r = (int) (rS + (rE - rS) * 1f / (mDecibel + 1) * pointerTick);
+        int r = (int) (rS + (rE - rS) * 1f * rangeColorRate);
+        int g = (int) (gS + (gE - gS) * 1f * rangeColorRate);
+        int b = (int) (bS + (bE - bS) * 1f * rangeColorRate);
+        /*int r = (int) (rS + (rE - rS) * 1f / (mDecibel + 1) * pointerTick);
         int g = (int) (gS + (gE - gS) * 1f / (mDecibel + 1) * pointerTick);
-        int b = (int) (bS + (bE - bS) * 1f / (mDecibel + 1) * pointerTick);
+        int b = (int) (bS + (bE - bS) * 1f / (mDecibel + 1) * pointerTick);*/
         return Color.argb(255, r, g, b);
     }
 
@@ -296,7 +316,8 @@ public class VoiceServant extends View{
         if (colors == null) {
             colors = new int[] {
                     ContextCompat.getColor(mCtx, R.color.white),
-                    ContextCompat.getColor(mCtx, R.color.oxygen_green)
+                    ContextCompat.getColor(mCtx, R.color.oxygen_green),
+                    ContextCompat.getColor(mCtx, R.color.cinnabar_red)
             };
         }
         this.mGalaxyColors = colors;
