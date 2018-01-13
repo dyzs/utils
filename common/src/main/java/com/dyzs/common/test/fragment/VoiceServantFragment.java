@@ -13,13 +13,11 @@ import android.view.ViewGroup;
 import com.dyzs.common.R;
 import com.dyzs.common.ui.VoiceServant;
 
-import java.util.Random;
-
 /**
  * Created by maidou on 2018/1/8.
  */
 
-public class VoiceServantFragment extends Fragment{
+public class VoiceServantFragment extends Fragment implements VoiceServant.ServantListener{
     VoiceServant voice_servant;
     private HandlerThread mHandlerThread;
     private String mHtName = "voice_servant";
@@ -41,8 +39,9 @@ public class VoiceServantFragment extends Fragment{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         voice_servant = (VoiceServant) view.findViewById(R.id.voice_servant);
+        voice_servant.setServantListener(this);
         voice_servant.setPointerDecibel(123);
-        mLooper.sendEmptyMessage(TIME_DOWNING);
+        // mLooper.sendEmptyMessage(TIME_DOWNING);
     }
 
     private void initHandlerThread() {
@@ -56,7 +55,6 @@ public class VoiceServantFragment extends Fragment{
                 if (msg.what == TIME_DOWNING && i > 0) {
                     doWithMainUI();
                     i--;
-                    mLooper.sendEmptyMessageDelayed(TIME_DOWNING, 1500);
                 }
             }
         };
@@ -81,5 +79,10 @@ public class VoiceServantFragment extends Fragment{
     public void onDestroy() {
         mHandlerThread.quit();
         super.onDestroy();
+    }
+
+    @Override
+    public void startTension() {
+        mLooper.sendEmptyMessage(TIME_DOWNING);
     }
 }
