@@ -44,10 +44,11 @@ public class CompassServant extends View{
     private Paint mMasterPaint;// color gradient paint
     private Paint mMoriSummerPaint;// pointer paint
     private float mStartAngle;
-    private int mDecibel = 119;// decibel
+    private int mDecibel = 119;// tick mark total count
     private int[] mGalaxyColors;
-    private float[] mGalaxyPositions;// could't never authorized
-    private int mC1, mC2, mC3, mC4, mC5, mCCommander;
+    private float[] mGalaxyPositions;// could't be authorized
+    private int mC1, mC2, mC3, mC4;
+    private int mCCommander;// command display colors, value limits[2~4]
 
     public CompassServant(Context context) {
         this(context, null);
@@ -69,6 +70,13 @@ public class CompassServant extends View{
 
     private void init(Context context, AttributeSet attrs) {
         mCtx = context;
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CompassServant);
+        mCCommander = ta.getInt(R.styleable.CompassServant_cs_color_commander, 3);
+        mC1 = ta.getColor(R.styleable.CompassServant_cs_color1, ContextCompat.getColor(context, R.color.white));
+        mC2 = ta.getColor(R.styleable.CompassServant_cs_color2, ContextCompat.getColor(context, R.color.oxygen_green));
+        mC3 = ta.getColor(R.styleable.CompassServant_cs_color3, ContextCompat.getColor(context, R.color.cinnabar_red));
+        mC4 = ta.getColor(R.styleable.CompassServant_cs_color4, ContextCompat.getColor(context, R.color.pale_blue));
+        ta.recycle();
         mPadding = 10f;
         mSpacing = 15f;
         mGalaxyDegree = 280f;
@@ -80,7 +88,8 @@ public class CompassServant extends View{
         mTickWidth = 3f;
         mOxygenWidth = 30f;
         mMoriSummerWidth = 10f;
-        setGalaxyColors(mGalaxyColors);
+
+        setGalaxyColors(calcInitColors());
 
         mDarkPaint = new Paint();
         mDarkPaint.setAntiAlias(true);
@@ -105,6 +114,16 @@ public class CompassServant extends View{
         mMoriSummerPaint.setStyle(Paint.Style.STROKE);
         mMoriSummerPaint.setStrokeWidth(mMoriSummerWidth);
         mMoriSummerPaint.setColor(ContextCompat.getColor(context, R.color.alice_blue));
+    }
+
+    private int[] calcInitColors() {
+        mCCommander = mCCommander % 5;
+        if (mCCommander < 2) {mCCommander = 2;}
+        int[] retColors = new int[mCCommander], colors = new int[]{mC1, mC2, mC3, mC4};
+        for (int i = 0; i < mCCommander; i++) {
+            retColors[i] = colors[i];
+        }
+        return retColors;
     }
 
     @Override
@@ -144,9 +163,6 @@ public class CompassServant extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mGalaxyColors.length != mGalaxyPositions.length) {
-            throw new IllegalArgumentException("length errors happened between colors and positions");
-        }
         drawDarkFlameMaster(canvas);
         drawGalaxy(canvas);
     }
@@ -319,6 +335,7 @@ public class CompassServant extends View{
 
     /**
      * 设置颜色的时候同时计算 positions
+     * ！不处理任何颜色值设置异常
      */
     public void setGalaxyColors(@Nullable int[] colors) {
         if (colors == null) {
@@ -341,12 +358,12 @@ public class CompassServant extends View{
     /* not allow use */
     private void setPositions(@Nullable float[] positions) {
         float degreeRate = mGalaxyDegree / 360f;
-        if (positions == null) {
+        if (positions == null) {// set positions average allocation
             positions = new float[mGalaxyColors.length];
-            for (int i = 0; i < mGalaxyColors.length; i++) {
-                positions[i] = i * degreeRate / (mGalaxyColors.length - 1);
+            for (int i = 0; i < positions.length; i++) {
+                positions[i] = i * degreeRate / (positions.length - 1);
             }
-        } else {// positions reset
+        } else {// use degree rate while reset positions
             for (int i = 0; i < positions.length; i++) {
                 positions[i] = positions[i] * degreeRate;
             }
