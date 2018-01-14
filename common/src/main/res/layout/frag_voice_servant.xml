@@ -8,8 +8,8 @@
     android:gravity="center"
     >
 
-    <com.dyzs.common.ui.VoiceServant
-        android:id="@+id/voice_servant"
+    <com.dyzs.common.ui.CompassServant
+        android:id="@+id/compass_servant"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         />

@@ -11,14 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dyzs.common.R;
-import com.dyzs.common.ui.VoiceServant;
+import com.dyzs.common.ui.CompassServant;
 
 /**
  * Created by maidou on 2018/1/8.
  */
 
-public class VoiceServantFragment extends Fragment implements VoiceServant.ServantListener{
-    VoiceServant voice_servant;
+public class CompassServantFragment extends Fragment implements CompassServant.ServantListener{
+    CompassServant voice_servant;
     private HandlerThread mHandlerThread;
     private String mHtName = "voice_servant";
     private Handler mLooper;
@@ -38,7 +38,7 @@ public class VoiceServantFragment extends Fragment implements VoiceServant.Serva
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        voice_servant = (VoiceServant) view.findViewById(R.id.voice_servant);
+        voice_servant = (CompassServant) view.findViewById(R.id.compass_servant);
         voice_servant.setServantListener(this);
         voice_servant.setPointerDecibel(118);
         // mLooper.sendEmptyMessage(TIME_DOWNING);

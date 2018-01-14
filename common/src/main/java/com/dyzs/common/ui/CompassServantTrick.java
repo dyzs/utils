@@ -11,11 +11,11 @@ import android.os.Handler;
  * @author dyzs
  * Created on 2018/1/10.
  * Audio Record
- * trick master{@link VoiceServant}
+ * trick master{@link CompassServant}
  */
 
-public class VoiceServantTrick {
-    private static final String TAG = VoiceServantTrick.class.getSimpleName();
+public class CompassServantTrick {
+    private static final String TAG = CompassServantTrick.class.getSimpleName();
     private AudioRecord mAudioRecord;
     private static final int SAMPLE_RATE_IN_HZ = 8000;
     private static final int BUFFER_SIZE = AudioRecord.getMinBufferSize(SAMPLE_RATE_IN_HZ,
@@ -23,7 +23,7 @@ public class VoiceServantTrick {
     private boolean isGetVoiceRun;
     private Object mLock;
 
-    public VoiceServantTrick() {
+    public CompassServantTrick() {
         mLock = new Object();
     }
 
