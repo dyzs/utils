@@ -3,6 +3,7 @@ package com.dyzs.common.ui;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -45,7 +46,8 @@ public class CompassServant extends View{
     private float mStartAngle;
     private int mDecibel = 119;// decibel
     private int[] mGalaxyColors;
-    private float[] mGalaxyPositions;
+    private float[] mGalaxyPositions;// could't never authorized
+    private int mC1, mC2, mC3, mC4, mC5, mCCommander;
 
     public CompassServant(Context context) {
         this(context, null);
@@ -61,11 +63,11 @@ public class CompassServant extends View{
 
     public CompassServant(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
+        init(context, attrs);
         // startPointerAnim();
     }
 
-    private void init(Context context) {
+    private void init(Context context, AttributeSet attrs) {
         mCtx = context;
         mPadding = 10f;
         mSpacing = 15f;
@@ -217,18 +219,47 @@ public class CompassServant extends View{
         // invalidate();
     }
 
+    /**
+     * SweepGradient 颜色值对应的1f：360f(圆的角度)
+     * pointerDegreeRate 计算解释：pointerTick/totalPointer对应了颜色值的渐变，
+     * 因为当前圆可以设置为存在缺口的圆弧，所以按照比例同成于圆弧 galaxyDegree/360f（圆的角度）
+     * 颜色区间计算：通过上述得到的float值，去校验当前指针在 positions 的哪个区间，然后换算当前颜色值RGB
+     */
     public int getPointerColor(int pointerTick) {
-        int sc = mGalaxyColors[0];
-        int ec = mGalaxyColors[1];
+        if (mGalaxyColors.length == 1) {
+            return mGalaxyColors[0];
+        }
+        float degreeRate = mGalaxyDegree / 360f;
+        float pointerDegreeRate = pointerTick * 1f / (mDecibel + 1) * degreeRate;
+        int resSColor = ContextCompat.getColor(mCtx, R.color.white);
+        int resEColor = ContextCompat.getColor(mCtx, R.color.oxygen_green);
+        float rangeColorRate = 0f;
+        for (int i = 0 ; i < mGalaxyPositions.length; i++) {
+            if (i == 0) {
+                resSColor = mGalaxyColors[0];
+                resEColor = mGalaxyColors[1];
+                continue;
+            }
+            if (pointerDegreeRate < mGalaxyPositions[i]) {
+                float s = mGalaxyPositions[i-1];
+                float e = mGalaxyPositions[i];
+                rangeColorRate = (pointerDegreeRate - s) / (e - s);
+                resSColor = mGalaxyColors[i-1];
+                resEColor = mGalaxyColors[i];
+                break;
+            }
+        }
+        int sc = resSColor;
+        int ec = resEColor;
         int rS = Color.red(sc);
         int gS = Color.green(sc);
         int bS = Color.blue(sc);
         int rE = Color.red(ec);
         int gE = Color.green(ec);
         int bE = Color.blue(ec);
-        int r = (int) (rS + (rE - rS) * 1f / (mDecibel + 1) * pointerTick);
-        int g = (int) (gS + (gE - gS) * 1f / (mDecibel + 1) * pointerTick);
-        int b = (int) (bS + (bE - bS) * 1f / (mDecibel + 1) * pointerTick);
+        int r = (int) (rS + (rE - rS) * 1f * rangeColorRate);
+        int g = (int) (gS + (gE - gS) * 1f * rangeColorRate);
+        int b = (int) (bS + (bE - bS) * 1f * rangeColorRate);
         return Color.argb(255, r, g, b);
     }
 
@@ -293,7 +324,8 @@ public class CompassServant extends View{
         if (colors == null) {
             colors = new int[] {
                     ContextCompat.getColor(mCtx, R.color.white),
-                    ContextCompat.getColor(mCtx, R.color.oxygen_green)
+                    ContextCompat.getColor(mCtx, R.color.oxygen_green),
+                    ContextCompat.getColor(mCtx, R.color.cinnabar_red)
             };
         }
         this.mGalaxyColors = colors;

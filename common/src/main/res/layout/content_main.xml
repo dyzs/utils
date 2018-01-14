@@ -16,7 +16,7 @@
         android:gravity="center"
         >
 
-        <com.dyzs.common.ui.CompassServantVer2
+        <com.dyzs.common.ui.CompassServant
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/black"
