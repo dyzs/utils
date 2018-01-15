@@ -14,16 +14,17 @@ import com.dyzs.common.R;
 import com.dyzs.common.ui.CompassServant;
 
 /**
- * Created by maidou on 2018/1/8.
+ * @author dyzs
+ * Created on 2018/1/8.
  */
 
 public class CompassServantFragment extends Fragment implements CompassServant.ServantListener{
-    CompassServant voice_servant;
+    CompassServant compass_servant;
     private HandlerThread mHandlerThread;
-    private String mHtName = "voice_servant";
+    private String mHtName = "compass_servant";
     private Handler mLooper;
     private Handler mUIHandler;
-    private static int TIME_DOWNING = 0x110;
+    private static int MESSAGE = 0x110;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,15 +33,15 @@ public class CompassServantFragment extends Fragment implements CompassServant.S
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_voice_servant, null);
+        return inflater.inflate(R.layout.frag_compass_servant, null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        voice_servant = (CompassServant) view.findViewById(R.id.compass_servant);
-        voice_servant.setServantListener(this);
-        voice_servant.setPointerDecibel(118);
+        compass_servant = (CompassServant) view.findViewById(R.id.compass_servant);
+        compass_servant.setServantListener(this);
+        compass_servant.setPointerDecibel(118);
         // mLooper.sendEmptyMessage(TIME_DOWNING);
     }
 
@@ -52,7 +53,7 @@ public class CompassServantFragment extends Fragment implements CompassServant.S
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (msg.what == TIME_DOWNING && i > 0) {
+                if (msg.what == MESSAGE && i > 0) {
                     doWithMainUI();
                     i--;
                 }
@@ -67,7 +68,7 @@ public class CompassServantFragment extends Fragment implements CompassServant.S
                 public void run() {
                     Double d = Math.random() * 89;
                     int iRandom = d.intValue() + 30;
-                    voice_servant.setPointerDecibel(iRandom);
+                    compass_servant.setPointerDecibel(iRandom);
                 }
             });
         } catch (Exception e) {
@@ -83,6 +84,6 @@ public class CompassServantFragment extends Fragment implements CompassServant.S
 
     @Override
     public void startTension() {
-        mLooper.sendEmptyMessage(TIME_DOWNING);
+        mLooper.sendEmptyMessage(MESSAGE);
     }
 }
