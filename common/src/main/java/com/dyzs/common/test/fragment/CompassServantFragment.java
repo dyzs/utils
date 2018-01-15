@@ -42,7 +42,6 @@ public class CompassServantFragment extends Fragment implements CompassServant.S
         compass_servant = (CompassServant) view.findViewById(R.id.compass_servant);
         compass_servant.setServantListener(this);
         compass_servant.setPointerDecibel(118);
-        // mLooper.sendEmptyMessage(TIME_DOWNING);
     }
 
     private void initHandlerThread() {
