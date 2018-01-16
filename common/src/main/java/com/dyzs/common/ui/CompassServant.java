@@ -33,7 +33,7 @@ public class CompassServant extends View{
     private float[] mCircleCenter = new float[2];// center of the universal
     private float mRadius, mPointerRadius, mTickRadius, mOxygenRadius;
     private float mGalaxyDegree, mPerDegree, mPointerDegree, mMinDegree, mMaxDegree;
-    private RectF mPointerRectF, mTickRectF, mOxygenRectF;
+    private RectF mPointerRectF, mTickRectF, mOxygenRectF, mTextRectF;
     private float mCircleWidth;// outer circle width
     private float mTickLength;// tick mark pointer length
     private float mTickWidth;// tick mark pointer width
@@ -43,12 +43,16 @@ public class CompassServant extends View{
     private Paint mFlamePaint;// tick mark paint
     private Paint mMasterPaint;// color gradient paint
     private Paint mMoriSummerPaint;// pointer paint
+    private Paint mTextPaint;
     private float mStartAngle;
     private int mDecibel;// tick mark total count
     private int[] mGalaxyColors;
     private float[] mGalaxyPositions;// could't be authorized
     private int mC1, mC2, mC3, mC4;
     private int mCCommander;// command display colors, value limits[2~4]
+    private int mTeleportColor;
+    static int[] BACKGROUND = new int[]{android.R.attr.background};
+
 
     public CompassServant(Context context) {
         this(context, null);
@@ -64,13 +68,13 @@ public class CompassServant extends View{
 
     public CompassServant(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context, attrs);
+        init(context, attrs, defStyleAttr, defStyleRes);
         // startPointerAnim();
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         mCtx = context;
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CompassServant);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CompassServant, defStyleAttr, defStyleRes);
         mCCommander = ta.getInt(R.styleable.CompassServant_cs_color_commander, 3);
         mC1 = ta.getColor(R.styleable.CompassServant_cs_color1, ContextCompat.getColor(context, R.color.white));
         mC2 = ta.getColor(R.styleable.CompassServant_cs_color2, ContextCompat.getColor(context, R.color.oxygen_green));
@@ -81,6 +85,11 @@ public class CompassServant extends View{
         mCircleWidth = ta.getDimension(R.styleable.CompassServant_cs_outer_circle, 20f);
         mGalaxyDegree = ta.getFloat(R.styleable.CompassServant_cs_galaxy_degree, 280f);
         ta.recycle();
+        /* get system attr */
+        ta = context.obtainStyledAttributes(BACKGROUND);
+        mTeleportColor = ta.getColor(0, ContextCompat.getColor(context, R.color.white));
+        ta.recycle();
+
         mPadding = 10f;
         mSpacing = 15f;
         mGalaxyDegree = mGalaxyDegree % 361f;
@@ -103,7 +112,6 @@ public class CompassServant extends View{
         mFlamePaint.setAntiAlias(true);
         mFlamePaint.setStyle(Paint.Style.STROKE);
         mFlamePaint.setStrokeWidth(mTickWidth);
-        // mFlamePaint.setStrokeCap(Paint.Cap.ROUND);
         mFlamePaint.setColor(ContextCompat.getColor(context, R.color.tension_grey));
 
         mMasterPaint = new Paint();
@@ -117,6 +125,12 @@ public class CompassServant extends View{
         mMoriSummerPaint.setStyle(Paint.Style.STROKE);
         mMoriSummerPaint.setStrokeWidth(mMoriSummerWidth);
         mMoriSummerPaint.setColor(ContextCompat.getColor(context, R.color.alice_blue));
+
+        mTextPaint = new Paint();
+        mTextPaint.setAntiAlias(true);
+        mTextPaint.setColor(Color.WHITE);
+        mTextPaint.setStrokeWidth(4f);
+        mTextPaint.setTextSize(40f);
     }
 
     private int[] calcInitColors() {
@@ -161,6 +175,13 @@ public class CompassServant extends View{
         r = mCircleCenter[0] + mOxygenRadius;
         b = mCircleCenter[1] + mOxygenRadius;
         mOxygenRectF = new RectF(l, t, r, b);
+
+        float textWidth = mTextPaint.measureText(mDecibel + "dB");
+        l = mCircleCenter[0] - textWidth + 10;
+        t = mCircleCenter[1] - textWidth + 10;
+        r = mCircleCenter[0] + textWidth + 10;
+        b = mCircleCenter[1] + textWidth + 10;
+        mTextRectF = new RectF(l, t, r, b);
     }
 
     @Override
@@ -208,6 +229,10 @@ public class CompassServant extends View{
                         mFlamePaint);
             }
             canvas.restore();
+            mTextPaint.setColor(mTeleportColor);
+            canvas.drawRect(mTextRectF, mTextPaint);
+            mTextPaint.setColor(Color.WHITE);
+            canvas.drawText(i + "dB", mCircleCenter[0], mCircleCenter[1], mTextPaint);
         }
     }
 
