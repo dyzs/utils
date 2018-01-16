@@ -32,7 +32,7 @@ public class CompassServant extends View{
     private float mSpacing;// the abyss between tick mark and outer circle
     private float[] mCircleCenter = new float[2];// center of the universal
     private float mRadius, mPointerRadius, mTickRadius, mOxygenRadius;
-    private float mGalaxyDegree, mAPieceOfDegree, mPointerDegree, mMinDegree, mMaxDegree;
+    private float mGalaxyDegree, mPerDegree, mPointerDegree, mMinDegree, mMaxDegree;
     private RectF mPointerRectF, mTickRectF, mOxygenRectF;
     private float mCircleWidth;// outer circle width
     private float mTickLength;// tick mark pointer length
@@ -84,11 +84,11 @@ public class CompassServant extends View{
         mPadding = 10f;
         mSpacing = 15f;
         mGalaxyDegree = mGalaxyDegree % 361f;
-        mAPieceOfDegree = mGalaxyDegree / mDecibel;
+        mPerDegree = mGalaxyDegree / mDecibel;
         mStartAngle = (360f - mGalaxyDegree) / 2 + 90f;
         mPointerDegree = 280f; mMinDegree = 60f; mMaxDegree = 180f; // def degree value
         mOxygenWidth = mCircleWidth * 1.5f;
-        mTickWidth = (float) (mAPieceOfDegree / 4.5f * 2 * Math.PI);
+        mTickWidth = (float) (mPerDegree / 4.5f * 2 * Math.PI);
         mMoriSummerWidth = mTickWidth * 2;
 
         setGalaxyColors(calcInitColors());
@@ -179,7 +179,7 @@ public class CompassServant extends View{
         for (int i = 0; i <= mDecibel; i++) {
             canvas.save();
             float rotateDegree;
-            rotateDegree = mStartAngle + 90 + mAPieceOfDegree * i;
+            rotateDegree = mStartAngle + 90 + mPerDegree * i;
             canvas.rotate(rotateDegree, mCircleCenter[0], mCircleCenter[1]);
             if (i <= dBPointer) {
                 mFlamePaint.setColor(getPointerColor(i));//ContextCompat.getColor(mCtx, R.color.blair_grey));
