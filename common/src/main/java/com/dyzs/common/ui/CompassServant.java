@@ -76,18 +76,19 @@ public class CompassServant extends View{
         mC2 = ta.getColor(R.styleable.CompassServant_cs_color2, ContextCompat.getColor(context, R.color.oxygen_green));
         mC3 = ta.getColor(R.styleable.CompassServant_cs_color3, ContextCompat.getColor(context, R.color.cinnabar_red));
         mC4 = ta.getColor(R.styleable.CompassServant_cs_color4, ContextCompat.getColor(context, R.color.pale_blue));
+        mCircleWidth = ta.getDimension(R.styleable.CompassServant_cs_outer_circle, 20f);
+        mGalaxyDegree = ta.getFloat(R.styleable.CompassServant_cs_galaxy_degree, 280f);
+        mTickLength = ta.getDimension(R.styleable.CompassServant_cs_tick_mark_length, 80f);
         ta.recycle();
         mPadding = 10f;
         mSpacing = 15f;
-        mGalaxyDegree = 280f;
+        mGalaxyDegree = mGalaxyDegree % 361f;
         mAPieceOfDegree = mGalaxyDegree / mDecibel;
         mStartAngle = (360f - mGalaxyDegree) / 2 + 90f;
         mPointerDegree = 280f; mMinDegree = 60f; mMaxDegree = 180f; // def degree value
-        mCircleWidth = 20f;
-        mTickLength = 80f;
+        mOxygenWidth = mCircleWidth * 1.5f;
         mTickWidth = 3f;
-        mOxygenWidth = 30f;
-        mMoriSummerWidth = 10f;
+        mMoriSummerWidth = mTickWidth * 3;
 
         setGalaxyColors(calcInitColors());
 
