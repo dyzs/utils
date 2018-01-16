@@ -27,7 +27,8 @@
             app:cs_color4="@color/white"
             app:cs_galaxy_degree="280"
             app:cs_outer_circle="7dp"
-            app:cs_tick_mark_length="25dp"
+            app:cs_tick_mark_length="30dp"
+            app:cs_decibel="119"
             />
 
     </RelativeLayout>

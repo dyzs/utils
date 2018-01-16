@@ -44,7 +44,7 @@ public class CompassServant extends View{
     private Paint mMasterPaint;// color gradient paint
     private Paint mMoriSummerPaint;// pointer paint
     private float mStartAngle;
-    private int mDecibel = 119;// tick mark total count
+    private int mDecibel;// tick mark total count
     private int[] mGalaxyColors;
     private float[] mGalaxyPositions;// could't be authorized
     private int mC1, mC2, mC3, mC4;
@@ -76,9 +76,10 @@ public class CompassServant extends View{
         mC2 = ta.getColor(R.styleable.CompassServant_cs_color2, ContextCompat.getColor(context, R.color.oxygen_green));
         mC3 = ta.getColor(R.styleable.CompassServant_cs_color3, ContextCompat.getColor(context, R.color.cinnabar_red));
         mC4 = ta.getColor(R.styleable.CompassServant_cs_color4, ContextCompat.getColor(context, R.color.pale_blue));
+        mDecibel = ta.getInteger(R.styleable.CompassServant_cs_decibel, 119);
+        mTickLength = ta.getDimension(R.styleable.CompassServant_cs_tick_mark_length, 80f);
         mCircleWidth = ta.getDimension(R.styleable.CompassServant_cs_outer_circle, 20f);
         mGalaxyDegree = ta.getFloat(R.styleable.CompassServant_cs_galaxy_degree, 280f);
-        mTickLength = ta.getDimension(R.styleable.CompassServant_cs_tick_mark_length, 80f);
         ta.recycle();
         mPadding = 10f;
         mSpacing = 15f;
@@ -87,8 +88,8 @@ public class CompassServant extends View{
         mStartAngle = (360f - mGalaxyDegree) / 2 + 90f;
         mPointerDegree = 280f; mMinDegree = 60f; mMaxDegree = 180f; // def degree value
         mOxygenWidth = mCircleWidth * 1.5f;
-        mTickWidth = 3f;
-        mMoriSummerWidth = mTickWidth * 3;
+        mTickWidth = (float) (mAPieceOfDegree / 4.5f * 2 * Math.PI);
+        mMoriSummerWidth = mTickWidth * 2;
 
         setGalaxyColors(calcInitColors());
 
@@ -102,6 +103,7 @@ public class CompassServant extends View{
         mFlamePaint.setAntiAlias(true);
         mFlamePaint.setStyle(Paint.Style.STROKE);
         mFlamePaint.setStrokeWidth(mTickWidth);
+        // mFlamePaint.setStrokeCap(Paint.Cap.ROUND);
         mFlamePaint.setColor(ContextCompat.getColor(context, R.color.tension_grey));
 
         mMasterPaint = new Paint();

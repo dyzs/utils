@@ -12,6 +12,7 @@
         android:id="@+id/compass_servant"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        app:cs_decibel="120"
         />
 
 </LinearLayout>
