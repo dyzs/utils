@@ -80,7 +80,7 @@ public class CompassServant extends View{
         TypedArray ta = context.obtainStyledAttributes(attrs, BACKGROUND);
         mTeleportColor = ta.getColor(0, ContextCompat.getColor(context, R.color.black));
         ta.recycle();
-        // setBackgroundColor(mTeleportColor);
+        setBackgroundColor(mTeleportColor);
 
         ta = context.obtainStyledAttributes(attrs, R.styleable.CompassServant, defStyleAttr, defStyleRes);
         mCCommander = ta.getInt(R.styleable.CompassServant_cs_color_commander, 3);
