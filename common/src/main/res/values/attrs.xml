@@ -55,4 +55,20 @@
         <attr name="cs_tick_mark_length" format="dimension"/>
         <attr name="cs_text_size" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="ColorProgress">
+        <attr name="cpProgressColor" format="color" />
+        <attr name="cpTotalColor" format="color" />
+        <attr name="cpTotalProgress" format="integer" />
+        <attr name="cpProgress" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CornerImageView">
+        <attr name="circleRadius" format="dimension" />
+        <attr name="paintColor" format="color" />
+        <attr name="pureColor" format="color" />
+        <attr name="selectedState" format="boolean" />
+        <attr name="imageResource" format="integer" />
+        <attr name="resId" format="reference" />
+    </declare-styleable>
 </resources>

@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/black"
+            android:padding="5dp"
             app:cs_color_commander="4"
             app:cs_color1="@color/alice_blue"
             app:cs_color2="@color/cinnabar_red"

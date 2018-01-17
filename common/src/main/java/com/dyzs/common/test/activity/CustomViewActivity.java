@@ -27,6 +27,9 @@ public class CustomViewActivity extends BaseActivity implements View.OnClickList
         findViewById(R.id.multi_player).setOnClickListener(this);
         findViewById(R.id.dotted_line).setOnClickListener(this);
         findViewById(R.id.compass_servant).setOnClickListener(this);
+        findViewById(R.id.color_progress).setOnClickListener(this);
+        findViewById(R.id.corner_image).setOnClickListener(this);
+
     }
 
     @Override
@@ -57,6 +60,14 @@ public class CustomViewActivity extends BaseActivity implements View.OnClickList
             case R.id.dotted_line:
                 intent = new Intent(this, CustomViewDisplayActivity.class);
                 intent.putExtra("viewName", "DottedLine");
+                break;
+            case R.id.color_progress:
+                intent = new Intent(this, CustomViewDisplayActivity.class);
+                intent.putExtra("viewName", "ColorProgress");
+                break;
+            case R.id.corner_image:
+                intent = new Intent(this, CustomViewDisplayActivity.class);
+                intent.putExtra("viewName", "CornerImage");
                 break;
         }
         startActivity(intent);

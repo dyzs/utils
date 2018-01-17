@@ -13,6 +13,7 @@ import android.graphics.SweepGradient;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -44,7 +45,7 @@ public class CompassServant extends View{
     private Paint mFlamePaint;// tick mark paint
     private Paint mMasterPaint;// color gradient paint
     private Paint mMoriSummerPaint;// pointer paint
-    private Paint mTextPaint;
+    private Paint mTextPaint, mTrianglePaint;
     private float mStartAngle;
     private int mDecibel;// tick mark total count
     private int[] mGalaxyColors;
@@ -53,8 +54,11 @@ public class CompassServant extends View{
     private int mCCommander;// command display colors, value limits[2~4]
     private int mTeleportColor;
     private float mTeleportSize;
-    private static final int[] BACKGROUND = new int[]{android.R.attr.background};// got new skill
-
+    private static final int[] SYS_ATTRS = new int[]{
+            android.R.attr.background,
+            android.R.attr.padding
+    };// got new skill
+    private Path mTrianglePath;
 
     public CompassServant(Context context) {
         this(context, null);
@@ -77,8 +81,9 @@ public class CompassServant extends View{
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         mCtx = context;
         /* get system attr */
-        TypedArray ta = context.obtainStyledAttributes(attrs, BACKGROUND);
+        TypedArray ta = context.obtainStyledAttributes(attrs, SYS_ATTRS);
         mTeleportColor = ta.getColor(0, ContextCompat.getColor(context, R.color.black));
+        mPadding = ta.getDimension(1, dp2Px(10));
         ta.recycle();
         setBackgroundColor(mTeleportColor);
 
@@ -95,7 +100,6 @@ public class CompassServant extends View{
         mTeleportSize = ta.getDimension(R.styleable.CompassServant_cs_text_size, 50f);
         ta.recycle();
 
-        mPadding = 10f;
         mSpacing = 15f;
         mGalaxyDegree = mGalaxyDegree % 361f;
         mPerDegree = mGalaxyDegree / mDecibel;
@@ -136,6 +140,10 @@ public class CompassServant extends View{
         mTextPaint.setColor(mTeleportColor);
         mTextPaint.setStrokeWidth(4f);
         mTextPaint.setTextSize(mTeleportSize);
+
+        mTrianglePaint = new Paint();
+        mTrianglePaint.setAntiAlias(true);
+        mTrianglePaint.setColor(ContextCompat.getColor(context, R.color.tension_grey));
     }
 
     private int[] calcInitColors() {
@@ -186,6 +194,11 @@ public class CompassServant extends View{
         r -= mOxygenWidth;
         b -= mOxygenWidth;
         mTextRectF = new RectF(l, t, r, b);
+
+        mTrianglePath = new Path();
+        mTrianglePath.moveTo(mCircleCenter[0] - mPadding / 2, mPadding / 4);
+        mTrianglePath.lineTo(mCircleCenter[0] + mPadding / 2, mPadding / 4);
+        mTrianglePath.lineTo(mCircleCenter[0], mPadding - mPadding / 4);
     }
 
     @Override
@@ -222,6 +235,7 @@ public class CompassServant extends View{
                             mCircleCenter[0],
                             mTickRectF.top + mTickLength / 2,
                             mMoriSummerPaint);
+                    // canvas.drawPath(mTrianglePath, mTrianglePaint);
                 }
             } else {
                 mFlamePaint.setColor(ContextCompat.getColor(mCtx, R.color.tension_grey));
@@ -412,6 +426,11 @@ public class CompassServant extends View{
         }
         this.mGalaxyPositions = positions;
     }
+
+    private float dp2Px(float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, mCtx.getResources().getDisplayMetrics());
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

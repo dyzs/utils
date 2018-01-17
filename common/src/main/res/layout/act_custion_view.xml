@@ -34,6 +34,18 @@
             />
 
         <TextView
+            android:id="@+id/color_progress"
+            style="@style/CommonTextViewItem"
+            android:text="Color Progress"
+            />
+
+        <TextView
+            android:id="@+id/corner_image"
+            style="@style/CommonTextViewItem"
+            android:text="Corner Image View"
+            />
+
+        <TextView
             android:id="@+id/dotted_line"
             style="@style/CommonTextViewItem"
             android:text="Dotted Line View"

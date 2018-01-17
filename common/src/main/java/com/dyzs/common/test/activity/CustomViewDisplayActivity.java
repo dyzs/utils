@@ -7,6 +7,8 @@ import android.widget.FrameLayout;
 import com.dyzs.common.R;
 import com.dyzs.common.base.BaseActivity;
 import com.dyzs.common.test.fragment.ChasingLoadingFragment;
+import com.dyzs.common.test.fragment.ColorProgressFragment;
+import com.dyzs.common.test.fragment.CornerImageFragment;
 import com.dyzs.common.test.fragment.DottedLineFragment;
 import com.dyzs.common.test.fragment.SolarEclipseFragment;
 import com.dyzs.common.test.fragment.CompassServantFragment;
@@ -48,6 +50,12 @@ public class CustomViewDisplayActivity extends BaseActivity{
                 break;
             case "DottedLine":
                 transaction.add(R.id.container, new DottedLineFragment(), viewName);
+                break;
+            case "ColorProgress":
+                transaction.add(R.id.container, new ColorProgressFragment(), viewName);
+                break;
+            case "CornerImage":
+                transaction.add(R.id.container, new CornerImageFragment(), viewName);
                 break;
         }
         transaction.commit();

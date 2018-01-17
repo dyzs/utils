@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    >
+
+    <com.dyzs.common.ui.ColorProgress
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        app:cpProgressColor="@color/oxygen_green"
+        app:cpTotalColor="@color/oxygen_yellow"
+        app:cpTotalProgress="100"
+        app:cpProgress="0"
+        />
+
+    <TextView
+        android:id="@+id/click"
+        android:text="click to run"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        />
+
+</LinearLayout>
