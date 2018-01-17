@@ -19,7 +19,7 @@
         <com.dyzs.common.ui.CompassServant
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@color/alice_blue"
+            android:background="@color/black"
             app:cs_color_commander="4"
             app:cs_color1="@color/alice_blue"
             app:cs_color2="@color/cinnabar_red"

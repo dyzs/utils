@@ -80,7 +80,7 @@ public class CompassServant extends View{
         TypedArray ta = context.obtainStyledAttributes(attrs, BACKGROUND);
         mTeleportColor = ta.getColor(0, ContextCompat.getColor(context, R.color.black));
         ta.recycle();
-        setBackgroundColor(mTeleportColor);
+        // setBackgroundColor(mTeleportColor);
 
         ta = context.obtainStyledAttributes(attrs, R.styleable.CompassServant, defStyleAttr, defStyleRes);
         mCCommander = ta.getInt(R.styleable.CompassServant_cs_color_commander, 3);
@@ -133,7 +133,7 @@ public class CompassServant extends View{
 
         mTextPaint = new Paint();
         mTextPaint.setAntiAlias(true);
-        mTextPaint.setColor(Color.WHITE);
+        mTextPaint.setColor(mTeleportColor);
         mTextPaint.setStrokeWidth(4f);
         mTextPaint.setTextSize(mTeleportSize);
     }
@@ -181,11 +181,10 @@ public class CompassServant extends View{
         b = mCircleCenter[1] + mOxygenRadius;
         mOxygenRectF = new RectF(l, t, r, b);
 
-        float textWidth = mTextPaint.measureText(mDecibel + "dB");
-        l = mCircleCenter[0] - textWidth - 10;
-        t = mCircleCenter[1] - textWidth - 10;
-        r = mCircleCenter[0] + textWidth + 10;
-        b = mCircleCenter[1] + textWidth + 10;
+        l += mOxygenWidth;
+        t += mOxygenWidth;
+        r -= mOxygenWidth;
+        b -= mOxygenWidth;
         mTextRectF = new RectF(l, t, r, b);
     }
 
@@ -242,8 +241,8 @@ public class CompassServant extends View{
         String text = decibel + "";
         mTextPaint.setTextSize(mTeleportSize);
         mTextPaint.setColor(mTeleportColor);
-        canvas.drawRect(mTextRectF, mTextPaint);
-        mTextPaint.setColor(Color.WHITE);
+        canvas.drawCircle(mCircleCenter[0], mCircleCenter[1], Math.abs(mTextRectF.bottom - mTextRectF.top) / 2, mTextPaint);
+        mTextPaint.setColor(mTeleportColor >> 0xFFFFFF);
         float textWidth = mTextPaint.measureText(text) * 1.0f;
         float textHalfHeight = FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint);
         canvas.drawText(text, mCircleCenter[0] - textWidth / 2, mCircleCenter[1] + textHalfHeight / 2, mTextPaint);
