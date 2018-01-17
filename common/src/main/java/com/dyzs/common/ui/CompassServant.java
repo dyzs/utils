@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.dyzs.common.R;
+import com.dyzs.common.utils.FontMatrixUtils;
 
 /**
  * @author dyzs
@@ -51,7 +52,8 @@ public class CompassServant extends View{
     private int mC1, mC2, mC3, mC4;
     private int mCCommander;// command display colors, value limits[2~4]
     private int mTeleportColor;
-    static int[] BACKGROUND = new int[]{android.R.attr.background};
+    private float mTeleportSize;
+    private static final int[] BACKGROUND = new int[]{android.R.attr.background};// got new skill
 
 
     public CompassServant(Context context) {
@@ -74,7 +76,13 @@ public class CompassServant extends View{
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         mCtx = context;
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CompassServant, defStyleAttr, defStyleRes);
+        /* get system attr */
+        TypedArray ta = context.obtainStyledAttributes(attrs, BACKGROUND);
+        mTeleportColor = ta.getColor(0, ContextCompat.getColor(context, R.color.black));
+        ta.recycle();
+        setBackgroundColor(mTeleportColor);
+
+        ta = context.obtainStyledAttributes(attrs, R.styleable.CompassServant, defStyleAttr, defStyleRes);
         mCCommander = ta.getInt(R.styleable.CompassServant_cs_color_commander, 3);
         mC1 = ta.getColor(R.styleable.CompassServant_cs_color1, ContextCompat.getColor(context, R.color.white));
         mC2 = ta.getColor(R.styleable.CompassServant_cs_color2, ContextCompat.getColor(context, R.color.oxygen_green));
@@ -84,10 +92,7 @@ public class CompassServant extends View{
         mTickLength = ta.getDimension(R.styleable.CompassServant_cs_tick_mark_length, 80f);
         mCircleWidth = ta.getDimension(R.styleable.CompassServant_cs_outer_circle, 20f);
         mGalaxyDegree = ta.getFloat(R.styleable.CompassServant_cs_galaxy_degree, 280f);
-        ta.recycle();
-        /* get system attr */
-        ta = context.obtainStyledAttributes(BACKGROUND);
-        mTeleportColor = ta.getColor(0, ContextCompat.getColor(context, R.color.white));
+        mTeleportSize = ta.getDimension(R.styleable.CompassServant_cs_text_size, 50f);
         ta.recycle();
 
         mPadding = 10f;
@@ -130,7 +135,7 @@ public class CompassServant extends View{
         mTextPaint.setAntiAlias(true);
         mTextPaint.setColor(Color.WHITE);
         mTextPaint.setStrokeWidth(4f);
-        mTextPaint.setTextSize(40f);
+        mTextPaint.setTextSize(mTeleportSize);
     }
 
     private int[] calcInitColors() {
@@ -177,8 +182,8 @@ public class CompassServant extends View{
         mOxygenRectF = new RectF(l, t, r, b);
 
         float textWidth = mTextPaint.measureText(mDecibel + "dB");
-        l = mCircleCenter[0] - textWidth + 10;
-        t = mCircleCenter[1] - textWidth + 10;
+        l = mCircleCenter[0] - textWidth - 10;
+        t = mCircleCenter[1] - textWidth - 10;
         r = mCircleCenter[0] + textWidth + 10;
         b = mCircleCenter[1] + textWidth + 10;
         mTextRectF = new RectF(l, t, r, b);
@@ -229,11 +234,21 @@ public class CompassServant extends View{
                         mFlamePaint);
             }
             canvas.restore();
-            mTextPaint.setColor(mTeleportColor);
-            canvas.drawRect(mTextRectF, mTextPaint);
-            mTextPaint.setColor(Color.WHITE);
-            canvas.drawText(i + "dB", mCircleCenter[0], mCircleCenter[1], mTextPaint);
         }
+        drawLeapText(canvas, dBPointer + 1);
+    }
+
+    private void drawLeapText(Canvas canvas, int decibel) {
+        String text = decibel + "";
+        mTextPaint.setTextSize(mTeleportSize);
+        mTextPaint.setColor(mTeleportColor);
+        canvas.drawRect(mTextRectF, mTextPaint);
+        mTextPaint.setColor(Color.WHITE);
+        float textWidth = mTextPaint.measureText(text) * 1.0f;
+        float textHalfHeight = FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint);
+        canvas.drawText(text, mCircleCenter[0] - textWidth / 2, mCircleCenter[1] + textHalfHeight / 2, mTextPaint);
+        mTextPaint.setTextSize(mTeleportSize / 2);
+        canvas.drawText("dB", mCircleCenter[0] + textWidth / 2, mCircleCenter[1] + textHalfHeight / 2, mTextPaint);
     }
 
     private void drawGalaxy(Canvas canvas) {
