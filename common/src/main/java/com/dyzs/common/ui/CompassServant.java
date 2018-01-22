@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -19,14 +18,18 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.dyzs.common.R;
+import com.dyzs.common.utils.ColorUtil;
 import com.dyzs.common.utils.FontMatrixUtils;
 
 /**
  * @author dyzs
  * Created on 2018/1/9.
+ * 自定义命名空间
+ * xmlns:dyzs="http://schemas.android.com/apk/res/com.dyzs.common.ui.CompassServant"
+ * this is a deprecated version, move to compass servant repository
  */
 
-public class CompassServant extends View{
+public class CompassServant extends View {
     private static final String TAG = CompassServant.class.getSimpleName();
     private Context mCtx;// god of the universal
     private float mWidth, mHeight;
@@ -256,7 +259,7 @@ public class CompassServant extends View{
         mTextPaint.setTextSize(mTeleportSize);
         mTextPaint.setColor(mTeleportColor);
         canvas.drawCircle(mCircleCenter[0], mCircleCenter[1], Math.abs(mTextRectF.bottom - mTextRectF.top) / 2, mTextPaint);
-        mTextPaint.setColor(mTeleportColor >> 0xFFFFFF);
+        mTextPaint.setColor(ColorUtil.getColorReverse(mTeleportColor));
         float textWidth = mTextPaint.measureText(text) * 1.0f;
         float textHalfHeight = FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint);
         canvas.drawText(text, mCircleCenter[0] - textWidth / 2, mCircleCenter[1] + textHalfHeight / 2, mTextPaint);
@@ -321,18 +324,7 @@ public class CompassServant extends View{
                 break;
             }
         }
-        int sc = resSColor;
-        int ec = resEColor;
-        int rS = Color.red(sc);
-        int gS = Color.green(sc);
-        int bS = Color.blue(sc);
-        int rE = Color.red(ec);
-        int gE = Color.green(ec);
-        int bE = Color.blue(ec);
-        int r = (int) (rS + (rE - rS) * 1f * rangeColorRate);
-        int g = (int) (gS + (gE - gS) * 1f * rangeColorRate);
-        int b = (int) (bS + (bE - bS) * 1f * rangeColorRate);
-        return Color.argb(255, r, g, b);
+        return ColorUtil.getCompositeColor(resSColor, resEColor, rangeColorRate);
     }
 
     private ValueAnimator mAnimator;
@@ -430,7 +422,6 @@ public class CompassServant extends View{
     private float dp2Px(float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, mCtx.getResources().getDisplayMetrics());
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

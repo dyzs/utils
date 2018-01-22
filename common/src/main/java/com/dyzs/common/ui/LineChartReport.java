@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author dyzs
  */
 
 public class LineChartReport extends View {
