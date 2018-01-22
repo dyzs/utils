@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -21,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".test.activity.TestActivity" >
+        <activity android:name=".test.activity.CustomViewActivity" >
             <intent-filter>
                 <action android:name="com.dyzs.common.action.TEST" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -40,6 +41,8 @@
         </receiver>
 
         <service android:name=".test.service.ScreenUnLockMonitorService" />
+
+        <activity android:name=".test.activity.CustomViewDisplayActivity" />
     </application>
 
 </manifest>

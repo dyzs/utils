@@ -16,9 +16,8 @@ import android.view.MenuItem;
 import com.dyzs.common.R;
 import com.dyzs.common.base.BaseActivity;
 import com.dyzs.common.test.service.CBMonitorService;
-import com.dyzs.common.ui.LineChartReport;
+import com.dyzs.common.ui.SolarEclipse;
 
-import java.util.ArrayList;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @Override
@@ -46,7 +45,7 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        initView();
     }
 
     @Override
@@ -99,6 +98,8 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            Intent intent = new Intent(MainActivity.this, CustomViewActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

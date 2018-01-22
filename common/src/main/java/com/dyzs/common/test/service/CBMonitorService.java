@@ -40,7 +40,7 @@ public class CBMonitorService extends Service{
 
         initHandleThread();
 
-        mHandler.sendEmptyMessage(TIME_DOWNING);
+        // mHandler.sendEmptyMessage(TIME_DOWNING);
     }
 
     @Override
