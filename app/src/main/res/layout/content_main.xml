@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_main"
-    tools:context=".test.activity.MainActivity">
+    tools:context=".activity.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:gravity="center"
         >
 
-        <com.dyzs.app.ui.CompassServant
+        <com.dyzs.common.ui.CompassServant
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/black"

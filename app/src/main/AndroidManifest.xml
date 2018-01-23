@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".test.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -22,16 +22,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".test.activity.CustomViewActivity" >
+        <activity android:name=".activity.CustomViewActivity" >
             <intent-filter>
                 <action android:name="com.dyzs.common.action.TEST" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <service android:name=".test.service.CBMonitorService"/>
+        <service android:name=".service.CBMonitorService"/>
 
-        <receiver android:name=".test.widget.ClockWidget">
+        <receiver android:name=".widget.ClockWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -40,9 +40,9 @@
                 android:resource="@layout/layout_app_widget_provider" />
         </receiver>
 
-        <service android:name=".test.service.ScreenUnLockMonitorService" />
+        <service android:name=".service.ScreenUnLockMonitorService" />
 
-        <activity android:name=".test.activity.CustomViewDisplayActivity" />
+        <activity android:name=".activity.CustomViewDisplayActivity" />
     </application>
 
 </manifest>

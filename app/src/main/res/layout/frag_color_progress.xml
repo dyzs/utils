@@ -7,7 +7,7 @@
     android:gravity="center"
     >
 
-    <com.dyzs.app.ui.ColorProgress
+    <com.dyzs.common.ui.ColorProgress
         android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="3dp"

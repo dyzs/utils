@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     >
-    <com.dyzs.app.ui.CornerImageView
+    <com.dyzs.common.ui.CornerImageView
         android:layout_marginTop="5dp"
         android:id="@+id/icon"
         android:layout_width="150dp"
