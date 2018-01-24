@@ -13,9 +13,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+<<<<<<< Updated upstream:app/src/main/java/com/dyzs/app/activity/MainActivity.java
 import com.dyzs.app.R;
 import com.dyzs.app.base.BaseActivity;
 import com.dyzs.app.service.CBMonitorService;
+=======
+import com.dyzs.common.R;
+import com.dyzs.common.base.BaseActivity;
+import com.dyzs.common.test.service.CBMonitorService;
+import com.dyzs.common.ui.BiscuitsToast;
+import com.dyzs.common.ui.SolarEclipse;
+>>>>>>> Stashed changes:common/src/main/java/com/dyzs/common/test/activity/MainActivity.java
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,7 +57,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initView() {
-
+        BiscuitsToast.getInstance(this).makeText("Hello");
     }
 
     @Override
