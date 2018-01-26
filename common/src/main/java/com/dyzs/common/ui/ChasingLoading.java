@@ -29,13 +29,14 @@ import java.util.ArrayList;
  * BounceInterpolator   动画结束的时候弹起
  * CycleInterpolator    动画循环播放特定的次数，速率改变沿着正弦曲线
  * OvershootInterpolator    向前甩一定值后再回到原来位置
+ * @notice this view already moved to ChasingLoading repository @url{link=https://github.com/dyzs/ChasingLoading}
  */
 
 public class ChasingLoading extends View{
     private Context mCtx;
     private float mWidth, mHeight;
 
-    private Paint mDark, mFlame, mMaster;
+    private Paint mDfmPaint;
     private ArrayList<Paint> mDfmPaints;
     private ArrayList<Float> mDfmRadians;
     private float mDarkRadian, mFlameRadian, mMasterRadian;
@@ -48,6 +49,7 @@ public class ChasingLoading extends View{
     private ArrayList<RectF> rectFs;
     private boolean mChasing;
     private ValueAnimator mAnimator;
+    private static final int[] COLORS = {Color.RED, Color.CYAN, Color.BLACK};
     public ChasingLoading(Context context) {
         this(context, null);
     }
@@ -92,31 +94,17 @@ public class ChasingLoading extends View{
         mStartAngleValues.add(mFlameStartAngle);
         mStartAngleValues.add(mMasterStartAngle);
 
-        mDark = new Paint();
-        mDark.setAntiAlias(true);
-        mDark.setStyle(Paint.Style.STROKE);
-        mDark.setStrokeWidth(mDfmWidth);
-        mDark.setStrokeCap(Paint.Cap.ROUND);
-        mDark.setColor(Color.RED);
-
-        mFlame = new Paint();
-        mFlame.setAntiAlias(true);
-        mFlame.setStyle(Paint.Style.STROKE);
-        mFlame.setStrokeWidth(mDfmWidth);
-        mFlame.setStrokeCap(Paint.Cap.ROUND);
-        mFlame.setColor(Color.CYAN);
-
-        mMaster = new Paint();
-        mMaster.setAntiAlias(true);
-        mMaster.setStyle(Paint.Style.STROKE);
-        mMaster.setStrokeWidth(mDfmWidth);
-        mMaster.setStrokeCap(Paint.Cap.ROUND);
-        mMaster.setColor(Color.BLACK);
-
         mDfmPaints = new ArrayList<>();
-        mDfmPaints.add(mDark);
-        mDfmPaints.add(mFlame);
-        mDfmPaints.add(mMaster);
+        for (int i = 0; i < mDfmRadians.size(); i++) {
+            mDfmPaint = new Paint();
+            mDfmPaint.setAntiAlias(true);
+            mDfmPaint.setStyle(Paint.Style.STROKE);
+            mDfmPaint.setStrokeWidth(mDfmWidth);
+            mDfmPaint.setStrokeCap(Paint.Cap.ROUND);
+            mDfmPaint.setColor(COLORS[i]);
+            mDfmPaints.add(mDfmPaint);
+        }
+
         mDfmPath = new Path();
     }
 
