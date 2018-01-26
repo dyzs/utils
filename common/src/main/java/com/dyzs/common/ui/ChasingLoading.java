@@ -35,21 +35,20 @@ import java.util.ArrayList;
 public class ChasingLoading extends View{
     private Context mCtx;
     private float mWidth, mHeight;
-
     private Paint mDfmPaint;
     private ArrayList<Paint> mDfmPaints;
-    private ArrayList<Float> mDfmRadians;
-    private float mDarkRadian, mFlameRadian, mMasterRadian;
+    private ArrayList<Float> mDfmAngles;
+    private float mDfmAngle;
     private float mDfmWidth, mDfmSpacing, mPadding;
     private float mDarkStartAngle, mFlameStartAngle, mMasterStartAngle;
     private int mDarkSpeedRate, mFlameSpeedRate, mMasterSpeedRate;
     private ArrayList<Float> mStartAngleValues;
-
     private Path mDfmPath;
-    private ArrayList<RectF> rectFs;
+    private ArrayList<RectF> mRectFs;
     private boolean mChasing;
     private ValueAnimator mAnimator;
     private static final int[] COLORS = {Color.RED, Color.CYAN, Color.BLACK};
+    private static final int[] SYS_ATTRS = {android.R.attr.padding};
     public ChasingLoading(Context context) {
         this(context, null);
     }
@@ -70,7 +69,10 @@ public class ChasingLoading extends View{
     }
 
     private void init(Context context, AttributeSet attrs) {
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ChasingLoading);
+        TypedArray ta = context.obtainStyledAttributes(attrs, SYS_ATTRS);
+        mPadding = ta.getDimension(0, 5f);
+        ta.recycle();
+        ta = context.obtainStyledAttributes(attrs, R.styleable.ChasingLoading);
         mDfmWidth = ta.getDimension(R.styleable.ChasingLoading_clDfmWidth, 10f);
         mDfmSpacing = ta.getDimension(R.styleable.ChasingLoading_clDfmSpacing, 10f);
         mDarkSpeedRate = ta.getInteger(R.styleable.ChasingLoading_clDsRate, 4);
@@ -81,13 +83,6 @@ public class ChasingLoading extends View{
         mMasterStartAngle =  ta.getInteger(R.styleable.ChasingLoading_clMsAngle, 260);
         mChasing = ta.getBoolean(R.styleable.ChasingLoading_clChasing, true);
         ta.recycle();
-        mDarkRadian = 360f / 100 * 30 % 360;
-        mFlameRadian = 360f / 100 * 25 % 360;
-        mMasterRadian = 360f / 100 * 20 % 360;
-        mDfmRadians = new ArrayList();
-        mDfmRadians.add(mDarkRadian);
-        mDfmRadians.add(mFlameRadian);
-        mDfmRadians.add(mMasterRadian);
 
         mStartAngleValues = new ArrayList<>();
         mStartAngleValues.add(mDarkStartAngle);
@@ -95,7 +90,9 @@ public class ChasingLoading extends View{
         mStartAngleValues.add(mMasterStartAngle);
 
         mDfmPaints = new ArrayList<>();
-        for (int i = 0; i < mDfmRadians.size(); i++) {
+        mDfmAngles = new ArrayList();
+        for (int i = 0; i < mStartAngleValues.size(); i++) {
+            // add arc paint 添加画笔数组
             mDfmPaint = new Paint();
             mDfmPaint.setAntiAlias(true);
             mDfmPaint.setStyle(Paint.Style.STROKE);
@@ -103,9 +100,14 @@ public class ChasingLoading extends View{
             mDfmPaint.setStrokeCap(Paint.Cap.ROUND);
             mDfmPaint.setColor(COLORS[i]);
             mDfmPaints.add(mDfmPaint);
+
+            /* add arc radian 计算圆弧的角度 */
+            mDfmAngle = 360f / 100 * Math.abs(30 - 5 * i) % 360;
+            mDfmAngles.add(mDfmAngle);
         }
 
         mDfmPath = new Path();
+        mRectFs = new ArrayList<>();
     }
 
 
@@ -116,13 +118,10 @@ public class ChasingLoading extends View{
         mHeight = getMeasuredHeight();
         float l, t, r, b, radius;
         if (mWidth >= mHeight) {
-            mPadding = mHeight * 0.05f;
             radius = mHeight / 2 - mPadding;
         } else {
-            mPadding = mWidth * 0.05f;
             radius = mWidth / 2 - mPadding;
         }
-        rectFs = new ArrayList<>();
         RectF rectF;
         for (int i = 0 ; i < 3; i++) {
             l = mWidth / 2 - radius + i * (mDfmSpacing + mDfmWidth);
@@ -130,7 +129,7 @@ public class ChasingLoading extends View{
             r = mWidth / 2 + radius - i * (mDfmSpacing + mDfmWidth);
             b = mHeight / 2 + radius - i * (mDfmSpacing + mDfmWidth);
             rectF = new RectF(l, t, r, b);
-            rectFs.add(rectF);
+            mRectFs.add(rectF);
         }
     }
 
@@ -141,10 +140,10 @@ public class ChasingLoading extends View{
     }
 
     private void drawDarkFlameMaster(Canvas canvas) {
-        if (rectFs == null)return;
-        for (int i = 0; i < rectFs.size(); i++) {
+        if (mRectFs == null)return;
+        for (int i = 0; i < mRectFs.size(); i++) {
             mDfmPath.reset();
-            mDfmPath.addArc(rectFs.get(i), mStartAngleValues.get(i), mDfmRadians.get(i));
+            mDfmPath.addArc(mRectFs.get(i), mStartAngleValues.get(i), mDfmAngles.get(i));
             canvas.drawPath(mDfmPath, mDfmPaints.get(i));
         }
     }
@@ -169,8 +168,12 @@ public class ChasingLoading extends View{
         mAnimator.start();
     }
 
-    public void setChasingStop() {
-        mChasing = false;
+    public void setChasing(boolean b) {
+        mChasing = b;
+        if (mChasing) {
+            startDarkFlameMaster();
+            return;
+        }
         if (mAnimator != null && mAnimator.isRunning()) {
             mAnimator.cancel();
             mAnimator = null;
