@@ -123,7 +123,8 @@ public class ChasingLoading extends View{
             radius = mWidth / 2 - mPadding;
         }
         RectF rectF;
-        for (int i = 0 ; i < 3; i++) {
+        mRectFs.clear();
+        for (int i = 0 ; i < mStartAngleValues.size(); i++) {
             l = mWidth / 2 - radius + i * (mDfmSpacing + mDfmWidth);
             t = mHeight / 2 - radius + i * (mDfmSpacing + mDfmWidth);
             r = mWidth / 2 + radius - i * (mDfmSpacing + mDfmWidth);

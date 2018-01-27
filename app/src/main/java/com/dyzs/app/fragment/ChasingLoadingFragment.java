@@ -36,7 +36,7 @@ public class ChasingLoadingFragment extends Fragment{
                 ChasingLoadingFragment.this.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        chasing_loading.setChasing();
+                        chasing_loading.setChasing(false);
                     }
                 });
             }
