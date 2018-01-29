@@ -1,6 +1,7 @@
 package com.dyzs.app.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.FrameLayout;
 
@@ -10,6 +11,7 @@ import com.dyzs.app.fragment.ChasingLoadingFragment;
 import com.dyzs.app.fragment.ColorProgressFragment;
 import com.dyzs.app.fragment.CornerImageFragment;
 import com.dyzs.app.fragment.DottedLineFragment;
+import com.dyzs.app.fragment.FragmentFactory;
 import com.dyzs.app.fragment.SolarEclipseFragment;
 import com.dyzs.app.fragment.CompassServantFragment;
 import com.dyzs.app.fragment.YinJiMultiPlayerFragment;
@@ -35,29 +37,31 @@ public class CustomViewDisplayActivity extends BaseActivity{
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
         viewName = getIntent().getStringExtra("viewName");
+        FragmentFactory.Type type = FragmentFactory.Type.SOLAR_ECLIPSE;
         switch (viewName) {
             case "SolarEclipse":
-                transaction.add(R.id.container, new SolarEclipseFragment(), viewName);
+                type = FragmentFactory.Type.SOLAR_ECLIPSE;
                 break;
             case "ChasingLoading":
-                transaction.add(R.id.container, new ChasingLoadingFragment(), viewName);
+                type = FragmentFactory.Type.CHASING_LOADING;
                 break;
             case "CompassServant":
-                transaction.add(R.id.container, new CompassServantFragment(), viewName);
+                type = FragmentFactory.Type.COMPASS_SERVANT;
                 break;
             case "YinJiMultiPlayer":
-                transaction.add(R.id.container, new YinJiMultiPlayerFragment(), viewName);
+                type = FragmentFactory.Type.MULTI_PLAYER;
                 break;
             case "DottedLine":
-                transaction.add(R.id.container, new DottedLineFragment(), viewName);
+                type = FragmentFactory.Type.DOTTED_LINE;
                 break;
             case "ColorProgress":
-                transaction.add(R.id.container, new ColorProgressFragment(), viewName);
+                type = FragmentFactory.Type.COLOR_PROGRESS;
                 break;
             case "CornerImage":
-                transaction.add(R.id.container, new CornerImageFragment(), viewName);
+                type = FragmentFactory.Type.CORNER_IMAGE;
                 break;
         }
+        transaction.add(R.id.container, FragmentFactory.createFragment(type), viewName);
         transaction.commit();
     }
 
