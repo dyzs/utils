@@ -16,12 +16,13 @@ import com.dyzs.app.fragment.SolarEclipseFragment;
 import com.dyzs.app.fragment.CompassServantFragment;
 import com.dyzs.app.fragment.YinJiMultiPlayerFragment;
 
+import butterknife.BindView;
+
 /**
  * Created by maidou on 2018/1/8.
  */
 
 public class CustomViewDisplayActivity extends BaseActivity{
-    FrameLayout container;
     String viewName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,6 @@ public class CustomViewDisplayActivity extends BaseActivity{
 
     @Override
     public void initView() {
-        container = (FrameLayout) findViewById(R.id.container);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
         viewName = getIntent().getStringExtra("viewName");

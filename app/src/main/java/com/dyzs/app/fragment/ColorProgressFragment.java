@@ -9,40 +9,50 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dyzs.app.R;
 import com.dyzs.common.ui.ColorProgress;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * @author dyzs
  * Created on 2018/1/17.
  */
 
-public class ColorProgressFragment extends Fragment implements View.OnClickListener {
+public class ColorProgressFragment extends Fragment{
     private static final int SUCCESS = 1;
-    private ColorProgress progress;
-    private TextView click;
+    @BindView(R.id.progress)
+    public ColorProgress progress;
+    @BindView(R.id.click)
+    public TextView click;
+
+    private Unbinder unbinder;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // ButterKnife.bind(this); // activity use this
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_color_progress, null);
+        View view = inflater.inflate(R.layout.frag_color_progress, null);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        click = (TextView) view.findViewById(R.id.click);
-        click.setOnClickListener(this);
-        progress = (ColorProgress) view.findViewById(R.id.progress);
+
     }
 
-    @Override
-    public void onClick(View v) {
+    @OnClick(R.id.click)
+    public void click2Run() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,4 +79,10 @@ public class ColorProgressFragment extends Fragment implements View.OnClickListe
             return false;
         }
     });
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 }

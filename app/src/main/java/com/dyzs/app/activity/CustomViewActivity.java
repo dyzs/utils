@@ -7,6 +7,8 @@ import android.view.View;
 import com.dyzs.app.R;
 import com.dyzs.app.base.BaseActivity;
 
+import butterknife.OnClick;
+
 /**
  * Created by maidou on 2017/11/20.
  */
