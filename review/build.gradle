@@ -1,0 +1,14 @@
+apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = 'com.dyzs.review.designpattern.MyMain' // main() 的路径
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
