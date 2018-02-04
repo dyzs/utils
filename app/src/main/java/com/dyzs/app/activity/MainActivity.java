@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +17,8 @@ import android.view.MenuItem;
 import com.dyzs.app.R;
 import com.dyzs.app.base.BaseActivity;
 import com.dyzs.app.service.CBMonitorService;
+import com.dyzs.common.ui.FullScreenDialog;
+import com.dyzs.common.ui.FullScreenDialogVer2;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -108,7 +111,7 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            showFullScreenDialogVer2();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -119,5 +122,19 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    private void showFullScreenDialogVer2 () {
+
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_dialog_full, null);
+        FullScreenDialogVer2 dialogVer2 = new FullScreenDialogVer2.Builder(this)
+                .setInterruptKeyEvent(true)
+                .setContentView(view)
+                .build();
+        dialogVer2.show();
+
+        /*FullScreenDialog dialog = new FullScreenDialog(this);
+        dialog.setContentView(view);
+        dialog.show();*/
     }
 }

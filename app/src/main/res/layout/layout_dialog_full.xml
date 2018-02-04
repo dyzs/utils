@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/alice_white"
+        >
+
+        <com.dyzs.common.ui.magicruf.GranzortView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@color/black"
+            />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

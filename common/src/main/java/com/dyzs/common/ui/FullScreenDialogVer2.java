@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.dyzs.common.R;
@@ -14,15 +15,17 @@ import com.dyzs.common.R;
  * Created by maidou on 2017/11/17.
  */
 
-public class FullScreenDialogBuilder extends Dialog{
+public class FullScreenDialogVer2 extends Dialog {
     protected final Builder mBuilder;
     private boolean interruptKeyEvent = true;
-    /*public FullScreenDialog(Context context) {
-        super(context, R.style.FullScreenDialog);
-        setCanceledOnTouchOutside(true);
-        interruptKeyEvent = true;
-    }*/
 
+    public FullScreenDialogVer2(Builder builder) {
+        super(builder.context, R.style.FullScreenDialog);
+        setCanceledOnTouchOutside(true);
+        mBuilder = builder;
+        this.interruptKeyEvent = mBuilder.interruptKeyEvent;
+        this.setContentView(mBuilder.view);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,15 +87,10 @@ public class FullScreenDialogBuilder extends Dialog{
         this.interruptKeyEvent = interrupt;
     }
 
-    public FullScreenDialogBuilder(Builder builder) {
-        super(builder.context, R.style.FullScreenDialog);
-        setCanceledOnTouchOutside(true);
-        mBuilder = builder;
-    }
-
     public static class Builder {
         private Context context;
         private boolean interruptKeyEvent = true;
+        private View view;
         public Builder(Context ctx) {
             this.context = ctx;
         }
@@ -102,8 +100,19 @@ public class FullScreenDialogBuilder extends Dialog{
             return this;
         }
 
-        public FullScreenDialogBuilder build() {
-            return new FullScreenDialogBuilder(this);
+        public Builder setContentView(View contentView) {
+            this.view = contentView;
+            return this;
+        }
+
+        public FullScreenDialogVer2 build() {
+            return new FullScreenDialogVer2(this);
+        }
+
+        public FullScreenDialogVer2 show() {
+            FullScreenDialogVer2 dialogVer2 = build();
+            dialogVer2.show();
+            return dialogVer2;
         }
     }
 }
