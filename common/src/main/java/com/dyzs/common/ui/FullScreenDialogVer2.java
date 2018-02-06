@@ -23,8 +23,10 @@ public class FullScreenDialogVer2 extends Dialog {
         super(builder.context, R.style.FullScreenDialog);
         setCanceledOnTouchOutside(true);
         mBuilder = builder;
-        this.interruptKeyEvent = mBuilder.interruptKeyEvent;
-        this.setContentView(mBuilder.view);
+
+        FullScreenDialogInit.init(this);
+        /*this.setInterruptKeyEvent(mBuilder.interruptKeyEvent);
+        this.setContentView(mBuilder.view);*/
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +90,9 @@ public class FullScreenDialogVer2 extends Dialog {
     }
 
     public static class Builder {
-        private Context context;
-        private boolean interruptKeyEvent = true;
-        private View view;
+        protected Context context;
+        protected boolean interruptKeyEvent = true;
+        protected View view;
         public Builder(Context ctx) {
             this.context = ctx;
         }
