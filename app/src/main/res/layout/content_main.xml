@@ -22,11 +22,11 @@
             android:background="@color/black"
             />
 
-        <com.dyzs.common.ui.magicruf.GranzortView
+        <!--<com.dyzs.common.ui.magicruf.GranzortView
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/black"
-            />
+            />-->
 
     </RelativeLayout>
 
