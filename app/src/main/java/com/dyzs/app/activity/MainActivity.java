@@ -19,6 +19,9 @@ import com.dyzs.app.base.BaseActivity;
 import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.common.ui.FullScreenDialog;
 import com.dyzs.common.ui.FullScreenDialogVer2;
+import com.dyzs.common.ui.magicruf.MagicRUF;
+
+import butterknife.BindView;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,7 +55,12 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initView() {
-
+        findViewById(R.id.magic_ruf).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MagicRUF) v).startTension(0);
+            }
+        });
     }
 
     @Override

@@ -25,7 +25,7 @@ import android.view.animation.LinearInterpolator;
  */
 
 public class MagicRUF extends View {
-    private static final int STATE_1ST = 0, STATE_2ND = 1, STATE_3RD = 2, STATE_4TH = 3;
+    private static final int STATE_1ST = 0, STATE_2ND = 1, STATE_3RD = 2, STATE_4TH = 3, STATE_END = 4;
     private int mState = STATE_1ST;
 
     private float mWidth, mHeight;
@@ -223,15 +223,16 @@ public class MagicRUF extends View {
                 switch (mState) {
                     case STATE_1ST:
                         mState = STATE_2ND;
+                        startAnimation();
                         break;
                     case STATE_2ND:
                         mState = STATE_3RD;
+                        startAnimation();
                         break;
-                    case STATE_3RD:
+                    /*case STATE_3RD:
                         mState = STATE_1ST;
-                        break;
+                        break;*/
                 }
-                startAnimation();
             }
 
             @Override
@@ -246,5 +247,14 @@ public class MagicRUF extends View {
         });
 
         mAnimator.start();
+    }
+
+    public void startTension(int state) {
+        this.mState = state;
+        if (mAnimator == null) {
+            startAnimation();
+        } else {
+            mAnimator.start();
+        }
     }
 }

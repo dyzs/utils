@@ -63,4 +63,11 @@
     <color name="gay_purple">#6C40FD</color>
     <color name="deep_yellow">#FFF700</color>
     <color name="oxygen_green">#35D599</color>
+
+    <integer-array name="chasing_loading_colors">
+        <item>@color/ion_pink</item>
+        <item>@color/stone_grey</item>
+        <item>@color/girl_pink</item>
+        <item>@color/purple</item>
+    </integer-array>
 </resources>

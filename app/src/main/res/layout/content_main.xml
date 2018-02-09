@@ -17,9 +17,17 @@
         >
 
         <com.dyzs.common.ui.magicruf.MagicRUF
+            android:id="@+id/magic_ruf"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/black"
+            />
+
+        <com.dyzs.common.ui.LineChartViewForYinJi
+            android:layout_below="@+id/magic_ruf"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/half_percent_maria_blue"
             />
 
         <!--<com.dyzs.common.ui.magicruf.GranzortView
