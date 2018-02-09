@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
@@ -24,6 +25,9 @@ import android.view.animation.LinearInterpolator;
  */
 
 public class MagicRUF extends View {
+    private static final int STATE_1ST = 0, STATE_2ND = 1, STATE_3RD = 2, STATE_4TH = 3;
+    private int mState = STATE_1ST;
+
     private float mWidth, mHeight;
     private float mPadding;
     private float mSpacingBtwOuterAndInner; // 内圆和外圆的间距
@@ -68,6 +72,7 @@ public class MagicRUF extends View {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(mLineWidth);
         mPaint.setColor(Color.CYAN);
+        mPaint.setStrokeJoin(Paint.Join.BEVEL);
         mPaint.setShadowLayer(20, 0, 0, Color.WHITE);
     }
 
@@ -112,6 +117,7 @@ public class MagicRUF extends View {
         mPathInnerCircle.addArc(rectF, 60, -359.9f);
 
         // step2: 设置 triangle 的 path 路径
+        mPathTriangle = new Path();
         mPathMeasure.setPath(mPathInnerCircle, false);// 设置当前的 path 路径，保证 triangle 可以有起始位置
         float[] pos = new float[2];
         mPathMeasure.getPosTan(0, pos, null);// 获取初始位置的坐标，表示获取当前内圆的起始点
@@ -124,9 +130,16 @@ public class MagicRUF extends View {
 
         mPathMeasure.getPosTan(2f / 3f * mPathMeasure.getLength(), pos, null);
         mPathTriangle.lineTo(pos[0], pos[1]);
+        System.out.println("two-third pos : " + pos[0] + "  " + pos[1]);
         mPathTriangle.close();
 
-        // step3: 复制步骤二，设置 triangle2 的 path 路径
+        // step3: 设置 triangle2 的 path 路径
+        mPathMeasure.getPosTan(2f / 3f * mPathMeasure.getLength(), pos, null);
+        mPathTriangle2 = new Path();
+        Matrix matrix = new Matrix();
+        matrix.postRotate(-180, mCenterPoint[0], mCenterPoint[1]);// 设置矩阵绕圆心点旋转
+        mPathTriangle.transform(matrix, mPathTriangle2);
+        // TODO: 2018/2/9 postRotate and transform
     }
 
     @Override
@@ -134,35 +147,69 @@ public class MagicRUF extends View {
         super.onDraw(canvas);
 
         mReactPath.reset();
-
         // 使用 path measure 代替当前 path 路径, 绘制想要的图形
         canvas.save();
-        mReactPath.reset();
-        mPathMeasure.setPath(mPathOuterCircle, false);
-        mPathMeasure.getSegment(0, perAnimationValue * mPathMeasure.getLength(), mReactPath, true);
-        canvas.drawPath(mReactPath, mPaint);
 
-        mReactPath.reset();
-        mPathMeasure.setPath(mPathInnerCircle, false);
-        mPathMeasure.getSegment(0, perAnimationValue * mPathMeasure.getLength(), mReactPath, true);
-        canvas.drawPath(mReactPath, mPaint);
+        switch (mState) {
+            case STATE_1ST:
+                mReactPath.reset();
+                mPathMeasure.setPath(mPathOuterCircle, false);
+                mPathMeasure.getSegment(0, perTimePathValue * mPathMeasure.getLength(), mReactPath, true);
+                canvas.drawPath(mReactPath, mPaint);
+
+                mReactPath.reset();
+                mPathMeasure.setPath(mPathInnerCircle, false);
+                mPathMeasure.getSegment(0, perTimePathValue * mPathMeasure.getLength(), mReactPath, true);
+                canvas.drawPath(mReactPath, mPaint);
+                break;
+            case STATE_2ND:
+                canvas.drawPath(mPathOuterCircle, mPaint);
+                canvas.drawPath(mPathInnerCircle, mPaint);
+
+                mReactPath.reset();
+                mPathMeasure.setPath(mPathTriangle, false);
+                float stopD = perTimePathValue * mPathMeasure.getLength();
+                float startD = stopD - (0.5f - Math.abs(0.5f - perTimePathValue)) * 200;
+                mPathMeasure.getSegment(startD, stopD, mReactPath, true);
+                canvas.drawPath(mReactPath, mPaint);
+
+                mReactPath.reset();
+                mPathMeasure.setPath(mPathTriangle2, false);
+                mPathMeasure.getSegment(startD, stopD, mReactPath, true);
+                canvas.drawPath(mReactPath, mPaint);
+                break;
+            case STATE_3RD:
+                canvas.drawPath(mPathOuterCircle, mPaint);
+                canvas.drawPath(mPathInnerCircle, mPaint);
+
+                mReactPath.reset();
+                mPathMeasure.setPath(mPathTriangle, false);
+                mPathMeasure.getSegment(0, perTimePathValue * mPathMeasure.getLength(), mReactPath, true);
+                canvas.drawPath(mReactPath, mPaint);
+
+                mReactPath.reset();
+                mPathMeasure.setPath(mPathTriangle2, false);
+                mPathMeasure.getSegment(0, perTimePathValue * mPathMeasure.getLength(), mReactPath, true);
+                canvas.drawPath(mReactPath, mPaint);
+                break;
+        }
+
         canvas.restore();
 
 
     }
 
 
-    private float perAnimationValue = 0;
+    private float perTimePathValue = 0;
     private void startAnimation() {
         mAnimator = ValueAnimator.ofFloat(0, 1);
-        mAnimator.setDuration(3000);
-        mAnimator.setRepeatCount(-1);
+        mAnimator.setDuration(2000);
         mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                perAnimationValue = (float) animation.getAnimatedValue();
-                invalidate();
+                perTimePathValue = (float) animation.getAnimatedValue();
+                postInvalidate();
             }
         });
         mAnimator.addListener(new Animator.AnimatorListener() {
@@ -173,7 +220,18 @@ public class MagicRUF extends View {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
+                switch (mState) {
+                    case STATE_1ST:
+                        mState = STATE_2ND;
+                        break;
+                    case STATE_2ND:
+                        mState = STATE_3RD;
+                        break;
+                    case STATE_3RD:
+                        mState = STATE_1ST;
+                        break;
+                }
+                startAnimation();
             }
 
             @Override

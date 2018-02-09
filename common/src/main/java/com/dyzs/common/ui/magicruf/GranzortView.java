@@ -207,7 +207,7 @@ public class GranzortView extends View {
 
         RectF innerRect = new RectF(-220, -220, 220, 220);
         RectF outerRect = new RectF(-280, -280, 280, 280);
-        innerCircle.addArc(innerRect, 150, -359.9F);     // 不能取360f，否则可能造成测量到的值不准确
+        innerCircle.addArc(innerRect, 60, -359.9F);     // 不能取360f，否则可能造成测量到的值不准确
         outerCircle.addArc(outerRect, 60, -359.9F);
 
         pathMeasure.setPath(innerCircle, false);
@@ -215,10 +215,10 @@ public class GranzortView extends View {
         float[] pos = new float[2];
         pathMeasure.getPosTan(0, pos, null);        // 获取开始位置的坐标
         trangle1.moveTo(pos[0], pos[1]);
-        pathMeasure.getPosTan((1f / 3f) * pathMeasure.getLength(), pos, null);
-        System.out.println("pos : " + pos[0] + "  " + pos[1]);
 
+        pathMeasure.getPosTan((1f / 3f) * pathMeasure.getLength(), pos, null);
         trangle1.lineTo(pos[0], pos[1]);
+
         pathMeasure.getPosTan((2f / 3f) * pathMeasure.getLength(), pos, null);
         trangle1.lineTo(pos[0], pos[1]);
         trangle1.close();
