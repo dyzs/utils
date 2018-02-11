@@ -20,6 +20,7 @@ import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.common.ui.FullScreenDialog;
 import com.dyzs.common.ui.FullScreenDialogVer2;
 import com.dyzs.common.ui.LineChartViewForYinJi;
+import com.dyzs.common.ui.LineChartViewForYinJiVer2;
 import com.dyzs.common.ui.magicruf.MagicRUF;
 
 import butterknife.BindView;
@@ -56,18 +57,20 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initView() {
+        final LineChartViewForYinJiVer2 lcv_yj = (LineChartViewForYinJiVer2) findViewById(R.id.lcv_yj);
+        lcv_yj.setData(lcv_yj.testLoadData(i));
+
         findViewById(R.id.magic_ruf).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MagicRUF) v).startTension(0);
+                // ((MagicRUF) v).startTension(0);
+                i++;
+                lcv_yj.setData(lcv_yj.testLoadData(i));
+                lcv_yj.playLineAnimation();
             }
         });
-
-
-
-        LineChartViewForYinJi lcv_yj = (LineChartViewForYinJi) findViewById(R.id.lcv_yj);
-        lcv_yj.setData(lcv_yj.testLoadData(10));
     }
+    private static int i = 0;
 
     @Override
     public void initData() {

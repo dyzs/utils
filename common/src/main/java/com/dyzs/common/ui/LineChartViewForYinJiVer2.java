@@ -1,5 +1,7 @@
 package com.dyzs.common.ui;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,6 +22,7 @@ import android.view.View;
 import com.dyzs.common.utils.FontMatrixUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -31,7 +34,7 @@ public class LineChartViewForYinJiVer2 extends View{
 
     private ArrayList<Point> mListPoints;
     private ArrayList<Rect> mListRoundRect;
-    private Paint mLinePaint;
+    private Paint mLineXYPaint;
     private Paint mTextPaint;
     private Paint mRoundRectPaint;
     private LinearGradient mLG;
@@ -55,14 +58,18 @@ public class LineChartViewForYinJiVer2 extends View{
     private int mYAxisPeakValue = 90;
     private Paint mDottedPaint;
 
+    @Deprecated
     private float offsetX = 0f, downX;
 
     private RectF rectFWorkArea = new RectF();
 
-    private Paint mChartLinePaint;
-    private Path mChartLinePath;
+    private Paint mChartLinePaint;// 绘制折线的画笔
+    private Path mChartLinePath;// 折线路径
+    private Path mReplacePath;// path measure 的路径
     private PathMeasure mLinePathMeasure;
-
+    private ValueAnimator mPathMeasureAnimator;
+    private float mSegmentPathMeasure;
+    private boolean isPlayLine = false;
 
 
     public LineChartViewForYinJiVer2(Context context) {
@@ -79,6 +86,7 @@ public class LineChartViewForYinJiVer2 extends View{
 
         initialize();
 
+        playLineAnimation();
     }
 
     private void initialize() {
@@ -97,10 +105,10 @@ public class LineChartViewForYinJiVer2 extends View{
     }
 
     private void initPaintAndPath() {
-        mLinePaint = new Paint();
-        mLinePaint.setAntiAlias(true);
-        mLinePaint.setColor(Color.YELLOW);
-        mLinePaint.setStrokeWidth(5f);
+        mLineXYPaint = new Paint();
+        mLineXYPaint.setAntiAlias(true);
+        mLineXYPaint.setColor(Color.YELLOW);
+        mLineXYPaint.setStrokeWidth(5f);
 
         mTextPaint = new Paint();
         mTextPaint.setAntiAlias(true);
@@ -134,6 +142,7 @@ public class LineChartViewForYinJiVer2 extends View{
         mChartLinePaint.setStrokeWidth(2f);
         mChartLinePaint.setStrokeCap(Paint.Cap.ROUND);
         mChartLinePaint.setStyle(Paint.Style.STROKE);
+        mReplacePath = new Path();
     }
 
     /**
@@ -141,29 +150,23 @@ public class LineChartViewForYinJiVer2 extends View{
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
+        // super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthPixels = getResources().getDisplayMetrics().widthPixels;
+        mViewHeight = getMeasuredHeight() * 1.0f;
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
-        super.onSizeChanged(w, h, oldW, oldH);
-        mViewWidth = w * 1.0f;
-        mViewHeight = h * 1.0f;
-
-        // 计算 x 轴参数
-        mXAxisStart = mViewWidth * 0.1f;
-        mXAxisTerminal = mViewWidth - mViewWidth * 0.05f;
+        // 临时计算 x 轴参数
+        mXAxisStart = widthPixels * 0.1f;
+        mXAxisTerminal = widthPixels - widthPixels * 0.05f;
         mXAxisLength = mXAxisTerminal - mXAxisStart;
-
-        // 计算 y 轴参数
-        mYAxisStart = mViewWidth * 0.05f;
-        mYAxisTerminal = mViewHeight * 0.8f;
-        mYAxisLength = mYAxisTerminal - mYAxisStart;
 
         // 计算 points, points 点的存在范围应该在 line 中，所以开始结束向内缩小 0.05f
         mActualPointsLength = mXAxisLength - mXAxisStart * 2;
-
         mPointSpacingWidth = mActualPointsLength / mXAxisDisplayNumber;
+
+        // 计算 y 轴参数
+        mYAxisStart = mViewHeight * 0.1f;
+        mYAxisTerminal = mViewHeight * 0.85f;
+        mYAxisLength = mYAxisTerminal - mYAxisStart;
 
         // 计算点数据的距离
         if (mListData != null && mListData.size() > 0) {
@@ -177,7 +180,20 @@ public class LineChartViewForYinJiVer2 extends View{
                 point.y = (int) (pY + mYAxisStart);
                 mListPoints.add(point);
             }
+            mViewWidth = (int) (mListPoints.get(mListPoints.size() - 1).x + mXAxisStart);
         }
+        mViewWidth = mViewWidth > widthPixels ? mViewWidth : widthPixels;
+
+        // 重新计算 X 轴的 terminal 值
+        mXAxisTerminal = mViewWidth - widthPixels * 0.05f;
+        setMeasuredDimension((int) mViewWidth, MeasureSpec.getSize(heightMeasureSpec));
+
+    }
+
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+        super.onSizeChanged(w, h, oldW, oldH);
     }
 
     @Override
@@ -186,18 +202,21 @@ public class LineChartViewForYinJiVer2 extends View{
 
         drawYAxisAndMarks(canvas);
         drawXAxisAndPoints(canvas);
-        /* calc point include offset */
-        if (mListPoints != null && mListPoints.size() > 0) {
-            /*for (int i = 0; i < mListPoints.size(); i ++) {
-                mListPoints.get(i).x += offsetX;
-            }*/
 
+        if (mListPoints != null && mListPoints.size() > 0) {
             mChartLinePath.reset();
             mChartLinePath.moveTo(mListPoints.get(0).x, mListPoints.get(0).y);
             for (int i = 0; i < mListPoints.size(); i ++) {
                 mChartLinePath.lineTo(mListPoints.get(i).x, mListPoints.get(i).y);
             }
-            canvas.drawPath(mChartLinePath, mChartLinePaint);
+            if (isPlayLine) {
+                mReplacePath.reset();
+                mLinePathMeasure.setPath(mChartLinePath, false);
+                mLinePathMeasure.getSegment(0, mSegmentPathMeasure * mLinePathMeasure.getLength(), mReplacePath, true);
+                canvas.drawPath(mReplacePath, mChartLinePaint);
+            } else {
+                canvas.drawPath(mChartLinePath, mChartLinePaint);
+            }
         }
         drawValuePoint(canvas);
         drawPriceAndRect(canvas);
@@ -215,7 +234,7 @@ public class LineChartViewForYinJiVer2 extends View{
             canvas.drawCircle(mXAxisStart, y, 5f, mTextPaint);
         }
 
-        canvas.drawLine(mXAxisStart, mYAxisStart, mXAxisStart, mYAxisTerminal, mLinePaint);
+        canvas.drawLine(mXAxisStart, mYAxisStart, mXAxisStart, mYAxisTerminal, mLineXYPaint);
     }
 
     /**
@@ -223,8 +242,8 @@ public class LineChartViewForYinJiVer2 extends View{
      * @param canvas
      */
     private void drawXAxisAndPoints(Canvas canvas) {
-        canvas.drawLine(mXAxisStart, mYAxisTerminal, mXAxisTerminal, mYAxisTerminal, mLinePaint);
-        for (int i = 0; i <= mXAxisDisplayNumber; i++) {
+        canvas.drawLine(mXAxisStart, mYAxisTerminal, mXAxisTerminal, mYAxisTerminal, mLineXYPaint);
+        for (int i = 0; i < getXAxisDisplayCount(); i++) {
             float fx = mPointSpacingWidth * i + mXAxisStart * 2;
             float fy = mYAxisTerminal;
             canvas.drawCircle(fx, fy, 5f, mTextPaint);
@@ -236,6 +255,10 @@ public class LineChartViewForYinJiVer2 extends View{
             fy += FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint) + 10f;
             canvas.drawText(text, fx, fy, mTextPaint);
         }
+    }
+
+    private int getXAxisDisplayCount() {
+        return mXAxisDisplayNumber > mListPoints.size() ? mXAxisDisplayNumber : mListPoints.size();
     }
 
     private void drawDottedLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
@@ -324,6 +347,45 @@ public class LineChartViewForYinJiVer2 extends View{
         }
     }
 
+    /**
+     * 开启 path measure 绘制 path 路径
+     */
+    public void playLineAnimation() {
+        isPlayLine = true;
+        mPathMeasureAnimator = new ValueAnimator().ofFloat(0, 1);
+        mPathMeasureAnimator.setDuration(300 * mListPoints.size());
+        mPathMeasureAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mSegmentPathMeasure = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        mPathMeasureAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isPlayLine = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mPathMeasureAnimator.start();
+    }
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // getParent().requestDisallowInterceptTouchEvent(true);
@@ -404,7 +466,27 @@ public class LineChartViewForYinJiVer2 extends View{
 
     public void setData(ArrayList<ViewItem> listData) {
         this.mListData = listData;
-        invalidate();
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < mListData.size(); i++) {
+            temp.add(Integer.parseInt(mListData.get(i).getPrice()));
+        }
+        if (temp.size() > 0) {
+            int max = Collections.max(temp);
+            resetPeakValue(max);
+        }
+        requestLayout();
+    }
+
+    /**
+     * 重置 peak value，计算最小公倍数，符合则结束递归
+     * @param listMax
+     */
+    private void resetPeakValue (int listMax) {
+        mYAxisPeakValue = Math.max(listMax, mYAxisPeakValue);
+        if (mYAxisPeakValue % 30 != 0) {
+            mYAxisPeakValue += 1;
+            resetPeakValue(mYAxisPeakValue);
+        }
     }
 
     public ArrayList<ViewItem> testLoadData(int items) {
@@ -412,7 +494,7 @@ public class LineChartViewForYinJiVer2 extends View{
         for (int i = 0; i < items; i++) {
             ViewItem viewItem = new ViewItem();
             Random random = new Random();
-            int p = random.nextInt(mYAxisPeakValue);
+            int p = random.nextInt(mYAxisPeakValue + 50);
             viewItem.setPrice(p + "");
             list.add(viewItem);
         }
