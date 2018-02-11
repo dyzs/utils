@@ -19,6 +19,7 @@ import com.dyzs.app.base.BaseActivity;
 import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.common.ui.FullScreenDialog;
 import com.dyzs.common.ui.FullScreenDialogVer2;
+import com.dyzs.common.ui.LineChartViewForYinJi;
 import com.dyzs.common.ui.magicruf.MagicRUF;
 
 import butterknife.BindView;
@@ -61,6 +62,11 @@ public class MainActivity extends BaseActivity
                 ((MagicRUF) v).startTension(0);
             }
         });
+
+
+
+        LineChartViewForYinJi lcv_yj = (LineChartViewForYinJi) findViewById(R.id.lcv_yj);
+        lcv_yj.setData(lcv_yj.testLoadData(10));
     }
 
     @Override

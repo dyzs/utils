@@ -25,7 +25,7 @@ import java.util.Random;
 /**
  * Created by maidou on 2017/12/21.
  */
-public class LineChartViewForYinJi extends View{
+public class LineChartViewForYinJiVer2 extends View{
     private Context mCtx;
     private ArrayList<ViewItem> mListData;
 
@@ -65,15 +65,15 @@ public class LineChartViewForYinJi extends View{
 
 
 
-    public LineChartViewForYinJi(Context context) {
+    public LineChartViewForYinJiVer2(Context context) {
         this(context, null);
     }
 
-    public LineChartViewForYinJi(Context context, AttributeSet attrs) {
+    public LineChartViewForYinJiVer2(Context context, AttributeSet attrs) {
         this(context, attrs, -1);
     }
 
-    public LineChartViewForYinJi(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LineChartViewForYinJiVer2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mCtx = context;
 

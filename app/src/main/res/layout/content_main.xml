@@ -6,25 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/app_bar_main"
-    tools:context=".activity.MainActivity">
+    tools:showIn="@layout/app_bar_main">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        >
+        android:gravity="center">
 
         <com.dyzs.common.ui.magicruf.MagicRUF
+            android:visibility="gone"
             android:id="@+id/magic_ruf"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/black"
             />
-
-        <com.dyzs.common.ui.LineChartViewForYinJi
-            android:layout_below="@+id/magic_ruf"
+        <com.dyzs.common.ui.LineChartViewForYinJiVer2
+            android:id="@+id/lcv_yj"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/half_percent_maria_blue"
