@@ -30,7 +30,6 @@
                 android:id="@+id/lcv_yj"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/half_percent_maria_blue"
                 />
         </HorizontalScrollView>
 

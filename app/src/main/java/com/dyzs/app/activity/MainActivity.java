@@ -64,13 +64,12 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 // ((MagicRUF) v).startTension(0);
-                i++;
                 lcv_yj.setData(lcv_yj.testLoadData(i));
                 lcv_yj.playLineAnimation();
             }
         });
     }
-    private static int i = 0;
+    private static int i = 8;
 
     @Override
     public void initData() {
