@@ -22,6 +22,7 @@ import com.dyzs.common.ui.FullScreenDialogVer2;
 import com.dyzs.common.ui.LineChartViewForYinJi;
 import com.dyzs.common.ui.LineChartViewForYinJiVer2;
 import com.dyzs.common.ui.magicruf.MagicRUF;
+import com.dyzs.common.utils.ToastUtils;
 
 import butterknife.BindView;
 
@@ -59,6 +60,12 @@ public class MainActivity extends BaseActivity
     public void initView() {
         final LineChartViewForYinJiVer2 lcv_yj = (LineChartViewForYinJiVer2) findViewById(R.id.lcv_yj);
         lcv_yj.setData(lcv_yj.testLoadData(i));
+        lcv_yj.setOnLineChartViewListener(new LineChartViewForYinJiVer2.LineChartViewListener() {
+            @Override
+            public void onPointClick(int selection) {
+                ToastUtils.makeText(MainActivity.this, "sel: " + selection);
+            }
+        });
 
         findViewById(R.id.magic_ruf).setOnClickListener(new View.OnClickListener() {
             @Override

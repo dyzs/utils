@@ -30,6 +30,9 @@
                 android:id="@+id/lcv_yj"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                app:lcvXYAxisPointColor="@color/carbon_black"
+                app:lcvTextColor="@color/light_pink"
+                app:lcvYAxisDisplay="true"
                 />
         </HorizontalScrollView>
 

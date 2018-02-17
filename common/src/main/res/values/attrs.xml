@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="DropIndicator">
-        <attr name="color1" format="color"></attr>
-        <attr name="color2" format="color"></attr>
-        <attr name="color3" format="color"></attr>
-        <attr name="color4" format="color"></attr>
-        <attr name="click_color" format="color"></attr>
-        <attr name="circle_color" format="color"></attr>
-        <attr name="radius" format="dimension"></attr>
-        <attr name="scale" format="float"></attr>
-        <attr name="duration" format="integer"></attr>
+        <attr name="color1" format="color"/>
+        <attr name="color2" format="color"/>
+        <attr name="color3" format="color"/>
+        <attr name="color4" format="color"/>
+        <attr name="click_color" format="color"/>
+        <attr name="circle_color" format="color"/>
+        <attr name="radius" format="dimension"/>
+        <attr name="scale" format="float"/>
+        <attr name="duration" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="LineChartReport">
@@ -95,6 +95,9 @@
         <attr name="lcvLineColor" format="color"/>
         <attr name="lcvSelectionColor" format="color"/>
         <attr name="lcvXYAxisColor" format="color"/>
+        <attr name="lcvXYAxisPointColor" format="color"/>
         <attr name="lcvTextColor" format="color"/>
+        <attr name="lcvYAxisDisplay" format="boolean"/>
+        <attr name="lcvPerLineDuration" format="integer"/>
     </declare-styleable>
 </resources>

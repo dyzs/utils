@@ -41,7 +41,8 @@ public class LineChartViewForYinJiVer2 extends View {
     private Paint mSelectionPointPaint;// 选中项画笔
     private Paint mDottedPaint;// 虚线画笔
     private Paint mChartLinePaint;// 绘制折线的画笔
-    private Paint mGradientPathPaint;//渐变背景画笔
+    private Paint mGradientPathPaint;// 渐变背景画笔
+    private Paint mXYAxisPointsPaint;// xy 轴点的颜色画笔
 
     private int mSelection = 0;// 选中项
     private float mViewWidth, mViewHeight;// view 实际宽高
@@ -63,17 +64,18 @@ public class LineChartViewForYinJiVer2 extends View {
     private PathMeasure mLinePathMeasure;
     private float mPathSegment;
     private ValueAnimator mPathMeasureAnimator;
-    private boolean isPlayLine = false;
+    private boolean isPlayLine = false, mDisplayYAxis = true;
 
     private Path mGradientPath;// 用来显示折线图的渐变颜色的路径
     private LinearGradient mChartGradient;// 折线图的渐变参数
     private RectF mChartGradientRectFArea;// 用来计算渐变动画时的设置渐变背景的动画区域
-    // {背景颜色, 折线图颜色, 选中点颜色, xy 轴颜色, 文本颜色}
-    private int mBgColor, mChartLineColor, mSelectionColor, mXYAxisColor, mTextColor;
+    // {背景颜色, 折线图颜色, 选中点颜色, xy 轴颜色, xy 轴刻度点的颜色, 文本颜色}
+    private int mBgColor, mChartLineColor, mSelectionColor, mXYAxisColor, mXYAxisPointColor, mTextColor;
 
     private float mChartLineSize;
-
+    // {用来判断 touch time & up time 的时间差}
     private long mTouchDownTime;
+    private long mPerLineDuration;// 两点成线的动画持续时间
 
     private static final int[] SYS_ATTRS = new int[] {
         android.R.attr.background
@@ -101,8 +103,12 @@ public class LineChartViewForYinJiVer2 extends View {
         mChartLineColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvLineColor, ContextCompat.getColor(context, R.color.oxygen_green));
         mSelectionColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvSelectionColor, ContextCompat.getColor(context, R.color.oxygen_green));
         mXYAxisColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvXYAxisColor, ContextCompat.getColor(context, R.color.oxygen_yellow));
+        mXYAxisPointColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvXYAxisPointColor, ContextCompat.getColor(context, R.color.alice_white));
         mTextColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvTextColor, ContextCompat.getColor(context, R.color.black));
+        mDisplayYAxis = ta.getBoolean(R.styleable.LineChartViewDYZS_lcvYAxisDisplay, true);
+        mPerLineDuration = ta.getInteger(R.styleable.LineChartViewDYZS_lcvPerLineDuration, 300);
         ta.recycle();
+        mPerLineDuration = mPerLineDuration < 100 ? 100 : mPerLineDuration;
 
         initialize();
 
@@ -131,7 +137,7 @@ public class LineChartViewForYinJiVer2 extends View {
 
         mTextPaint = new Paint();
         mTextPaint.setAntiAlias(true);
-        mTextPaint.setColor(Color.WHITE);
+        mTextPaint.setColor(mTextColor);
         mTextPaint.setStrokeWidth(4f);
         mTextPaint.setTextSize(dp2Px(15));// 初始化 15sp
 
@@ -162,6 +168,11 @@ public class LineChartViewForYinJiVer2 extends View {
         mGradientPathPaint.setAntiAlias(true);
         mGradientPathPaint.setStyle(Paint.Style.FILL);
         mChartGradientRectFArea = new RectF();
+
+        mXYAxisPointsPaint = new Paint();
+        mXYAxisPointsPaint.setAntiAlias(true);
+        mXYAxisPointsPaint.setStyle(Paint.Style.FILL);
+        mXYAxisPointsPaint.setColor(mXYAxisPointColor);
     }
 
     /**
@@ -294,7 +305,9 @@ public class LineChartViewForYinJiVer2 extends View {
     }
 
     private void drawYAxisAndMarks(Canvas canvas) {
-        canvas.drawLine(mXAxisStart, mYAxisStart, mXAxisStart, mYAxisTerminal, mLineXYPaint);
+        if (mDisplayYAxis) {
+            canvas.drawLine(mXAxisStart, mYAxisStart, mXAxisStart, mYAxisTerminal, mLineXYPaint);
+        }
         // 计算每个 dotted line 的高度
         float perDottedLineHeight = (mYAxisTerminal - mYAxisStart) / 3;
         for (int i = 0; i <= mYAxisDisplayNumber; i++) {
@@ -303,9 +316,11 @@ public class LineChartViewForYinJiVer2 extends View {
                 drawDottedLine(canvas, mXAxisStart, y, mXAxisTerminal, y);
             }
 
-            drawYAxisText(canvas, i, mXAxisStart, y);
+            if (mDisplayYAxis) {
+                drawYAxisText(canvas, i, mXAxisStart, y);
 
-            canvas.drawCircle(mXAxisStart, y, 5f, mTextPaint);
+                canvas.drawCircle(mXAxisStart, y, 5f, mXYAxisPointsPaint);
+            }
         }
     }
 
@@ -320,7 +335,7 @@ public class LineChartViewForYinJiVer2 extends View {
             float fy = mYAxisTerminal;
             drawDottedLine(canvas, fx, mYAxisStart, fx, fy);
 
-            canvas.drawCircle(fx, fy, 5f, mTextPaint);
+            canvas.drawCircle(fx, fy, 5f, mXYAxisPointsPaint);
 
             String text = i + "月";
             float textTotalWidth = mTextPaint.measureText(text);
@@ -390,7 +405,7 @@ public class LineChartViewForYinJiVer2 extends View {
     public void playLineAnimation() {
         isPlayLine = true;
         mPathMeasureAnimator = new ValueAnimator().ofFloat(0, 1);
-        mPathMeasureAnimator.setDuration(300 * mListPoints.size());
+        mPathMeasureAnimator.setDuration(mPerLineDuration * mListPoints.size());
         mPathMeasureAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -439,16 +454,17 @@ public class LineChartViewForYinJiVer2 extends View {
 
     private void handleActionUp(MotionEvent event) {
         long upTime = System.currentTimeMillis();
-        if (upTime - mTouchDownTime < 50) {
+        if (upTime - mTouchDownTime < 100) {
             float upX = event.getX();
             float upY = event.getY();
             float l, t, r , b;
             RectF rectF;
+            float touchLimit = mPointSpacingWidth / 2;
             for (int i = 0; i < mListPoints.size(); i ++) {
-                l = mListPoints.get(i).x - 50f;
-                t = mListPoints.get(i).y - 50f;
-                r = mListPoints.get(i).x + 50f;
-                b = mListPoints.get(i).y + 50f;
+                l = mListPoints.get(i).x - touchLimit;
+                t = mListPoints.get(i).y - touchLimit;
+                r = mListPoints.get(i).x + touchLimit;
+                b = mListPoints.get(i).y + touchLimit;
                 rectF = new RectF(l, t, r, b);
                 if (rectF.contains(upX, upY)) {
                     mSelection = i;
