@@ -337,7 +337,7 @@ public class LineChartViewForYinJiVer2 extends View {
 
             canvas.drawCircle(fx, fy, 5f, mXYAxisPointsPaint);
 
-            String text = i + "月";
+            String text = mListData.get(i).getAxisText();
             float textTotalWidth = mTextPaint.measureText(text);
             fx -= textTotalWidth / 2;
             fy += FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint) + textTotalWidth * 0.3f;
@@ -493,6 +493,7 @@ public class LineChartViewForYinJiVer2 extends View {
     public class ViewItem {
         private String xAxisText = "";
         private String price = "";
+        private String xAxisDate = "";// 当前 item 的真实日期
         public String getAxisText () {
             return xAxisText;
         }
@@ -507,6 +508,14 @@ public class LineChartViewForYinJiVer2 extends View {
 
         public void setPrice(String price) {
             this.price = price;
+        }
+
+        public void setXAxisDate (String date) {
+            this.xAxisDate = date;
+        }
+
+        public String getXAxisDate () {
+            return xAxisDate;
         }
     }
 
@@ -543,6 +552,7 @@ public class LineChartViewForYinJiVer2 extends View {
             Random random = new Random();
             int p = random.nextInt(mYAxisPeakValue + 50);
             viewItem.setPrice(p + "");
+            viewItem.setXAxisText(i + "月");
             list.add(viewItem);
         }
         return list;
