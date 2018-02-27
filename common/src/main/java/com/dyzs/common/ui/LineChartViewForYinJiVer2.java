@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.dyzs.common.R;
+import com.dyzs.common.utils.ColorUtil;
 import com.dyzs.common.utils.FontMatrixUtils;
 
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class LineChartViewForYinJiVer2 extends View {
         this.mCtx = context;
 
         TypedArray ta = context.obtainStyledAttributes(attrs, SYS_ATTRS);
-        mBgColor = ta.getColor(0, ContextCompat.getColor(context, R.color.girl_pink));
+        mBgColor = ta.getColor(0, ContextCompat.getColor(context, R.color.white));
         ta.recycle();
         setBackgroundColor(mBgColor);
 
@@ -102,9 +103,9 @@ public class LineChartViewForYinJiVer2 extends View {
         mChartLineSize = ta.getDimension(R.styleable.LineChartViewDYZS_lcvLineSize, 5f);
         mChartLineColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvLineColor, ContextCompat.getColor(context, R.color.oxygen_green));
         mSelectionColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvSelectionColor, ContextCompat.getColor(context, R.color.oxygen_green));
-        mXYAxisColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvXYAxisColor, ContextCompat.getColor(context, R.color.oxygen_yellow));
+        mXYAxisColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvXYAxisColor, ContextCompat.getColor(context, R.color.alice_white));
         mXYAxisPointColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvXYAxisPointColor, ContextCompat.getColor(context, R.color.alice_white));
-        mTextColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvTextColor, ContextCompat.getColor(context, R.color.black));
+        mTextColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvTextColor, ContextCompat.getColor(context, R.color.oxygen_grey));
         mDisplayYAxis = ta.getBoolean(R.styleable.LineChartViewDYZS_lcvYAxisDisplay, true);
         mPerLineDuration = ta.getInteger(R.styleable.LineChartViewDYZS_lcvPerLineDuration, 300);
         ta.recycle();
@@ -144,8 +145,8 @@ public class LineChartViewForYinJiVer2 extends View {
         mDottedPaint = new Paint();
         mDottedPaint.setAntiAlias(true);
         mDottedPaint.setStyle(Paint.Style.STROKE);
-        mDottedPaint.setStrokeWidth(2f);
-        mDottedPaint.setColor((Color.GRAY));
+        mDottedPaint.setStrokeWidth(1f);
+        mDottedPaint.setColor(ContextCompat.getColor(getContext(), R.color.oxygen_grey));
         mDottedPaint.setStrokeCap(Paint.Cap.ROUND);
 
         mSelectionPointPaint = new Paint();
@@ -161,6 +162,7 @@ public class LineChartViewForYinJiVer2 extends View {
         mChartLinePaint.setStrokeWidth(mChartLineSize);
         mChartLinePaint.setStrokeCap(Paint.Cap.ROUND);
         mChartLinePaint.setStyle(Paint.Style.STROKE);
+        mChartLinePaint.setShadowLayer(2, 0, 0, Color.WHITE);
 
         mReplacePath = new Path();
         mGradientPath = new Path();
@@ -240,7 +242,7 @@ public class LineChartViewForYinJiVer2 extends View {
         drawChartLineAndPoint(canvas);
 
         /* final step, 绘制折线点对应的价格 */
-        drawPriceAndRect(canvas);
+        drawPointTextAndRect(canvas);
     }
 
 
@@ -248,7 +250,7 @@ public class LineChartViewForYinJiVer2 extends View {
         if (mListPoints == null || mListPoints.size() <= 0) {return;}
         for (int i = 0; i < mListPoints.size(); i ++) {
             if (mSelection == i) {// 绘制选中的折线上的点
-                canvas.drawCircle(mListPoints.get(i).x, mListPoints.get(i).y, mChartLineSize * 1.5f, mSelectionPointPaint);
+                canvas.drawCircle(mListPoints.get(i).x, mListPoints.get(i).y, mChartLineSize * 2f, mSelectionPointPaint);
             }
         }
 
@@ -271,7 +273,7 @@ public class LineChartViewForYinJiVer2 extends View {
             // 初始化渐变, 设置为垂直渐变
             mChartGradient = new LinearGradient(
                     (mListPoints.get(mListPoints.size() - 1).x - mListPoints.get(0).x) / 2,
-                    mYAxisStart,
+                    mYAxisStart - mYAxisStart * 5f,
                     (mListPoints.get(mListPoints.size() - 1).x - mListPoints.get(0).x) / 2,
                     mYAxisTerminal,
                     new int[]{mChartLineColor, Color.TRANSPARENT},
@@ -370,7 +372,7 @@ public class LineChartViewForYinJiVer2 extends View {
     /**
      * 绘制折线点对应的价格
      */
-    private void drawPriceAndRect(Canvas canvas) {
+    private void drawPointTextAndRect(Canvas canvas) {
         if (mListPoints == null || mListPoints.size() <= 0) {return;}
 
         mTextPaint.setTextSize(dp2Px(10));
@@ -380,6 +382,7 @@ public class LineChartViewForYinJiVer2 extends View {
         float textTotalWidth;
         float textHeight = FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint);
         for (int i = 0; i < mListPoints.size(); i ++) {
+            if (i != mSelection)continue;
             float pY = mListPoints.get(i).y;// 中心点为 line 向上的一半
             text = mListData.get(i).getPointText();
             textTotalWidth = currencySymbolWidth + mTextPaint.measureText(text);
