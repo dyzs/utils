@@ -205,7 +205,7 @@ public class LineChartViewForYinJiVer2 extends View {
                 point = new Point();
                 float pX = mPointSpacingWidth * i + mXAxisStart + mXAxisStart / 2;
                 point.x = (int) pX;
-                float pY = mYAxisLength / mYAxisPeakValue * (mYAxisPeakValue - Integer.valueOf(mListData.get(i).getPrice()));
+                float pY = mYAxisLength / mYAxisPeakValue * (mYAxisPeakValue * 1f - mListData.get(i).getPointValue());
                 point.y = (int) (pY + mYAxisStart);
                 mListPoints.add(point);
             }
@@ -346,7 +346,8 @@ public class LineChartViewForYinJiVer2 extends View {
     }
 
     private int getXAxisDisplayCount() {
-        return mXAxisDisplayNumber > mListPoints.size() ? mXAxisDisplayNumber : mListPoints.size();
+        return mListPoints.size() - 1;
+        // return mXAxisDisplayNumber > mListPoints.size() ? mXAxisDisplayNumber : mListPoints.size();
     }
 
     private void drawDottedLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
@@ -380,7 +381,7 @@ public class LineChartViewForYinJiVer2 extends View {
         float textHeight = FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint);
         for (int i = 0; i < mListPoints.size(); i ++) {
             float pY = mListPoints.get(i).y;// 中心点为 line 向上的一半
-            text = mListData.get(i).getPrice();
+            text = mListData.get(i).getPointText();
             textTotalWidth = currencySymbolWidth + mTextPaint.measureText(text);
             // draw currency symbol text
             mTextPaint.setTextSize(dp2Px(10));
@@ -490,10 +491,13 @@ public class LineChartViewForYinJiVer2 extends View {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, mCtx.getResources().getDisplayMetrics());
     }
 
-    public class ViewItem {
+    public static class ViewItem {
         private String xAxisText = "";
-        private String price = "";
-        private String xAxisDate = "";// 当前 item 的真实日期
+        @Deprecated
+        private String pointText = "";// 已过时参数
+        private float pointValue = 0f;// value 的值, 用来做具体计算
+        @Deprecated
+        private String xAxisDate = "";// 当前 item 的真实日期, 这个参数...貌似并没有什么卵用
         public String getAxisText () {
             return xAxisText;
         }
@@ -502,12 +506,14 @@ public class LineChartViewForYinJiVer2 extends View {
             this.xAxisText = text;
         }
 
-        public String getPrice() {
-            return price;
+        @Deprecated
+        public String getPointText() {
+            return pointText;
         }
 
-        public void setPrice(String price) {
-            this.price = price;
+        @Deprecated
+        public void setPointText(String price) {
+            this.pointText = price;
         }
 
         public void setXAxisDate (String date) {
@@ -517,28 +523,37 @@ public class LineChartViewForYinJiVer2 extends View {
         public String getXAxisDate () {
             return xAxisDate;
         }
+
+        public void setPointValue(float value) {
+            this.pointValue = value;
+        }
+
+        public float getPointValue () {
+            return pointValue;
+        }
     }
 
     public void setData(ArrayList<ViewItem> listData) {
         this.mListData = listData;
-        ArrayList<Integer> temp = new ArrayList<>();
+        ArrayList<Float> temp = new ArrayList<>();
         for (int i = 0; i < mListData.size(); i++) {
-            temp.add(Integer.parseInt(mListData.get(i).getPrice()));
+            temp.add(mListData.get(i).getPointValue());
             mSelection = mListData.size() - 1;
         }
         if (temp.size() > 0) {
-            int max = Collections.max(temp);
+            float max = Collections.max(temp);
             resetPeakValue(max);
         }
         requestLayout();
     }
 
     /**
-     * 重置 peak value，计算最小公倍数，符合则结束递归
+     * 先做一遍值比较, 再进行四舍五入, 然后再进行倍数计算
+     * 重置 peak value, 计算最小公倍数, 符合则结束递归
      * @param listMax
      */
-    private void resetPeakValue (int listMax) {
-        mYAxisPeakValue = Math.max(listMax, mYAxisPeakValue);
+    private void resetPeakValue (float listMax) {
+        mYAxisPeakValue = Math.round(Math.max(listMax, mYAxisPeakValue));
         if (mYAxisPeakValue % 30 != 0) {
             mYAxisPeakValue += 1;
             resetPeakValue(mYAxisPeakValue);
@@ -550,8 +565,10 @@ public class LineChartViewForYinJiVer2 extends View {
         for (int i = 0; i < items; i++) {
             ViewItem viewItem = new ViewItem();
             Random random = new Random();
-            int p = random.nextInt(mYAxisPeakValue + 50);
-            viewItem.setPrice(p + "");
+            // int p = random.nextInt(mYAxisPeakValue + 50);
+            float p = random.nextFloat() * 100f + 50f;
+            viewItem.setPointText(p + "");
+            viewItem.setPointValue(p);
             viewItem.setXAxisText(i + "月");
             list.add(viewItem);
         }
