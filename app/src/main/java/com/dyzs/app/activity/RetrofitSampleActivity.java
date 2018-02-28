@@ -7,10 +7,14 @@ import com.dyzs.app.R;
 import com.dyzs.app.base.BaseActivity;
 import com.dyzs.app.base.IBaseUrl;
 import com.dyzs.app.entity.RetrofitSampleBean;
+import com.dyzs.app.entity.UserBean;
+import com.dyzs.app.entity.UserBeanResult;
 import com.dyzs.app.entity.WeatherDataBiz;
+import com.dyzs.app.retrofitsample.IPostApi;
 import com.dyzs.app.retrofitsample.IRetrofitApi;
 import com.dyzs.app.retrofitsample.IWeatherApi;
 import com.dyzs.common.utils.LogUtils;
+import com.dyzs.common.utils.ToastUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -233,6 +237,35 @@ public class RetrofitSampleActivity extends BaseActivity {
 
             }
         });
+    }
 
+    @OnClick(R.id.post_user)
+    public void retrofitPostUser() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IBaseUrl.BASE_URL_GANK)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        IPostApi postApi = retrofit.create(IPostApi.class);
+
+        UserBean userBean = new UserBean();
+        userBean.setId(1);
+        userBean.setName("java");
+
+        Call<UserBeanResult> call = postApi.postUser(userBean);
+
+        call.enqueue(new Callback<UserBeanResult>() {
+            @Override
+            public void onResponse(Call<UserBeanResult> call, Response<UserBeanResult> response) {
+                if (response.body().getYes() == 0) {
+                    ToastUtils.makeText(RetrofitSampleActivity.this, "success");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserBeanResult> call, Throwable t) {
+
+            }
+        });
     }
 }

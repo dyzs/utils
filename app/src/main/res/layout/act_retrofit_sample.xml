@@ -64,9 +64,20 @@
             <com.dyzs.common.ui.DottedLine
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="3dp"
                 app:lineDotColor="@color/oxygen_grey"
+                app:lineType="1"
+                />
+
+            <TextView
+                android:id="@+id/post_user"
+                style="@style/CommonTextViewItem"
+                android:text="POST 方式注册 user" />
+
+            <com.dyzs.common.ui.DottedLine
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                app:lineDotColor="@color/oxygen_grey"
+                app:lineType="1"
                 />
 
             <TextView
