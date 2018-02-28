@@ -23,6 +23,11 @@ public class CustomViewActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
+    public int initContentView() {
+        return R.layout.act_custion_view;
+    }
+
+    @Override
     public void initView() {
         findViewById(R.id.solar_eclipse_loading).setOnClickListener(this);
         findViewById(R.id.chasing_loading).setOnClickListener(this);

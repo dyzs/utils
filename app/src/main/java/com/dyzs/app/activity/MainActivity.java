@@ -16,18 +16,16 @@ import android.view.MenuItem;
 
 import com.dyzs.app.R;
 import com.dyzs.app.base.BaseActivity;
+import com.dyzs.app.presenter.MainPresenter;
 import com.dyzs.app.service.CBMonitorService;
-import com.dyzs.common.ui.FullScreenDialog;
+import com.dyzs.app.view.IMainView;
 import com.dyzs.common.ui.FullScreenDialogVer2;
-import com.dyzs.common.ui.LineChartViewForYinJi;
 import com.dyzs.common.ui.LineChartViewForYinJiVer2;
-import com.dyzs.common.ui.magicruf.MagicRUF;
 import com.dyzs.common.utils.ToastUtils;
 
-import butterknife.BindView;
-
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, IMainView {
+    MainPresenter presenter = new MainPresenter(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +52,11 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         initView();
+    }
+
+    @Override
+    public int initContentView() {
+        return R.layout.activity_main;
     }
 
     @Override
@@ -121,12 +124,10 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            Intent intent = new Intent(MainActivity.this, CustomViewActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
+        if (id == R.id.nav_custom_view) {
+            presenter.go2CustomView();
+        } else if (id == R.id.nav_retrofit_sample) {
+            presenter.go2RetrofitSample();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -159,5 +160,17 @@ public class MainActivity extends BaseActivity
         /*FullScreenDialog dialog = new FullScreenDialog(this);
         dialog.setContentView(view);
         dialog.show();*/
+    }
+
+    @Override
+    public void go2CustomView() {
+        Intent intent = new Intent(MainActivity.this, CustomViewActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void go2RetrofitSample() {
+        Intent intent = new Intent(this, RetrofitSampleActivity.class);
+        startActivity(intent);
     }
 }

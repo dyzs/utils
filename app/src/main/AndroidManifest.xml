@@ -4,7 +4,8 @@
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -25,6 +26,13 @@
         <activity android:name=".activity.CustomViewActivity" >
             <intent-filter>
                 <action android:name="com.dyzs.common.action.TEST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activity.RetrofitSampleActivity" >
+            <intent-filter>
+                <!--<action android:name="com.dyzs.common.action.TEST" />-->
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

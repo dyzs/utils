@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/retrofit_request"
+                style="@style/CommonTextViewItem"
+                android:text="请求" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/retrofit_request_city_weather"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/CommonTextViewItem"
+                    android:text="请求天气信息" />
+
+                <TextView
+                    android:id="@+id/weather_query_map_method"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/CommonTextViewItem"
+                    android:text="QueryMap 多参数请求" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/retrofit_sample"
+                    style="@style/CommonTextViewItem"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Bean 替换 ResBody" />
+
+                <TextView
+                    android:id="@+id/retrofit_sample_with_page"
+                    style="@style/CommonTextViewItem"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Bean 数据的分页查询" />
+            </LinearLayout>
+
+            <com.dyzs.common.ui.DottedLine
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                app:lineDotColor="@color/oxygen_grey"
+                />
+
+            <TextView
+                android:id="@+id/tv_result"
+                style="@style/CommonTextViewItem"
+                android:text="result 结果集" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

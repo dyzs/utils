@@ -29,8 +29,13 @@ dependencies {
     compile project(':common')
     compile project(':base')
 
+    // butter knife & ok http
     compile 'com.jakewharton:butterknife:8.5.1'
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.squareup.okio:okio:1.9.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
+    // retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
 }

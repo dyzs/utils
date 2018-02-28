@@ -31,6 +31,11 @@ public class CustomViewDisplayActivity extends BaseActivity{
         initView();
     }
 
+    @Override
+    public int initContentView() {
+        return R.layout.act_custion_view_display;
+    }
+
 
     @Override
     public void initView() {
