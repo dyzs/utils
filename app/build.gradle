@@ -45,16 +45,43 @@ android {
     }
 
     productFlavors {
-        dyzs_utils_v0 {
+        v0 {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_v1", IN_VERSION: "0"]
         }
-        dyzs_utils_yingyongbao_v1 {
+        yingyongbao_v1 {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_yyb_v1", IN_VERSION: "1"]
         }
-        dyzs_utils_google_v2 {
+        googleplay_v2 {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_gp_v2", IN_VERSION: "2"]
         }
     }
+
+    /*productFlavors {
+        google {
+            manifestPlaceholders = [CHANNEL_VALUE: "google"]
+        }
+        qh360 {
+            manifestPlaceholders = [CHANNEL_VALUE: "360"]
+        }
+        baidu {
+            manifestPlaceholders = [CHANNEL_VALUE: "baidu"]
+        }
+        self {
+            manifestPlaceholders = [CHANNEL_VALUE: "self"]
+        }
+    }*/
+
+    /*productFlavors {
+        kuan {}
+        xiaomi {}
+        qh360 {}
+        baidu {}
+        wandoujia {}
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [CHANNEL_VALUE: name]
+    }*/
 }
 
 dependencies {
@@ -65,7 +92,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile project(':common')
     compile project(':base')
-    // butter knife & ok http
+    // ButterKnife & OKHttp
     compile 'com.jakewharton:butterknife:8.5.1'
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.squareup.okio:okio:1.9.0'
@@ -78,4 +105,7 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.6'
     //RxAndroid
     compile 'io.reactivex:rxandroid:1.2.1'
+    // Umeng Analysis
+    compile 'com.umeng.sdk:common:latest.integration'
+    compile 'com.umeng.sdk:analytics:latest.integration'
 }
