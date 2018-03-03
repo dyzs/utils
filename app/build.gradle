@@ -20,6 +20,8 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0.1"
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE:"self",IN_VERSION:"0",VERSION_NAME:"1_0_1"]
+        ndk{abiFilters "armeabi"}
     }
     buildTypes {
         release {
@@ -46,13 +48,13 @@ android {
 
     productFlavors {
         v0 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_v1", IN_VERSION: "0"]
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "v0", IN_VERSION: "0"]
         }
         yingyongbao_v1 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_yyb_v1", IN_VERSION: "1"]
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yyb_v1", IN_VERSION: "1"]
         }
         googleplay_v2 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_gp_v2", IN_VERSION: "2"]
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "gp_v2", IN_VERSION: "2"]
         }
     }
 
