@@ -9,7 +9,7 @@ android {
             keyAlias properties.getProperty("debug.keyalias")
             keyPassword properties.getProperty("debug.keypassword")
             storeFile file('C:/Android/Keystore/utils.jks')
-            storePassword properties.getProperty("debug.keypassword")
+            storePassword properties.getProperty("debug.storepassword")
         }
     }
     compileSdkVersion 25
@@ -53,6 +53,9 @@ android {
         }
         googleplay_v2 {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_gp_v2", IN_VERSION: "2"]
+        }
+        flyme_v3 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_flyme_v3", IN_VERSION: "3"]
         }
     }
 
