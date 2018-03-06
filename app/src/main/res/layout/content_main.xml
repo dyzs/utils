@@ -33,6 +33,7 @@
                 app:lcvXYAxisPointColor="@color/carbon_black"
                 app:lcvTextColor="@color/light_pink"
                 app:lcvYAxisDisplay="true"
+                app:lcvXAxisDisplayNumber="8"
                 />
         </HorizontalScrollView>
 

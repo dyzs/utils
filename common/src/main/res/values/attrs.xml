@@ -99,5 +99,6 @@
         <attr name="lcvTextColor" format="color"/>
         <attr name="lcvYAxisDisplay" format="boolean"/>
         <attr name="lcvPerLineDuration" format="integer"/>
+        <attr name="lcvXAxisDisplayNumber" format="integer"/>
     </declare-styleable>
 </resources>

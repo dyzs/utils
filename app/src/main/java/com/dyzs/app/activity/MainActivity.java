@@ -2,6 +2,7 @@ package com.dyzs.app.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.app.view.IMainView;
 import com.dyzs.common.ui.FullScreenDialogVer2;
 import com.dyzs.common.ui.LineChartViewForYinJiVer2;
+import com.dyzs.common.utils.FixDexUtils;
 import com.dyzs.common.utils.ToastUtils;
 
 public class MainActivity extends BaseActivity
@@ -66,6 +68,7 @@ public class MainActivity extends BaseActivity
         lcv_yj.setOnLineChartViewListener(new LineChartViewForYinJiVer2.LineChartViewListener() {
             @Override
             public void onPointClick(int selection) {
+                FixDexUtils.loadFixedDex(MainActivity.this, Environment.getExternalStorageDirectory());
                 ToastUtils.makeText(MainActivity.this, "sel: " + selection);
             }
         });
@@ -79,7 +82,7 @@ public class MainActivity extends BaseActivity
             }
         });
     }
-    private static int i = 8;
+    private static int i = 7;
 
     @Override
     public void initData() {
@@ -131,7 +134,7 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
-
+            presenter.go2SampleHotfix();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -172,5 +175,11 @@ public class MainActivity extends BaseActivity
     public void go2RetrofitSample() {
         Intent intent = new Intent(this, RetrofitSampleActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void go2SampleHotfix() {
+        /*Intent intent = new Intent(this, SampleHotfixActivity.class);
+        startActivity(intent);*/
     }
 }

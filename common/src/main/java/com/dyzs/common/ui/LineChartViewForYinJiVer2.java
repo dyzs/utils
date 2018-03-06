@@ -108,6 +108,7 @@ public class LineChartViewForYinJiVer2 extends View {
         mTextColor = ta.getColor(R.styleable.LineChartViewDYZS_lcvTextColor, ContextCompat.getColor(context, R.color.oxygen_grey));
         mDisplayYAxis = ta.getBoolean(R.styleable.LineChartViewDYZS_lcvYAxisDisplay, true);
         mPerLineDuration = ta.getInteger(R.styleable.LineChartViewDYZS_lcvPerLineDuration, 300);
+        mXAxisDisplayNumber = ta.getInteger(R.styleable.LineChartViewDYZS_lcvXAxisDisplayNumber, 4);
         ta.recycle();
         mPerLineDuration = mPerLineDuration < 100 ? 100 : mPerLineDuration;
 
