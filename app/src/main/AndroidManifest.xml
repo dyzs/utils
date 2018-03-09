@@ -87,6 +87,8 @@
         <service android:name=".service.ScreenUnLockMonitorService" />
 
         <activity android:name=".activity.CustomViewDisplayActivity" />
+
+        <activity android:name=".activity.SampleHotfixActivity" />
     </application>
 
 </manifest>

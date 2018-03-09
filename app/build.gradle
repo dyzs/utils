@@ -11,6 +11,8 @@ android {
             storeFile file('C:/Android/Keystore/utils.jks')
             storePassword properties.getProperty("debug.storepassword")
         }
+        debugConfig {
+        }
     }
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
@@ -42,7 +44,6 @@ android {
             }
         }
         debug {
-            signingConfig signingConfigs.release
         }
     }
 
@@ -57,7 +58,7 @@ android {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "gp_v2", IN_VERSION: "2"]
         }
         flyme_v3 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dyzs_utils_flyme_v3", IN_VERSION: "3"]
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "flyme_v3", IN_VERSION: "3"]
         }
     }
 

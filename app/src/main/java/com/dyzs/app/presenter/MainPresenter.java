@@ -30,4 +30,7 @@ public class MainPresenter extends BasePresenter {
     }
 
 
+    public void go2SampleHotfix() {
+        iView.go2SampleHotfix();
+    }
 }

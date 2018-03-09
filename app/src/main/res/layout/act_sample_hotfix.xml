@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/test_hotfix"
+        style="@style/CommonTextViewItem"
+        android:text="test_hotfix" />
+
+    <TextView
+        android:id="@+id/fix_bug"
+        style="@style/CommonTextViewItem"
+        android:text="fix bug" />
+
+</LinearLayout>
