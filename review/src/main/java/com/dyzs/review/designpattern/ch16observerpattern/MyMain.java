@@ -28,7 +28,7 @@ public class MyMain {
 
         HanFeiZiVer2 hanFeiZiVer2 = new HanFeiZiVer2();
         hanFeiZiVer2.addObserver(lisi2);
-        
+
         hanFeiZiVer2.haveBreakfast();
 
     }

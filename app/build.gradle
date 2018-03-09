@@ -21,7 +21,7 @@ android {
         versionCode 1
         versionName "1.0.1"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE:"self",IN_VERSION:"0",VERSION_NAME:"1_0_1"]
-        ndk{abiFilters "armeabi"}
+        // ndk{abiFilters "armeabi"}
     }
     buildTypes {
         release {
