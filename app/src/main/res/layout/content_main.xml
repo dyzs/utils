@@ -20,7 +20,7 @@
             android:layout_height="200dp"
             android:background="@color/black"
             />
-        <HorizontalScrollView
+        <com.dyzs.common.ui.LineChartViewWrapper
             android:layout_below="@+id/magic_ruf"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -33,15 +33,9 @@
                 app:lcvXYAxisPointColor="@color/carbon_black"
                 app:lcvTextColor="@color/light_pink"
                 app:lcvYAxisDisplay="true"
-                app:lcvXAxisDisplayNumber="8"
+                app:lcvXAxisDisplayNumber="4"
                 />
-        </HorizontalScrollView>
-
-        <!--<com.dyzs.common.ui.magicruf.GranzortView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/black"
-            />-->
+        </com.dyzs.common.ui.LineChartViewWrapper>
 
     </RelativeLayout>
 
