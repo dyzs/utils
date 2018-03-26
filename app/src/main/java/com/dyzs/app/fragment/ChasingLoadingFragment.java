@@ -29,17 +29,5 @@ public class ChasingLoadingFragment extends Fragment{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final ChasingLoading chasing_loading = (ChasingLoading) view.findViewById(R.id.chasing_loading);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SystemClock.sleep(5000);
-                ChasingLoadingFragment.this.getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        chasing_loading.setChasing(false);
-                    }
-                });
-            }
-        }).start();
     }
 }

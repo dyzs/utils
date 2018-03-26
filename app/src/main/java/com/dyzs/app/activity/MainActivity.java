@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity
             }
         });
     }
-    private static int i = 20;
+    private static int i = 11;
 
     @Override
     public void initData() {

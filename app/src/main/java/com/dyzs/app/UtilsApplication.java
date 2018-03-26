@@ -1,6 +1,7 @@
 package com.dyzs.app;
 
 import com.dyzs.base.BaseApplication;
+import com.dyzs.common.component.CrashHandler;
 import com.umeng.commonsdk.UMConfigure;
 
 /**
@@ -23,5 +24,9 @@ public class UtilsApplication extends BaseApplication {
          * 参数：boolean 默认为false（不加密）
          */
         UMConfigure.setEncryptEnabled(true);
+
+        CrashHandler handler = CrashHandler.getInstance();
+        //在 Application 里面设置我们的异常处理器为 UncaughtExceptionHandler 处理器
+        handler.init(getApplicationContext());
     }
 }

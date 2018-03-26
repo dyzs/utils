@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dyzs.common.utils.ToastUtils;
+
 import butterknife.ButterKnife;
 
 /**
@@ -33,5 +35,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public void showToast(String text) {
+        ToastUtils.makeText(this, text);
+    }
+
+    public void showToast(int resId) {
+        ToastUtils.makeText(this, resId);
     }
 }

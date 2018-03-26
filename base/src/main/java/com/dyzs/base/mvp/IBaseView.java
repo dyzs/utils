@@ -6,4 +6,8 @@ package com.dyzs.base.mvp;
 
 public interface IBaseView {
 
+    void showToast(String text);
+
+    void showToast(int resId);
+
 }
