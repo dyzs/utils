@@ -22,7 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.dyzs.common.R;
-import com.dyzs.common.utils.ColorUtil;
 import com.dyzs.common.utils.FontMatrixUtils;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.Random;
 /**
  * @author dyzs Created on 2018/2/11.
  */
-public class LineChartViewForYinJiVer2 extends View {
+public class LineChartView extends View {
     private Context mCtx;
     private ArrayList<ViewItem> mListData;
     private ArrayList<Point> mListPoints;
@@ -82,15 +81,15 @@ public class LineChartViewForYinJiVer2 extends View {
         android.R.attr.background
     };
 
-    public LineChartViewForYinJiVer2(Context context) {
+    public LineChartView(Context context) {
         this(context, null);
     }
 
-    public LineChartViewForYinJiVer2(Context context, AttributeSet attrs) {
+    public LineChartView(Context context, AttributeSet attrs) {
         this(context, attrs, -1);
     }
 
-    public LineChartViewForYinJiVer2(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LineChartView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mCtx = context;
 

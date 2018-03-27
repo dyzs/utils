@@ -21,7 +21,7 @@ import com.dyzs.app.presenter.MainPresenter;
 import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.app.view.IMainView;
 import com.dyzs.common.ui.FullScreenDialogVer2;
-import com.dyzs.common.ui.LineChartViewForYinJiVer2;
+import com.dyzs.common.ui.LineChartView;
 import com.dyzs.common.utils.FixDexUtils;
 import com.dyzs.common.utils.ToastUtils;
 
@@ -63,9 +63,9 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initView() {
-        final LineChartViewForYinJiVer2 lcv_yj = (LineChartViewForYinJiVer2) findViewById(R.id.lcv_yj);
+        final LineChartView lcv_yj = (LineChartView) findViewById(R.id.lcv_yj);
         lcv_yj.setData(lcv_yj.testLoadData(i));
-        lcv_yj.setOnLineChartViewListener(new LineChartViewForYinJiVer2.LineChartViewListener() {
+        lcv_yj.setOnLineChartViewListener(new LineChartView.LineChartViewListener() {
             @Override
             public void onPointClick(int selection) {
                 FixDexUtils.loadFixedDex(MainActivity.this, Environment.getExternalStorageDirectory());

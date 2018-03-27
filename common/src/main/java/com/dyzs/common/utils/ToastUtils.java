@@ -20,11 +20,11 @@ public class ToastUtils {
 		toast.show();
 	}
 
-	public static void makeText(Context context,int text){
+	public static void makeText(Context context, int resId){
 		if (toast == null) {
-			toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+			toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
 		}
-		toast.setText(text);
+		toast.setText(resId);
 		toast.show();
 	}
 }

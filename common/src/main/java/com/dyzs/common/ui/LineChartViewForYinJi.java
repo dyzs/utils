@@ -25,6 +25,7 @@ import java.util.Random;
 /**
  * Created by maidou on 2017/12/21.
  */
+@Deprecated
 public class LineChartViewForYinJi extends View{
     private Context mCtx;
     private ArrayList<ViewItem> mListData;
