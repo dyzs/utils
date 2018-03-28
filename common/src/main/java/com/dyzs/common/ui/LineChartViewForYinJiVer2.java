@@ -1,4 +1,4 @@
-package com.coocoo.app.unit.view;
+package com.dyzs.common.ui;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -21,8 +21,8 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.coocoo.app.unit.R;
-import com.coocoo.mark.common.utils.FontMatrixUtils;
+import com.dyzs.common.R;
+import com.dyzs.common.utils.FontMatrixUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
