@@ -9,6 +9,7 @@
     <color name="green">#00FF00</color>
     <color name="blue">#0000FF</color>
     <color name="white">#FFFFFF</color>
+    <color name="gray_white">#5ffffFFF</color>
 
     <color name="cinnabar_red">#F15250</color>
     <color name="pale_red">#F16868</color>

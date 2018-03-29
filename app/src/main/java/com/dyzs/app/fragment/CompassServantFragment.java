@@ -1,16 +1,13 @@
 package com.dyzs.app.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
-import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dyzs.app.R;
+import com.dyzs.app.base.BaseFragment;
 import com.dyzs.app.presenter.CompassServantPresenter;
 import com.dyzs.app.view.ICompassServantView;
 import com.dyzs.common.ui.CompassServant;
@@ -20,7 +17,7 @@ import com.dyzs.common.ui.CompassServant;
  * Created on 2018/1/8.
  */
 
-public class CompassServantFragment extends Fragment implements CompassServant.ServantListener
+public class CompassServantFragment extends BaseFragment implements CompassServant.ServantListener
         , ICompassServantView{
     CompassServant compass_servant;
     private CompassServantPresenter presenter = new CompassServantPresenter(this);

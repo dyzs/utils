@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
@@ -163,6 +164,11 @@ public class LineChartView extends View {
         mChartLinePaint.setStrokeCap(Paint.Cap.ROUND);
         mChartLinePaint.setStyle(Paint.Style.STROKE);
         mChartLinePaint.setShadowLayer(2, 0, 0, Color.WHITE);
+        // 设置平滑的折线图
+        // mChartLinePaint.setStrokeJoin(Paint.Join.ROUND);
+        // 设置平滑的折线图 方法2
+        CornerPathEffect cornerPathEffect = new CornerPathEffect(10);
+        mChartLinePaint.setPathEffect(cornerPathEffect);
 
         mReplacePath = new Path();
         mGradientPath = new Path();

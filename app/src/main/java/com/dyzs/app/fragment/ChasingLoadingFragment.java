@@ -8,13 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dyzs.app.R;
+import com.dyzs.app.base.BaseFragment;
 import com.dyzs.common.ui.ChasingLoading;
 
 /**
  * Created by maidou on 2018/1/8.
  */
 
-public class ChasingLoadingFragment extends Fragment{
+public class ChasingLoadingFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
