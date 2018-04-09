@@ -2,6 +2,7 @@ package com.dyzs.app;
 
 import com.dyzs.base.BaseApplication;
 import com.dyzs.common.component.CrashHandler;
+import com.squareup.leakcanary.LeakCanary;
 import com.umeng.commonsdk.UMConfigure;
 
 /**
@@ -28,5 +29,7 @@ public class UtilsApplication extends BaseApplication {
         CrashHandler handler = CrashHandler.getInstance();
         //在 Application 里面设置我们的异常处理器为 UncaughtExceptionHandler 处理器
         handler.init(getApplicationContext());
+
+        LeakCanary.install(this);
     }
 }

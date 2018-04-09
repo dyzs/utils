@@ -8,7 +8,8 @@ import android.os.Message;
  */
 
 public class BasePresenter {
-    IBaseView iBaseView;
+    private IBaseView iBaseView;
+    private static final int MESSAGE_GOT_ERROR = -110;
     public BasePresenter(IBaseView baseView) {
         this.iBaseView = baseView;
     }
@@ -18,23 +19,29 @@ public class BasePresenter {
 
     }
 
-    private Handler mHandler = new android.os.Handler(){
+    private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+        public boolean handleMessage(Message msg) {
             processMainHandleMessage(msg);
+            return false;
         }
-    };
+    });
 
-    protected void sendMainHandlerMessage(int what, Object obj){
+
+    protected void sendMainHandlerMessage(int what, Object obj) {
         Message msg= mHandler.obtainMessage();
         msg.what = what;
         msg.obj = obj;
         mHandler.sendMessage(msg);
     }
 
-    protected void processMainHandleMessage(Message msg){
-
+    /**
+     * @param msg
+     */
+    protected void processMainHandleMessage(Message msg) {
+        switch (msg.what) {
+            case MESSAGE_GOT_ERROR:
+        }
     }
 
 
