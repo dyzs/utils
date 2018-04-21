@@ -1,4 +1,4 @@
-## Q1: Sqlite 怎么做批量插入，效率更高
+# Q1: Sqlite 怎么做批量插入，效率更高
 
 我发现用transactions能够将数据保存在内存中, 只有在commit时候才写入文件系统. 因此我改动如下:
 Java代码  收藏代码
@@ -16,7 +16,7 @@ for (int i = 0; i < values.size(); i++) {
 db.setTransactionSuccessful();  
 db.endTransaction();
 
-## Q2: 网络通信原理，HTTP 和 TCP 原理
+# Q2: 网络通信原理，HTTP 和 TCP 原理
 
 要想理解socket首先得熟悉一下TCP/IP协议族，即传输控制协议/网间协议，定义了主机如何连入因特网及数据如何再它们之间传输的标准。
 
@@ -41,7 +41,7 @@ db.endTransaction();
 # Q3: Android 内存管理和 GC 回收机制
 ### Android 内存管理
 ##### 所有的内存都是基于物理内存的，即移动设备上的 RAM。当启动一个Android程序时，会启动一个Dalvik vm 进程，系统会给它分配固定的内存空间，这块内存会映射到RAM上某个区域，然后Android程序就运行在这块空间上。JAVA里会将这块空间分成Stack栈内存和Heap堆内存。stack里存放对象的引用，heap里存放实际对象数据。
-![](https://github.com/dyzs/utils/tree/master/android-interview/imgs/memory_allocation.png)
+![](https://github.com/dyzs/utils/tree/master/android-interview/imgs/memory_allocation.jpg)
   * 内存分配
   
   * 内存回收
@@ -87,6 +87,12 @@ db.endTransaction();
 
   * 属性动画造成内存泄露
     * 在销毁的时候，没有调用cancle方法。
+    
+  * 布局优化
+    * 使用 HierarchyViewer 查看并减少 OverDraw。
+    * 使用 include 标签：复用 xml。
+    * 使用 merge 标签：解决 include 标签的问题，减少一个层级，并且方便使用。
+    * 重用系统资源：比如一些系统颜色和系统样式 style。
    
 ### 总结
   * 内存泄露在Android内存优化是一个比较重要的一个方面，很多时候程序中发生了内存泄露我们不一定就能注意到，所有在
@@ -101,7 +107,7 @@ db.endTransaction();
     * Activity销毁时WebView的移除和销毁。
 
 
-### Android 进程优先级
+# Q4：Android 进程优先级
   * android将进程的优先级分为5个层次：
     * 前台进程（Foreground process）。
     * 可见进程（Visible process）。
@@ -110,7 +116,7 @@ db.endTransaction();
     * 空进程（Empty process）。
 
 
-### 消息推送的跳转方式
+# Q5：消息推送的跳转方式
   * 如果是App进程已经被系统回收，直接在PendingIntent中传目标Activity的Intent，则在退出目标Activity时会直接
   退出应用，感觉像是闪退了一样；如果是跳转到首页，然后在首页中检测是否是由点击通知进入应用的来进行跳转，这样的话
   首页就会闪屏。综上方法都不是很理想，一个比较好的解决方案是给PendingIntent传递一个Intent数组，分别放置目标
@@ -161,7 +167,7 @@ db.endTransaction();
     }
 ``
 
-### Android Binder 机制
+# Q6：Android Binder 机制
   * Binder 是 Android 中的一个类，它继承了 IBinder 接口，它是 Android 中的一种跨进通信方式，
 
   * 为什么使用 Binder ?
@@ -180,16 +186,16 @@ db.endTransaction();
     理解这一点的话，你做进程间通信时处理并发问题就会有一个底，比如使用 ContentProvider
     时（又一个使用Binder机制的组件），
     你就很清楚它的CRUD（创建、检索、更新和删除）方法只能同时有16个线程在跑。
-# Android 多渠道打包原理
+# Q7：Android 多渠道打包原理
   *
 
-# Activity 启动流程
+# Q8：Activity 启动流程
 
-# Android 进程保活
+# Q9：Android 进程保活
 
-# WebSocket
+# Q10：WebSocket
 
-# Android AIDL
+# Q11：Android AIDL
 ### AIDL是一个缩写，全称是Android Interface Definition Language，也就是 Android 接口定义语言。编译器可以通过 aidl 文件生成一段代码，通过预先定义的接口达到两个进程内部通信跨界访问。
 ### RPC（Remote Procedure Call 远程进程调用）
 
@@ -199,7 +205,7 @@ db.endTransaction();
 ##### 客户端：
 
 
-# Android 8.0 奥利奥，代号(O)
+# Q12：Android 8.0 奥利奥，代号(O)
 升级的重点是电池续航能力、速度和安全，让用户更好地控制各种应用程序。谷歌正慢慢让安卓系统向竞争对手苹果的iOS靠拢，加大了对 App 在后台操作的限制。这种限制在一定程度上延长了安卓机在“睡眠”（Doze）模式下的电池的续航能力，它让不在使用的 App 进入睡眠状态，使用时再唤醒。它要达到的目标是在不卸载程序、不改变用户使用习惯的情况下，减少后台应用的用电。同时，这种对后台应用的限制也会加快运行的速度。
 ##### GooglePlayProtect
   * 这个功能主要用于 GooglePlay 中，下载的应用和游戏将会经过它的排查，来看看是否是有害甚至携带病毒的应用，不过国内用户可能不能访问 GooglePlay。
@@ -216,9 +222,30 @@ db.endTransaction();
 
 
 
+# Q13：MVC，MVP 和 MVVM 的区别
 
 
+# Q14：架构设计需要考虑哪些方面
 
+# Q15：有没有好的埋点统计方案
+  * Umeng 统计中的埋点，百点收集
+
+# Q16：组件化有什么好的实现方式，热更新
+
+# Q17：手机误点多个重复的 Activity，有什么好的规避方案
+
+# Q18：App 性能优化有没有好的框架复用，从 UI 到代码监测
+
+# Q19：冷启动有没有好的优化方式
+
+# Q20：Android LruCache
+##### 图片三级缓存原理图：
+![](https://github.com/dyzs/utils/tree/master/android-interview/imgs/LruCache.jpg)
+##### Android原生为我们提供了一个LruCache，其中维护着一个LinkedHashMap。LruCache可以用来存储各种类型的数据，但最常见的是存储图片（Bitmap）。LruCache创建LruCache时，我们需要设置它的大小，一般是系统最大存储空间的八分之一。 LruCache的机制是存储最近、最后使用的图片，如果LruCache中的图片大小超过了其默认大小，则会将最老、最远使用的图片移除出去。
+##### 当图片被LruCache移除的时候，我们需要手动将这张图片添加到软引用（SoftReference）中。我们需要在项目中维护一个由SoftReference组成的集合，其中存储被LruCache移除出来的图片。软引用的一个好处是当系统空间紧张的时候，软引用可以随时销毁，因此软引用是不会影响系统运行的，换句话说，如果系统因为某个原因OOM了，那么这个原因肯定不是软引用引起的。
+
+  * 图片的三级缓存：
+    * 当我们的APP中想要加载某张图片时，先去LruCache中寻找图片，如果LruCache中有，则直接取出来使用，如果LruCache中没有，则去SoftReference中寻找，如果SoftReference中有，则从SoftReference中取出图片使用，同时将图片重新放回到LruCache中，如果SoftReference中也没有图片，则去文件系统中寻找，如果有则取出来使用，同时将图片添加到LruCache中，如果没有，则连接网络从网上下载图片。图片下载完成后，将图片保存到文件系统中，然后放到LruCache中。
 
 
 
