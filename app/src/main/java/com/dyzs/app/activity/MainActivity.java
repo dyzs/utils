@@ -131,8 +131,8 @@ public class MainActivity extends BaseActivity
             presenter.go2CustomView();
         } else if (id == R.id.nav_retrofit_sample) {
             presenter.go2RetrofitSample();
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_rx_permission) {
+            presenter.go2RxPermission();
         } else if (id == R.id.nav_manage) {
             presenter.go2SampleHotfix();
         } else if (id == R.id.nav_share) {
@@ -181,5 +181,11 @@ public class MainActivity extends BaseActivity
     public void go2SampleHotfix() {
         /*Intent intent = new Intent(this, SampleHotfixActivity.class);
         startActivity(intent);*/
+    }
+
+    @Override
+    public void go2RxPermission() {
+        Intent intent = new Intent(this, RxPermissionSampleActivity.class);
+        startActivity(intent);
     }
 }

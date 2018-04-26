@@ -26,10 +26,13 @@
   * 基本数据类型: boolean，char，byte，short，int，long，float，double
   * 封装类类型：Boolean，Character，Byte，Short，Integer，Long，Float，Double
 ##### Java 自动装箱：将基本数据类型重新转化为对象
+Java 为每种基本数据类型都提供了对应的包装器类型
 ````java
 public class Test {  
-    public static void main(String[] args) {  
-        //声明一个Integer对象
+    public static void main(String[] args) {
+        // 装箱
+        Integer n1 = new Integer(10);
+        // 自动装箱, 声明一个Integer对象
         Integer num = 9;
         //以上的声明就是用到了自动的装箱：解析为:Integer num = new Integer(9);
     }  
@@ -39,9 +42,11 @@ public class Test {
 ````java
 public class Test {  
     public static void main(String[] args) {  
-        //声明一个Integer对象
+        // 声明一个Integer对象
         Integer num = 9;
-        //进行计算时隐含的有自动拆箱
+        // 拆箱
+        int i1 = num;
+        // 进行计算时隐含的有自动拆箱
         System.out.print(num--);
     }  
 }  

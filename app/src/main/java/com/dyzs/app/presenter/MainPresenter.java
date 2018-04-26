@@ -33,4 +33,8 @@ public class MainPresenter extends BasePresenter {
     public void go2SampleHotfix() {
         iView.go2SampleHotfix();
     }
+
+    public void go2RxPermission() {
+        iView.go2RxPermission();
+    }
 }

@@ -89,6 +89,8 @@
         <activity android:name=".activity.CustomViewDisplayActivity" />
 
         <activity android:name=".activity.SampleHotfixActivity" />
+
+        <activity android:name=".activity.RxPermissionSampleActivity"/>
     </application>
 
 </manifest>

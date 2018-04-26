@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Retrofit" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_rx_permission"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="RxPermission" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

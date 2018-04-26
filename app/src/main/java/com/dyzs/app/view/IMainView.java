@@ -13,4 +13,6 @@ public interface IMainView extends IBaseView {
     void go2RetrofitSample();
 
     void go2SampleHotfix();
+
+    void go2RxPermission();
 }
