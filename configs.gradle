@@ -1,0 +1,14 @@
+ext {
+    configuration = [
+            buildToolsVersion: "25.0.0",
+            compileVersion   : 25,
+            minSdk           : 21,
+            targetSdk        : 25,
+            versionCode      : 1,
+            versionName      : "1.0",
+    ]
+
+    libraries = [
+            multidex                 : "1.0.1",
+    ]
+}
