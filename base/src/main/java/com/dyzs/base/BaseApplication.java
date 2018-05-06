@@ -1,12 +1,17 @@
 package com.dyzs.base;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 /**
- * @author maidou, created on 2018/3/2.
+ * ================================================
+ * Created by dyzs on 2018/3/2.
+ * <a href="dyzs.me@gmail.com">Contact me</a>
+ * <a href="https://github.com/dyzs">Follow me</a>
+ * ================================================
  */
 
-public class BaseApplication extends Application {
+
+public class BaseApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();

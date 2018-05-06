@@ -9,6 +9,6 @@ ext {
     ]
 
     libraries = [
-            multidex                 : "1.0.1",
+            multidex                 : "1.0.1",// Deprecated
     ]
 }

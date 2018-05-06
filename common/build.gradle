@@ -28,5 +28,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     // implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 
-    compile "com.android.support:multidex:${libs.multidex}"
+    // compile "com.android.support:multidex:${libs.multidex}"
 }
