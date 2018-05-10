@@ -3,7 +3,7 @@ package com.dyzs.app.activity;
 import android.Manifest;
 
 import com.dyzs.app.R;
-import com.dyzs.app.base.BaseActivity;
+import com.dyzs.base.BaseActivity;
 import com.dyzs.common.utils.ToastUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 

@@ -1,8 +1,8 @@
 package com.dyzs.app.presenter;
 
 import com.dyzs.app.view.IMainView;
-import com.dyzs.app.base.BasePresenter;
-import com.dyzs.app.base.IBaseView;
+import com.dyzs.base.BasePresenter;
+import com.dyzs.base.IBaseView;
 
 /**
  * @author maidou, created on 2018/2/28.

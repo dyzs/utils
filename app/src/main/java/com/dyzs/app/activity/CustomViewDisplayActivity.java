@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
 import com.dyzs.app.R;
-import com.dyzs.app.base.BaseActivity;
+import com.dyzs.base.BaseActivity;
 import com.dyzs.app.fragment.FragmentFactory;
 
 /**

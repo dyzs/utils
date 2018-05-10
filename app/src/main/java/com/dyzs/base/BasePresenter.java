@@ -1,4 +1,4 @@
-package com.dyzs.app.base;
+package com.dyzs.base;
 
 import android.os.Handler;
 import android.os.Message;

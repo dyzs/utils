@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dyzs.app.R;
-import com.dyzs.app.base.BaseActivity;
+import com.dyzs.base.BaseActivity;
 import com.dyzs.app.presenter.MainPresenter;
 import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.app.view.IMainView;

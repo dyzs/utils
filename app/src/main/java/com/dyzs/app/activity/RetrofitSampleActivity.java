@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.dyzs.app.R;
-import com.dyzs.app.base.BaseActivity;
-import com.dyzs.app.base.IBaseUrl;
+import com.dyzs.base.BaseActivity;
+import com.dyzs.app.net.IBaseUrl;
 import com.dyzs.app.entity.RetrofitSampleBean;
 import com.dyzs.app.entity.UserBean;
 import com.dyzs.app.entity.UserBeanResult;

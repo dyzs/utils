@@ -3,7 +3,7 @@ package com.dyzs.app.activity;
 import android.os.Environment;
 
 import com.dyzs.app.R;
-import com.dyzs.app.base.BaseActivity;
+import com.dyzs.base.BaseActivity;
 import com.dyzs.common.utils.FixDexUtils;
 import com.dyzs.common.utils.ToastUtils;
 

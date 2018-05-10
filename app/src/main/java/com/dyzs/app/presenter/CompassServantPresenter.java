@@ -6,8 +6,8 @@ import android.os.Message;
 import android.os.Process;
 
 import com.dyzs.app.view.ICompassServantView;
-import com.dyzs.app.base.BasePresenter;
-import com.dyzs.app.base.IBaseView;
+import com.dyzs.base.BasePresenter;
+import com.dyzs.base.IBaseView;
 
 /**
  * @author akuma

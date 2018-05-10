@@ -1,6 +1,6 @@
 package com.dyzs.app.retrofitsample;
 
-import com.dyzs.app.base.IBaseUrl;
+import com.dyzs.app.net.IBaseUrl;
 import com.dyzs.app.entity.RetrofitSampleBean;
 
 import okhttp3.ResponseBody;

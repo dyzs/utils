@@ -2,7 +2,6 @@ package com.dyzs.app;
 
 import android.support.multidex.MultiDexApplication;
 
-import com.dyzs.base.BaseApplication;
 import com.dyzs.common.component.CrashHandler;
 import com.squareup.leakcanary.LeakCanary;
 import com.umeng.commonsdk.UMConfigure;

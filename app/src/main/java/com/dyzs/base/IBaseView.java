@@ -1,4 +1,4 @@
-package com.dyzs.app.base;
+package com.dyzs.base;
 
 /**
  * Created by maidou on 2018/1/27.

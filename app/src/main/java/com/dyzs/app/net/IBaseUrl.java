@@ -1,4 +1,4 @@
-package com.dyzs.app.base;
+package com.dyzs.app.net;
 
 /**
  * @author dyzs, created on 2018/2/28.

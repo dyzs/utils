@@ -1,4 +1,4 @@
-package com.dyzs.app.base;
+package com.dyzs.base;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;

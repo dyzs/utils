@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dyzs.app.R;
-import com.dyzs.app.base.BaseActivity;
+import com.dyzs.base.BaseActivity;
 
 import butterknife.OnClick;
 
