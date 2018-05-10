@@ -1,4 +1,4 @@
-package com.dyzs.app.base;
+package com.dyzs.app.base.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 /**
- * Created by NKlaus on 2017/11/19.
+ * ================================================
+ * Created by dyzs on 2017/11/19.
+ * <a href="dyzs.me@gmail.com">Contact me</a>
+ * <a href="https://github.com/dyzs">Follow me</a>
+ * ================================================
  */
 
 public abstract class BaseRecycleViewAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {

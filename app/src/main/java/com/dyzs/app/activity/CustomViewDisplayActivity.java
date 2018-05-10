@@ -1,22 +1,11 @@
 package com.dyzs.app.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.FrameLayout;
 
 import com.dyzs.app.R;
 import com.dyzs.app.base.BaseActivity;
-import com.dyzs.app.fragment.ChasingLoadingFragment;
-import com.dyzs.app.fragment.ColorProgressFragment;
-import com.dyzs.app.fragment.CornerImageFragment;
-import com.dyzs.app.fragment.DottedLineFragment;
 import com.dyzs.app.fragment.FragmentFactory;
-import com.dyzs.app.fragment.SolarEclipseFragment;
-import com.dyzs.app.fragment.CompassServantFragment;
-import com.dyzs.app.fragment.YinJiMultiPlayerFragment;
-
-import butterknife.BindView;
 
 /**
  * Created by maidou on 2018/1/8.

@@ -1,4 +1,4 @@
-package com.dyzs.base.mvp;
+package com.dyzs.app.base;
 
 /**
  * Created by maidou on 2018/1/27.

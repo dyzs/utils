@@ -1,15 +1,21 @@
 package com.dyzs.app;
 
+import android.support.multidex.MultiDexApplication;
+
 import com.dyzs.base.BaseApplication;
 import com.dyzs.common.component.CrashHandler;
 import com.squareup.leakcanary.LeakCanary;
 import com.umeng.commonsdk.UMConfigure;
 
 /**
- * @author maidou, created on 2018/3/2.
+ * ================================================
+ * Created by dyzs on 2018/3/2.
+ * <a href="dyzs.me@gmail.com">Contact me</a>
+ * <a href="https://github.com/dyzs">Follow me</a>
+ * ================================================
  */
 
-public class UtilsApplication extends BaseApplication {
+public class UtilsApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
 

@@ -1,6 +1,6 @@
 package com.dyzs.app.view;
 
-import com.dyzs.base.mvp.IBaseView;
+import com.dyzs.app.base.IBaseView;
 /**
  * Created by maidou on 2018/1/27.
  */

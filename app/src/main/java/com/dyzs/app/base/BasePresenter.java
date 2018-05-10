@@ -1,4 +1,4 @@
-package com.dyzs.base.mvp;
+package com.dyzs.app.base;
 
 import android.os.Handler;
 import android.os.Message;

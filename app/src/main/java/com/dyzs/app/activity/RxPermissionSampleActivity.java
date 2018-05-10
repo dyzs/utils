@@ -1,29 +1,21 @@
 package com.dyzs.app.activity;
 
 import android.Manifest;
-import android.hardware.Camera;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.dyzs.app.R;
 import com.dyzs.app.base.BaseActivity;
 import com.dyzs.common.utils.ToastUtils;
-import com.jakewharton.rxbinding.view.RxView;
-import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import java.io.IOException;
-
 import butterknife.OnClick;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import rx.functions.Func1;
 
 /**
- * Created by maidou on 2017/11/20.
+ * ================================================
+ * Created by dyzs on 2017/11/20.
+ * <a href="dyzs.me@gmail.com">Contact me</a>
+ * <a href="https://github.com/dyzs">Follow me</a>
+ * ================================================
  */
-
 public class RxPermissionSampleActivity extends BaseActivity {
     private static String TAG = RxPermissionSampleActivity.class.getSimpleName();
 
@@ -51,8 +43,8 @@ public class RxPermissionSampleActivity extends BaseActivity {
     public void permissionCameraClick() {
         ToastUtils.makeText(this, "hi");
         RxPermissions rxPermissions = new RxPermissions(this);
-        rxPermissions.request(Manifest.permission.CAMERA);
-        /*rxPermissions
+        // rxPermissions.request(Manifest.permission.CAMERA);
+        rxPermissions
                 .request(Manifest.permission.CAMERA)
                 .subscribe(granted -> {
                     if (granted) {
@@ -60,6 +52,20 @@ public class RxPermissionSampleActivity extends BaseActivity {
                     } else {
 
                     }
-                });*/
+                });
+
+        /*rxPermissions
+                .requestEachCombined(Manifest.permission.CAMERA,
+                        Manifest.permission.READ_PHONE_STATE)
+                .subscribe(permission -> { // will emit 1 Permission object
+                    if (permission.granted) {
+                        // All permissions are granted !
+                    } else if (permission.shouldShowRequestPermissionRationale) {
+                        // At least one denied permission without ask never again
+                    } else {
+                        // At least one denied permission with ask never again
+                        // Need to go to the settings
+                    }
+        });*/
     }
 }

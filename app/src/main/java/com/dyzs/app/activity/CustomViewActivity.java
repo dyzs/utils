@@ -1,17 +1,12 @@
 package com.dyzs.app.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.BinderThread;
 import android.view.View;
 import android.widget.TextView;
 
 import com.dyzs.app.R;
 import com.dyzs.app.base.BaseActivity;
-import com.dyzs.common.utils.ToastUtils;
 
-import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.OnClick;
 
 /**
