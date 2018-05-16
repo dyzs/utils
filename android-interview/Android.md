@@ -70,7 +70,8 @@ db.endTransaction();
 # Q3: Android 内存管理和 GC 回收机制
 ## Android 内存管理
 ##### 所有的内存都是基于物理内存的, 即移动设备上的 RAM。当启动一个Android程序时, 会启动一个Dalvik VM进程, 系统会给它分配固定的内存空间, 这块内存会映射到RAM上某个区域, 然后Android程序就运行在这块空间上。JAVA里会将这块空间分成Stack栈内存和Heap堆内存。stack里存放对象的引用, heap里存放实际对象数据。
-![](https://github.com/dyzs/utils/tree/master/android-interview/imgs/memory_allocation.png)
+![](https://github.com/dyzs/utils/blob/master/android-interview/imgs/memory_allocation.png)
+
   * 内存分配
   
   * 内存回收
@@ -254,7 +255,7 @@ db.endTransaction();
 
 ---
 # Q15：有没有好的埋点统计方案
-  * Umeng 统计中的埋点, 百点收集
+  * 友盟统计中的埋点收集
   
 ---
 # Q16：组件化有什么好的实现方式, 热更新
@@ -335,7 +336,7 @@ db.endTransaction();
   * 3、在该方法里会先准备好 Looper 和消息队列, 然后调用 attach 方法将应用进程绑定到 ActivityManagerService, 然后进入 loop 循环, 不断地读取消息队列里的消息, 并分发消息。
 # Q21：Android LruCache
 ##### 图片三级缓存原理图：
-![](https://github.com/dyzs/utils/tree/master/android-interview/imgs/LruCache.png)
+![](https://github.com/dyzs/utils/blob/master/android-interview/imgs/LruCache.png)
 ##### 内存（memory）-本地(local)-网络(Internet) 机制, 其中内存缓存i包括强引用缓存和软引用
 ##### Android原生为我们提供了一个LruCache, 其中维护着一个LinkedHashMap。LruCache可以用来存储各种类型的数据, 但最常见的是存储图片（Bitmap）。LruCache创建LruCache时, 我们需要设置它的大小, 一般是系统最大存储空间的八分之一。 LruCache的机制是存储最近、最后使用的图片, 如果LruCache中的图片大小超过了其默认大小, 则会将最老、最远使用的图片移除出去。
 ##### 当图片被LruCache移除的时候, 我们需要手动将这张图片添加到软引用（SoftReference）中。我们需要在项目中维护一个由SoftReference组成的集合, 其中存储被LruCache移除出来的图片。软引用的一个好处是当系统空间紧张的时候, 软引用可以随时销毁, 因此软引用是不会影响系统运行的, 换句话说, 如果系统因为某个原因OOM了, 那么这个原因肯定不是软引用引起的。
