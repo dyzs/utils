@@ -7,23 +7,23 @@ import android.os.Process;
 
 import com.dyzs.app.view.ICompassServantView;
 import com.dyzs.base.BasePresenter;
-import com.dyzs.base.IBaseView;
 
 /**
  * @author akuma
  * Created on 2018/1/27.
  */
 
-public class CompassServantPresenter extends BasePresenter{
+public class CompassServantPresenter extends BasePresenter<ICompassServantView> {
     private HandlerThread mHandlerThread;
     private String mHtName = "compass_servant";
     private Handler mLooper;
     private Handler mUIHandler;
     private static int MESSAGE = 0x110;
     private ICompassServantView iView;
-    public CompassServantPresenter(IBaseView baseView) {
+
+    public CompassServantPresenter(ICompassServantView baseView) {
         super(baseView);
-        iView = (ICompassServantView) baseView;
+        iView = baseView;
     }
 
     public void initHandlerThread() {
@@ -45,13 +45,10 @@ public class CompassServantPresenter extends BasePresenter{
     private int i = 1000;
     private void doWithMainUI() {
         try {
-            mUIHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Double d = Math.random() * 89;
-                    int iRandom = d.intValue() + 30;
-                    iView.setCSPointerDecibel(iRandom);
-                }
+            mUIHandler.post(()-> {
+                Double d = Math.random() * 89;
+                int iRandom = d.intValue() + 30;
+                iView.setCSPointerDecibel(iRandom);
             });
         } catch (Exception e) {
 
