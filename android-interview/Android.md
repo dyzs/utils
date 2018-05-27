@@ -337,12 +337,21 @@ db.endTransaction();
 # Q21：Android LruCache
 ##### 图片三级缓存原理图：
 ![](https://github.com/dyzs/utils/blob/master/android-interview/imgs/LruCache.png)
-##### 内存（memory）-本地(local)-网络(Internet) 机制, 其中内存缓存i包括强引用缓存和软引用
-##### Android原生为我们提供了一个LruCache, 其中维护着一个LinkedHashMap。LruCache可以用来存储各种类型的数据, 但最常见的是存储图片（Bitmap）。LruCache创建LruCache时, 我们需要设置它的大小, 一般是系统最大存储空间的八分之一。 LruCache的机制是存储最近、最后使用的图片, 如果LruCache中的图片大小超过了其默认大小, 则会将最老、最远使用的图片移除出去。
-##### 当图片被LruCache移除的时候, 我们需要手动将这张图片添加到软引用（SoftReference）中。我们需要在项目中维护一个由SoftReference组成的集合, 其中存储被LruCache移除出来的图片。软引用的一个好处是当系统空间紧张的时候, 软引用可以随时销毁, 因此软引用是不会影响系统运行的, 换句话说, 如果系统因为某个原因OOM了, 那么这个原因肯定不是软引用引起的。
+##### 内存（memory）-本地(local)-网络(Internet) 机制, 其中内存缓存包括强引用缓存和软引用
+> Android原生为我们提供了一个LruCache, 其中维护着一个LinkedHashMap。LruCache可以用来存储各种类型的数据,
+但最常见的是存储图片（Bitmap）。LruCache创建LruCache时, 我们需要设置它的大小, 一般是系统最大存储空间的八分之一。
+LruCache的机制是存储最近、最后使用的图片, 如果LruCache中的图片大小超过了其默认大小, 则会将最老、最远使用的图片
+移除出去。当图片被LruCache移除的时候, 我们需要手动将这张图片添加到软引用（SoftReference）中。我们需要在项目中
+维护一个由SoftReference组成的集合, 其中存储被LruCache移除出来的图片。软引用的一个好处是当系统空间紧张的时候,
+软引用可以随时销毁, 因此软引用是不会影响系统运行的, 换句话说, 如果系统因为某个原因OOM了, 那么这个原因肯定不是
+软引用引起的。
 
   * 图片的三级缓存：
-    * 当我们的APP中想要加载某张图片时, 先去LruCache中寻找图片, 如果LruCache中有, 则直接取出来使用, 如果LruCache中没有, 则去SoftReference中寻找, 如果SoftReference中有, 则从SoftReference中取出图片使用, 同时将图片重新放回到LruCache中, 如果SoftReference中也没有图片, 则去文件系统中寻找, 如果有则取出来使用, 同时将图片添加到LruCache中, 如果没有, 则连接网络从网上下载图片。图片下载完成后, 将图片保存到文件系统中, 然后放到LruCache中。
+    * 当我们的APP中想要加载某张图片时, 先去LruCache中寻找图片, 如果LruCache中有, 则直接取出来使用,
+    如果LruCache中没有, 则去SoftReference中寻找, 如果SoftReference中有, 则从SoftReference中取出图片使用,
+    同时将图片重新放回到LruCache中, 如果SoftReference中也没有图片, 则去文件系统中寻找, 如果有则取出来使用,
+    同时将图片添加到LruCache中, 如果没有, 则连接网络从网上下载图片。图片下载完成后, 将图片保存到文件系统中,
+    然后放到LruCache中。
 
 ---
 # Q21：SurfaceView
