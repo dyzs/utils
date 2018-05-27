@@ -56,7 +56,7 @@ public class RetrofitSampleActivity extends BaseActivity {
     }
 
     @Override
-    public int initContentView() {
+    public int initLayoutView(Bundle savedInstanceState) {
         return R.layout.act_retrofit_sample;
     }
 

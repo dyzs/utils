@@ -57,7 +57,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public int initContentView() {
+    public int initLayoutView(Bundle savedInstanceState) {
         return R.layout.activity_main;
     }
 

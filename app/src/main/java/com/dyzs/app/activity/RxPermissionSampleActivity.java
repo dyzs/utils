@@ -1,13 +1,26 @@
 package com.dyzs.app.activity;
 
 import android.Manifest;
+import android.hardware.Camera;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.dyzs.app.R;
 import com.dyzs.base.BaseActivity;
 import com.dyzs.common.utils.ToastUtils;
+import com.jakewharton.rxbinding.view.RxView;
+import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.io.IOException;
+
 import butterknife.OnClick;
+import hu.akarnokd.rxjava.interop.RxJavaInterop;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * ================================================
@@ -20,7 +33,7 @@ public class RxPermissionSampleActivity extends BaseActivity {
     private static String TAG = RxPermissionSampleActivity.class.getSimpleName();
 
     @Override
-    public int initContentView() {
+    public int initLayoutView(Bundle savedInstanceState) {
         return R.layout.act_rx_permission_sample;
     }
 
@@ -41,16 +54,15 @@ public class RxPermissionSampleActivity extends BaseActivity {
 
     @OnClick(R.id.rx_permission_camera)
     public void permissionCameraClick() {
-        ToastUtils.makeText(this, "hi");
         RxPermissions rxPermissions = new RxPermissions(this);
         // rxPermissions.request(Manifest.permission.CAMERA);
         rxPermissions
                 .request(Manifest.permission.CAMERA)
                 .subscribe(granted -> {
                     if (granted) {
-
+                        ToastUtils.makeText(this, "access");
                     } else {
-
+                        ToastUtils.makeText(this, "permission denied");
                     }
                 });
 

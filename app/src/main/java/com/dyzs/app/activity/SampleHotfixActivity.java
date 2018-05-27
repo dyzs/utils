@@ -1,5 +1,6 @@
 package com.dyzs.app.activity;
 
+import android.os.Bundle;
 import android.os.Environment;
 
 import com.dyzs.app.R;
@@ -16,7 +17,7 @@ import butterknife.OnClick;
 public class SampleHotfixActivity extends BaseActivity {
 
     @Override
-    public int initContentView() {
+    public int initLayoutView(Bundle savedInstanceState) {
         return R.layout.act_sample_hotfix;
     }
 

@@ -21,7 +21,7 @@ public class CustomViewDisplayActivity extends BaseActivity{
     }
 
     @Override
-    public int initContentView() {
+    public int initLayoutView(Bundle savedInstanceState) {
         return R.layout.act_custion_view_display;
     }
 

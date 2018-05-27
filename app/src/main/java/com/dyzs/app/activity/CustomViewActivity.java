@@ -1,22 +1,30 @@
 package com.dyzs.app.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.dyzs.app.R;
+import com.dyzs.app.presenter.CustomViewPresenter;
+import com.dyzs.app.view.ICustomView;
 import com.dyzs.base.BaseActivity;
 
 import butterknife.OnClick;
 
 /**
- * Created by maidou on 2017/11/20.
+ * ================================================
+ * Created by dyzs on 2017/11/20.
+ * <a href="dyzs.me@gmail.com">Contact me</a>
+ * <a href="https://github.com/dyzs">Follow me</a>
+ * ================================================
  */
 
-public class CustomViewActivity extends BaseActivity {
+public class CustomViewActivity extends BaseActivity<CustomViewPresenter> implements ICustomView {
 
+    private CustomViewPresenter mPresenter = new CustomViewPresenter(this);
     @Override
-    public int initContentView() {
+    public int initLayoutView(Bundle savedInstanceState) {
         return R.layout.act_custion_view;
     }
 
@@ -26,6 +34,10 @@ public class CustomViewActivity extends BaseActivity {
     @Override
     public void initData() {}
 
+    @Override
+    public CustomViewPresenter initPresenter() {
+        return mPresenter;
+    }
 
     @OnClick({R.id.solar_eclipse_loading, R.id.chasing_loading, R.id.compass_servant, R.id.multi_player,
             R.id.dotted_line, R.id.color_progress, R.id.corner_image})
@@ -49,9 +61,8 @@ public class CustomViewActivity extends BaseActivity {
                 intent.putExtra("viewName", "YinJiMultiPlayer");
                 break;
             case R.id.dotted_line:
-                intent = new Intent(this, CustomViewDisplayActivity.class);
-                intent.putExtra("viewName", "DottedLine");
-                break;
+                mPresenter.go2DottedLineView();
+                return;
             case R.id.color_progress:
                 intent = new Intent(this, CustomViewDisplayActivity.class);
                 intent.putExtra("viewName", "ColorProgress");
@@ -64,34 +75,11 @@ public class CustomViewActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void onClick(View v) {
-        Intent intent = null;
-        switch (v.getId()) {
-            case R.id.chasing_loading:
-                intent = new Intent(this, CustomViewDisplayActivity.class);
-                intent.putExtra("viewName", "ChasingLoading");
-                break;
-            case R.id.compass_servant:
-                intent = new Intent(this, CustomViewDisplayActivity.class);
-                intent.putExtra("viewName", "CompassServant");
-                break;
-            case R.id.multi_player:
-                intent = new Intent(this, CustomViewDisplayActivity.class);
-                intent.putExtra("viewName", "YinJiMultiPlayer");
-                break;
-            case R.id.dotted_line:
-                intent = new Intent(this, CustomViewDisplayActivity.class);
-                intent.putExtra("viewName", "DottedLine");
-                break;
-            case R.id.color_progress:
-                intent = new Intent(this, CustomViewDisplayActivity.class);
-                intent.putExtra("viewName", "ColorProgress");
-                break;
-            case R.id.corner_image:
-                intent = new Intent(this, CustomViewDisplayActivity.class);
-                intent.putExtra("viewName", "CornerImage");
-                break;
-        }
+
+    @Override
+    public void go2DottedLineView() {
+        Intent intent = new Intent(this, CustomViewDisplayActivity.class);
+        intent.putExtra("viewName", "DottedLine");
         startActivity(intent);
     }
 }

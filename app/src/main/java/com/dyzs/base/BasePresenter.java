@@ -3,18 +3,25 @@ package com.dyzs.base;
 import android.os.Handler;
 import android.os.Message;
 
+import com.dyzs.common.utils.LogUtils;
+
 /**
- * Created by maidou on 2018/1/27.
+ * ================================================
+ * Created by dyzs on 2018/1/27.
+ * <a href="dyzs.me@gmail.com">Contact me</a>
+ * <a href="https://github.com/dyzs">Follow me</a>
+ * ================================================
  */
 
-public class BasePresenter {
-    private IBaseView iBaseView;
+public class BasePresenter<V extends IBaseView> implements IPresenter {
+    private static String TAG = "BasePresenter";
+    private V iBaseView;
     private static final int MESSAGE_GOT_ERROR = -110;
-    public BasePresenter(IBaseView baseView) {
+    public BasePresenter(V baseView) {
         this.iBaseView = baseView;
     }
 
-    public BasePresenter(IBaseView baseView, String handlerThreadName) {
+    public BasePresenter(V baseView, String handlerThreadName) {
         this.iBaseView = baseView;
 
     }
@@ -45,8 +52,13 @@ public class BasePresenter {
     }
 
 
+    @Override
+    public void onStart() {
+        LogUtils.i(TAG, "basePresenter call onStart");
+    }
 
-
-
-
+    @Override
+    public void onDestroy() {
+        this.iBaseView = null;
+    }
 }
