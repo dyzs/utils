@@ -23,9 +23,32 @@
   * ThreadLocal 用于创建线程的本地变量，我们知道一个对象的所有线程会共享它的全局变量，所以这些变量不是线程安全的，
   我们可以使用同步技术。但是当我们不想使用同步的时候，我们可以选择ThreadLocal变量。
 
+> ThreadLocal类用来提供线程内部的局部变量。这种变量在多线程环境下访问(通过get或set方法访问)时能保证各个线程里
+的变量相对独立于其他线程内的变量。ThreadLocal实例通常来说都是private static类型的，用于关联线程和线程的上下文。
+可以总结为一句话：ThreadLocal的作用是提供线程内的局部变量，这种变量在线程的生命周期内起作用，减少同一个线程内多
+个函数或者组件之间一些公共变量的传递的复杂度。
+
   * 每个线程都会拥有他们自己的Thread变量，它们可以使用get()\set()方法去获取他们的默认值或者在线程内部改变他们的值。
   ThreadLocal实例通常是希望它们同线程状态关联起来是private static属性。在ThreadLocal例子这篇文章中你可以看到
   一个关于ThreadLocal的小程序。
+
+
+
+ThreadLocal 深入释义
+----------
+  * ThreadLocal并不是一个Thread，而是Thread的局部变量，也许把它命名为ThreadLocalVariable更容易让人理解一些。
+  * 当使用ThreadLocal维护变量时，ThreadLocal为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地
+改变自己的副本，而不会影响其它线程所对应的副本。
+  * 从线程的角度看，目标变量就像是线程的本地变量，这也是类名中“Local”所要表达的意思。
+
+  * 如果在多线程并发环境中，一个可变对象涉及到共享与竞争，那么该可变对象就一定会涉及到线程间同步操作，
+  这是多线程并发问题。
+  * 一个可变对象，在每一个线程(或者说多线程环境)中都会被使用，并且，该可变对象无需在各个线程间进行同步，那么，
+  该可变对象就可以通过ThreadLocal进行管理。
+
+  * ThreadLocal 内部维护了一个 ThreadLocalMap 的静态内部类，ThreadLocalMap 把其外部类 ThreadLocal 的对象
+  作为 key ，把要管理的可变对象作为 value，比如(MessageQueue)，ThreadLocalMap 的实例对象是由当前线程对象
+  Thread 的实例持有，而不是 ThreadLocal 持有。这体现在 Thread 的源码中。
 
 
 ## 个人理解：
