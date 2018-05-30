@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.dyzs.app.R;
 import com.dyzs.base.BaseActivity;
@@ -22,26 +23,33 @@ import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.app.view.IMainView;
 import com.dyzs.common.ui.FullScreenDialogVer2;
 import com.dyzs.common.ui.LineChartView;
+import com.dyzs.common.ui.magicruf.MagicRUF;
+import com.dyzs.common.utils.Biscuits;
 import com.dyzs.common.utils.FixDexUtils;
 import com.dyzs.common.utils.ToastUtils;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, IMainView {
     MainPresenter presenter = new MainPresenter(this);
+
+    @BindView(R.id.lcv_yj)
+    LineChartView lcv_yj;
+
+    @BindView(R.id.chart_redraw)
+    TextView chart_redraw;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fab.setOnClickListener((view)-> {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            }
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -63,23 +71,14 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initView() {
-        final LineChartView lcv_yj = (LineChartView) findViewById(R.id.lcv_yj);
         lcv_yj.setData(lcv_yj.testLoadData(i));
-        lcv_yj.setOnLineChartViewListener(new LineChartView.LineChartViewListener() {
-            @Override
-            public void onPointClick(int selection) {
-                FixDexUtils.loadFixedDex(MainActivity.this, Environment.getExternalStorageDirectory());
+        lcv_yj.setOnLineChartViewListener((selection)-> {
+                // FixDexUtils.loadFixedDex(MainActivity.this, Environment.getExternalStorageDirectory());
                 ToastUtils.makeText(MainActivity.this, "sel: " + selection);
-            }
         });
 
-        findViewById(R.id.magic_ruf).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // ((MagicRUF) v).startTension(0);
-                lcv_yj.setData(lcv_yj.testLoadData(i));
-                lcv_yj.playLineAnimation();
-            }
+        findViewById(R.id.magic_ruf).setOnClickListener((v)-> {
+                ((MagicRUF) v).startTension(0);
         });
     }
     private static int i = 11;
@@ -154,11 +153,12 @@ public class MainActivity extends BaseActivity
     private void showFullScreenDialogVer2 () {
 
         View view = LayoutInflater.from(this).inflate(R.layout.layout_dialog_full, null);
-        FullScreenDialogVer2 dialogVer2 = new FullScreenDialogVer2.Builder(this)
+        new FullScreenDialogVer2.Builder(this)
                 .setInterruptKeyEvent(true)
                 .setContentView(view)
-                .build();
-        dialogVer2.show();
+                .build()
+                .show();
+        // dialogVer2.show();
 
         /*FullScreenDialog dialog = new FullScreenDialog(this);
         dialog.setContentView(view);
@@ -187,5 +187,13 @@ public class MainActivity extends BaseActivity
     public void go2RxPermission() {
         Intent intent = new Intent(this, RxPermissionSampleActivity.class);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.chart_redraw)
+    public void chartRedraw() {
+        lcv_yj.setData(lcv_yj.testLoadData(i));
+        lcv_yj.playLineAnimation();
+
+        Biscuits.getInstance(this).reflectionShow(20);
     }
 }

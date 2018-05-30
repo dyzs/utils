@@ -9,6 +9,7 @@ import com.dyzs.app.R;
 import com.dyzs.app.presenter.CustomViewPresenter;
 import com.dyzs.app.view.ICustomView;
 import com.dyzs.base.BaseActivity;
+import com.dyzs.common.utils.Biscuits;
 
 import butterknife.OnClick;
 
@@ -78,8 +79,9 @@ public class CustomViewActivity extends BaseActivity<CustomViewPresenter> implem
 
     @Override
     public void go2DottedLineView() {
-        Intent intent = new Intent(this, CustomViewDisplayActivity.class);
+        Biscuits.getInstance(this).show();
+        /*Intent intent = new Intent(this, CustomViewDisplayActivity.class);
         intent.putExtra("viewName", "DottedLine");
-        startActivity(intent);
+        startActivity(intent);*/
     }
 }

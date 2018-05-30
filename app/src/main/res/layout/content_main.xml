@@ -8,17 +8,21 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_main">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:orientation="vertical">
 
         <com.dyzs.common.ui.magicruf.MagicRUF
             android:id="@+id/magic_ruf"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/black"
+            />
+        <TextView
+            android:id="@+id/chart_redraw"
+            style="@style/CommonTextViewItem"
+            android:text="chart redraw"
             />
         <com.dyzs.common.ui.LineChartViewWrapper
             android:layout_below="@+id/magic_ruf"
@@ -37,6 +41,6 @@
                 />
         </com.dyzs.common.ui.LineChartViewWrapper>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
