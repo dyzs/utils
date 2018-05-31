@@ -3,10 +3,14 @@ package com.dyzs.common.utils;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.PixelFormat;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.dyzs.common.R;
@@ -46,8 +50,26 @@ public class Biscuits {
 		mToast.setGravity(Gravity.CENTER, 0, 0);
 		mToast.setView(v);
 
+		mWM = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		params = new WindowManager.LayoutParams();
+		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+		params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+		params.format = PixelFormat.TRANSLUCENT;
+		// params.windowAnimations = com.android.internal.R.style.Animation_Toast;
+		params.type = WindowManager.LayoutParams.TYPE_TOAST;
+		params.setTitle("Toast");
+		params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+				| WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+				| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+
+		mWM.addView(v, params);
+
+		/* Deprecated */
 		reflectionTN();
 	}
+
+	private WindowManager mWM;
+	private WindowManager.LayoutParams params;
 
 	public void show() {
 		mToast.setDuration(Toast.LENGTH_LONG);
@@ -57,6 +79,7 @@ public class Biscuits {
 	/**
 	 * 通过反射修改 toast 中的 tn
 	 */
+	@Deprecated
 	private void reflectionTN() {
 		try {
 			//从Toast对象中获得mTN变量
@@ -67,16 +90,13 @@ public class Biscuits {
 			showMethod = object.getClass().getDeclaredMethod("show", null);
 			hideMethod = object.getClass().getDeclaredMethod("hide", null);
 
-			objectINotificationManager = object.getClass().getDeclaredMethod("getService");
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static Object objectINotificationManager;
-	private static Object object;
-	private static Method showMethod, hideMethod;
+	private Object object;
+	private Method showMethod, hideMethod;
 
 	private void showReflectionToast() {
 		try {
@@ -95,13 +115,13 @@ public class Biscuits {
 		}
 	}
 
-	public void reflectionShow(long duration) {
+	public void reflectionShow(long seconds) {
 		showReflectionToast();
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
 				hideReflectionToast();
 			}
-		}, duration * 1000);
+		}, seconds * 1000);
 	}
 }
