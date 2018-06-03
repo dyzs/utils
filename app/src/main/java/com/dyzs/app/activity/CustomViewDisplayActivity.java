@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
 import com.dyzs.app.R;
+import com.dyzs.app.UtilsApplication;
 import com.dyzs.base.BaseActivity;
 import com.dyzs.app.fragment.FragmentFactory;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
  * Created by maidou on 2018/1/8.
@@ -62,5 +64,12 @@ public class CustomViewDisplayActivity extends BaseActivity{
     @Override
     public void initData() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = UtilsApplication.getRefWatcher(this);
+        refWatcher.watch(this);
     }
 }

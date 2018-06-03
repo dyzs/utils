@@ -2,7 +2,6 @@ package com.dyzs.app.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -24,8 +23,6 @@ import com.dyzs.app.view.IMainView;
 import com.dyzs.common.ui.FullScreenDialogVer2;
 import com.dyzs.common.ui.LineChartView;
 import com.dyzs.common.ui.magicruf.MagicRUF;
-import com.dyzs.common.utils.Biscuits;
-import com.dyzs.common.utils.FixDexUtils;
 import com.dyzs.common.utils.ToastUtils;
 
 import butterknife.BindView;
@@ -193,7 +190,5 @@ public class MainActivity extends BaseActivity
     public void chartRedraw() {
         lcv_yj.setData(lcv_yj.testLoadData(i));
         lcv_yj.playLineAnimation();
-
-        Biscuits.getInstance(this).reflectionShow(20);
     }
 }

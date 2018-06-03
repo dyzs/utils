@@ -10,17 +10,20 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
+        <ImageView
             android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:src="@mipmap/ic_launcher"
+            />
 
         <TextView
-            android:layout_width="40dp"
+            android:id="@+id/text"
+            android:layout_width="match_parent"
             android:layout_height="20dp"
             android:text="@string/biscuits_place_holder"
             android:textSize="15sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
             />
     </LinearLayout>
 </RelativeLayout>

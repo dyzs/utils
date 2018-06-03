@@ -1,9 +1,11 @@
 package com.dyzs.app;
 
+import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.dyzs.common.component.CrashHandler;
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.umeng.commonsdk.UMConfigure;
 
 /**
@@ -15,6 +17,7 @@ import com.umeng.commonsdk.UMConfigure;
  */
 
 public class UtilsApplication extends MultiDexApplication {
+    private RefWatcher refWatcher;
     @Override
     public void onCreate() {
 
@@ -31,10 +34,22 @@ public class UtilsApplication extends MultiDexApplication {
          */
         UMConfigure.setEncryptEnabled(true);
 
-        CrashHandler handler = CrashHandler.getInstance();
         //在 Application 里面设置我们的异常处理器为 UncaughtExceptionHandler 处理器
-        handler.init(getApplicationContext());
+        //CrashHandler.getInstance().init(getApplicationContext());
 
-        LeakCanary.install(this);
+        refWatcher = setupLeakCanary();
+
+    }
+
+    private RefWatcher setupLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return RefWatcher.DISABLED;
+        }
+        return LeakCanary.install(this);
+    }
+
+    public static RefWatcher getRefWatcher(Context context) {
+        UtilsApplication leakApplication = (UtilsApplication) context.getApplicationContext();
+        return leakApplication.refWatcher;
     }
 }

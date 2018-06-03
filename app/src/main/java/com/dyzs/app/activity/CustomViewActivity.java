@@ -1,15 +1,21 @@
 package com.dyzs.app.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Gravity;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dyzs.app.R;
+import com.dyzs.app.UtilsApplication;
 import com.dyzs.app.presenter.CustomViewPresenter;
 import com.dyzs.app.view.ICustomView;
 import com.dyzs.base.BaseActivity;
-import com.dyzs.common.utils.Biscuits;
+import com.dyzs.common.utils.ToastUtils;
+import com.dyzs.common.utils.ToastUtilsVer2;
+import com.dyzs.common.utils.ColorUtil;
+import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.OnClick;
 
@@ -79,9 +85,24 @@ public class CustomViewActivity extends BaseActivity<CustomViewPresenter> implem
 
     @Override
     public void go2DottedLineView() {
-        Biscuits.getInstance(this).show();
+        new ToastUtilsVer2.Builder(this)
+                .setText("拉拉。。。")
+                .setTextColor(ColorUtil.randomColor())
+                .setGravity(Gravity.CENTER, 0, 0)
+                .setDuration(Toast.LENGTH_SHORT)
+                .build()
+                .show();
+
         /*Intent intent = new Intent(this, CustomViewDisplayActivity.class);
         intent.putExtra("viewName", "DottedLine");
         startActivity(intent);*/
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = UtilsApplication.getRefWatcher(this);
+        refWatcher.watch(this);
+
     }
 }
