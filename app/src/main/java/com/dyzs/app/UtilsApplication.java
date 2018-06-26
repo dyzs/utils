@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.dyzs.common.component.CrashHandler;
+import com.dyzs.zxing.activity.ZXingLibrary;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.umeng.commonsdk.UMConfigure;
@@ -38,6 +39,8 @@ public class UtilsApplication extends MultiDexApplication {
         //CrashHandler.getInstance().init(getApplicationContext());
 
         refWatcher = setupLeakCanary();
+
+        ZXingLibrary.initDisplayOpinion(this);
 
     }
 
