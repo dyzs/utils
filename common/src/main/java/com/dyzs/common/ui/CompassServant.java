@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.dyzs.common.R;
-import com.dyzs.common.utils.ColorUtil;
+import com.dyzs.common.utils.ColorUtils;
 import com.dyzs.common.utils.FontMatrixUtils;
 
 /**
@@ -259,7 +259,7 @@ public class CompassServant extends View {
         mTextPaint.setTextSize(mTeleportSize);
         mTextPaint.setColor(mTeleportColor);
         canvas.drawCircle(mCircleCenter[0], mCircleCenter[1], Math.abs(mTextRectF.bottom - mTextRectF.top) / 2, mTextPaint);
-        mTextPaint.setColor(ColorUtil.getColorReverse(mTeleportColor));
+        mTextPaint.setColor(ColorUtils.getColorReverse(mTeleportColor));
         float textWidth = mTextPaint.measureText(text) * 1.0f;
         float textHalfHeight = FontMatrixUtils.calcTextHalfHeightPoint(mTextPaint);
         canvas.drawText(text, mCircleCenter[0] - textWidth / 2, mCircleCenter[1] + textHalfHeight / 2, mTextPaint);
@@ -324,7 +324,7 @@ public class CompassServant extends View {
                 break;
             }
         }
-        return ColorUtil.getCompositeColor(resSColor, resEColor, rangeColorRate);
+        return ColorUtils.getCompositeColor(resSColor, resEColor, rangeColorRate);
     }
 
     private ValueAnimator mAnimator;

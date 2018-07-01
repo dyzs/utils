@@ -1,7 +1,6 @@
 package com.dyzs.app.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -12,9 +11,8 @@ import com.dyzs.app.UtilsApplication;
 import com.dyzs.app.presenter.CustomViewPresenter;
 import com.dyzs.app.view.ICustomView;
 import com.dyzs.base.BaseActivity;
-import com.dyzs.common.utils.ToastUtils;
 import com.dyzs.common.utils.ToastUtilsVer2;
-import com.dyzs.common.utils.ColorUtil;
+import com.dyzs.common.utils.ColorUtils;
 import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.OnClick;
@@ -87,7 +85,7 @@ public class CustomViewActivity extends BaseActivity<CustomViewPresenter> implem
     public void go2DottedLineView() {
         new ToastUtilsVer2.Builder(this)
                 .setText("拉拉。。。")
-                .setTextColor(ColorUtil.randomColor())
+                .setTextColor(ColorUtils.randomColor())
                 .setGravity(Gravity.CENTER, 0, 0)
                 .setDuration(Toast.LENGTH_SHORT)
                 .build()
