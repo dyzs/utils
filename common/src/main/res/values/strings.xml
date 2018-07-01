@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">common</string>
     <string name="biscuits_place_holder">text</string>
+
+    <string-array name="recycler_view_test_array">
+        <item>从零开始的异世界</item>
+        <item>某科学的超电磁炮</item>
+        <item>请问您今天要来点兔子吗?</item>
+        <item>刀剑神域Sword Art Online</item>
+        <item>紫罗兰永恒花园</item>
+        <item>Darling in the frank</item>
+        <item>妖精森林的小不点</item>
+        <item>三颗星彩色冒险</item>
+        <item>齐木楠雄的灾难</item>
+        <item>火影忍者</item>
+        <item>斩赤红之瞳</item>
+        <item>四月是你的谎言</item>
+        <item>龙王的工作</item>
+    </string-array>
 </resources>
