@@ -21,6 +21,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -30,4 +34,7 @@ dependencies {
     // implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     compile libraries['zxing']
     // compile "com.android.support:multidex:${libs.multidex}"
+
+    // compile gson
+    compile libraries['gson']
 }

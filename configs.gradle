@@ -29,6 +29,7 @@ ext {
             multidex                    : "1.0.1",
             //material-dialogs
             "material-dialogs"          : "com.afollestad.material-dialogs:commons:0.9.6.",
+            "gson"                     : "com.google.code.gson:gson:2.8.2",
 
     ]
 }
