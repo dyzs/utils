@@ -45,8 +45,8 @@ public class ToastUtilsVer2 {
 			field.setAccessible(true);
 			object = field.get(mToast);
 			//TN对象中获得了show方法
-			showMethod = object.getClass().getDeclaredMethod("show", null);
-			hideMethod = object.getClass().getDeclaredMethod("hide", null);
+			showMethod = object.getClass().getDeclaredMethod("show", (Class<?>) null);
+			hideMethod = object.getClass().getDeclaredMethod("hide", (Class<?>) null);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,7 +59,7 @@ public class ToastUtilsVer2 {
 	private void showReflectionToast() {
 		try {
 			//调用show方法来显示Toast信息提示框
-			showMethod.invoke(object, null);
+			showMethod.invoke(object, (Object) null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -67,7 +67,7 @@ public class ToastUtilsVer2 {
 
 	private void hideReflectionToast(){
 		try{
-			hideMethod.invoke(object, null);
+			hideMethod.invoke(object, (Object) null);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
