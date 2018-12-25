@@ -1,17 +1,17 @@
 ext {
     configuration = [
-            buildToolsVersion: "25.0.0",
-            compileVersion   : 25,
+            buildToolsVersion: "28.0.3",
+            compileVersion   : 28,
             minSdkVersion    : 21,
-            targetSdkVersion : 25,
+            targetSdkVersion : 28,
             versionCode      : 1,
             versionName      : "1.0",
     ]
 
     version = [
-            androidSupportSdkVersion: "25.3.1",
+            androidSupportSdkVersion: "28.0.0",
             butterknifeVersion      : "8.8.1",
-            retrofitVersion         : "2.3.0",
+            retrofitVersion         : "2.4.0",
             leakCanaryVersion       : "1.5.4",
             googleZxingCoreVersion  : "3.3.0"
     ]
