@@ -147,6 +147,12 @@ public class CompassServant extends View {
         mTrianglePaint = new Paint();
         mTrianglePaint.setAntiAlias(true);
         mTrianglePaint.setColor(ContextCompat.getColor(context, R.color.tension_grey));
+
+        mPointerRectF = new RectF();
+        mTickRectF = new RectF();
+        mOxygenRectF = new RectF();
+        mTextRectF = new RectF();
+        mTrianglePath = new Path();
     }
 
     private int[] calcInitColors() {
@@ -176,29 +182,29 @@ public class CompassServant extends View {
         t = mCircleCenter[1] - mPointerRadius;
         r = mCircleCenter[0] + mPointerRadius;
         b = mCircleCenter[1] + mPointerRadius;
-        mPointerRectF = new RectF(l, t, r, b);
+        mPointerRectF.set(l, t, r, b);
 
         mTickRadius = mRadius - mCircleWidth - mTickLength / 2 - mSpacing;
         l = mCircleCenter[0] - mTickRadius;
         t = mCircleCenter[1] - mTickRadius;
         r = mCircleCenter[0] + mTickRadius;
         b = mCircleCenter[1] + mTickRadius;
-        mTickRectF = new RectF(l, t, r, b);
+        mTickRectF.set(l, t, r, b);
 
         mOxygenRadius = mRadius - mCircleWidth - mTickLength - mOxygenWidth / 2 - mSpacing * 2;
         l = mCircleCenter[0] - mOxygenRadius;
         t = mCircleCenter[1] - mOxygenRadius;
         r = mCircleCenter[0] + mOxygenRadius;
         b = mCircleCenter[1] + mOxygenRadius;
-        mOxygenRectF = new RectF(l, t, r, b);
+        mOxygenRectF.set(l, t, r, b);
 
         l += mOxygenWidth;
         t += mOxygenWidth;
         r -= mOxygenWidth;
         b -= mOxygenWidth;
-        mTextRectF = new RectF(l, t, r, b);
+        mTextRectF.set(l, t, r, b);
 
-        mTrianglePath = new Path();
+        mTrianglePath.reset();
         mTrianglePath.moveTo(mCircleCenter[0] - mPadding / 2, mPadding / 4);
         mTrianglePath.lineTo(mCircleCenter[0] + mPadding / 2, mPadding / 4);
         mTrianglePath.lineTo(mCircleCenter[0], mPadding - mPadding / 4);
