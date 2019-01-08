@@ -77,6 +77,7 @@ public class LineChartView extends View {
     // {用来判断 touch time & up time 的时间差}
     private long mTouchDownTime;
     private long mPerLineDuration;// 两点成线的动画持续时间
+    private Point mPoint;
 
     private static final int[] SYS_ATTRS = new int[] {
         android.R.attr.background
@@ -120,6 +121,7 @@ public class LineChartView extends View {
     private void initialize() {
         mListData = new ArrayList<>();
         mListPoints = new ArrayList<>();
+        mPoint = new Point();
 
         initParams();
 
@@ -208,14 +210,12 @@ public class LineChartView extends View {
         // 计算点数据的距离
         if (mListData != null && mListData.size() > 0) {
             mListPoints.clear();
-            Point point;
             for (int i = 0; i < mListData.size(); i ++) {
-                point = new Point();
                 float pX = mPointSpacingWidth * i + mXAxisStart + mXAxisStart / 2;
-                point.x = (int) pX;
+                mPoint.x = (int) pX;
                 float pY = mYAxisLength / mYAxisPeakValue * (mYAxisPeakValue * 1f - mListData.get(i).getPointValue());
-                point.y = (int) (pY + mYAxisStart);
-                mListPoints.add(point);
+                mPoint.y = (int) (pY + mYAxisStart);
+                mListPoints.add(mPoint);
             }
             mViewWidth = (int) (mListPoints.get(mListPoints.size() - 1).x + mXAxisStart);
         }
@@ -414,7 +414,7 @@ public class LineChartView extends View {
      */
     public void playLineAnimation() {
         isPlayLine = true;
-        mPathMeasureAnimator = new ValueAnimator().ofFloat(0, 1);
+        mPathMeasureAnimator = ValueAnimator.ofFloat(0, 1);
         mPathMeasureAnimator.setDuration(mPerLineDuration * mListPoints.size());
         mPathMeasureAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

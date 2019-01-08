@@ -49,6 +49,7 @@ public class ChasingLoading extends View{
     private ValueAnimator mAnimator;
     private static final int[] COLORS = {Color.RED, Color.CYAN, Color.BLACK};
     private static final int[] SYS_ATTRS = {android.R.attr.padding};
+    private RectF mRectF;
     public ChasingLoading(Context context) {
         this(context, null);
     }
@@ -90,7 +91,7 @@ public class ChasingLoading extends View{
         mStartAngleValues.add(mMasterStartAngle);
 
         mDfmPaints = new ArrayList<>();
-        mDfmAngles = new ArrayList();
+        mDfmAngles = new ArrayList<>();
         for (int i = 0; i < mStartAngleValues.size(); i++) {
             // add arc paint 添加画笔数组
             mDfmPaint = new Paint();
@@ -108,8 +109,8 @@ public class ChasingLoading extends View{
 
         mDfmPath = new Path();
         mRectFs = new ArrayList<>();
+        mRectF = new RectF();
     }
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -122,15 +123,14 @@ public class ChasingLoading extends View{
         } else {
             radius = mWidth / 2 - mPadding;
         }
-        RectF rectF;
         mRectFs.clear();
         for (int i = 0 ; i < mStartAngleValues.size(); i++) {
             l = mWidth / 2 - radius + i * (mDfmSpacing + mDfmWidth);
             t = mHeight / 2 - radius + i * (mDfmSpacing + mDfmWidth);
             r = mWidth / 2 + radius - i * (mDfmSpacing + mDfmWidth);
             b = mHeight / 2 + radius - i * (mDfmSpacing + mDfmWidth);
-            rectF = new RectF(l, t, r, b);
-            mRectFs.add(rectF);
+            mRectF.set(l, t, r, b);
+            mRectFs.add(mRectF);
         }
     }
 
