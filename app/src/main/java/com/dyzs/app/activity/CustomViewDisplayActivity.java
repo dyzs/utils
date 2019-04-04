@@ -56,6 +56,9 @@ public class CustomViewDisplayActivity extends BaseActivity{
             case "CornerImage":
                 type = FragmentFactory.Type.CORNER_IMAGE;
                 break;
+            case "SyncView":
+                type = FragmentFactory.Type.SYNC_VIEW;
+                break;
         }
         transaction.add(R.id.container, FragmentFactory.createFragment(type), viewName);
         transaction.commit();

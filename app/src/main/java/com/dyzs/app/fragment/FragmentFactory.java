@@ -2,8 +2,6 @@ package com.dyzs.app.fragment;
 
 import android.support.v4.app.Fragment;
 
-import java.util.HashMap;
-
 /**
  * @author dyzs(akuma)
  * Created on 2018/1/29.
@@ -41,6 +39,9 @@ public class FragmentFactory {
             case CORNER_IMAGE:
                 fragment = new CornerImageFragment();
                 break;
+            case SYNC_VIEW:
+                fragment = new SyncViewFragment();
+                break;
         }
         //fragments.put(type, fragment);
         return fragment;
@@ -54,6 +55,7 @@ public class FragmentFactory {
         MULTI_PLAYER,
         DOTTED_LINE,
         COLOR_PROGRESS,
-        CORNER_IMAGE
+        CORNER_IMAGE,
+        SYNC_VIEW
     }
 }

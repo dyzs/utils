@@ -101,4 +101,12 @@
         <attr name="lcvPerLineDuration" format="integer"/>
         <attr name="lcvXAxisDisplayNumber" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="CardCalibratorView">
+        <attr name="ccvCardRectStorkWidth" format="dimension"/>
+        <attr name="ccvCardRectStorkColor" format="color"/>
+        <attr name="ccvCardRectCornerRadius" format="dimension"/>
+        <attr name="ccvCardRegionColor" format="color"/>
+        <attr name="ccvCardRatio" format="float"/>
+    </declare-styleable>
 </resources>

@@ -51,5 +51,10 @@
             android:text="Dotted Line View"
             />
 
+        <TextView
+            android:id="@+id/head_scroll_wrapper"
+            style="@style/CommonTextViewItem"
+            android:text="Sync View"
+            />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

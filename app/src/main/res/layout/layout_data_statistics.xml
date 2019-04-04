@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_analysis"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dimen_25dp"
+    android:paddingRight="@dimen/dimen_25dp"
+    android:paddingTop="@dimen/margin_15_dp"
+    android:paddingBottom="@dimen/margin_15_dp"
+    android:background="@color/app_color_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <View style="@style/weight_width_divider"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                style="@style/data_statistics_text_style"
+                android:text="@string/data_statistics_contacts"
+                android:layout_marginBottom="@dimen/margin_5dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_count_contacts"
+                style="@style/data_statistics_text_style"
+                android:text="180人"
+                />
+        </LinearLayout>
+        <View style="@style/weight_width_divider"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/data_statistics_text_style"
+                android:text="@string/data_statistics_companies"
+                android:layout_marginBottom="@dimen/margin_5dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_count_workmate"
+                style="@style/data_statistics_text_style"
+                android:text="180人"
+                />
+        </LinearLayout>
+        <View style="@style/weight_width_divider"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                style="@style/data_statistics_text_style"
+                android:text="@string/data_statistics_phone_contacts"
+                android:layout_marginBottom="@dimen/margin_5dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_count_phone_contacts"
+                style="@style/data_statistics_text_style"
+                android:text="180人"
+                />
+        </LinearLayout>
+        <View style="@style/weight_width_divider"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/data_statistics_text_style"
+                android:text="@string/data_statistics_ocr"
+                android:layout_marginBottom="@dimen/margin_5dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_count_ocr_scan"
+                style="@style/data_statistics_text_style"
+                android:text="180人"
+                />
+        </LinearLayout>
+        <View style="@style/weight_width_divider"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/data_statistics_text_style"
+                android:text="@string/data_statistics_we_chat"
+                android:layout_marginBottom="@dimen/margin_5dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_count_we_chat"
+                style="@style/data_statistics_text_style"
+                android:text="180人"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -5,4 +5,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+
+    <string name="data_statistics_contacts">我的联系人</string>
+    <string name="data_statistics_companies">我的企业</string>
+    <string name="data_statistics_phone_contacts">本地通讯录</string>
+    <string name="data_statistics_ocr">来自OCR</string>
+    <string name="data_statistics_we_chat">来自微信</string>
+    <string name="data_count_placeholder">%1$s人</string>
 </resources>
