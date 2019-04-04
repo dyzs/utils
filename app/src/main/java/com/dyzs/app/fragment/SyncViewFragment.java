@@ -1,6 +1,12 @@
 package com.dyzs.app.fragment;
 
+import android.content.ContentResolver;
+import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +18,8 @@ import android.widget.TextView;
 
 import com.dyzs.app.R;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -50,6 +58,8 @@ public class SyncViewFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 
+        exportContacts();
+
     }
 
 
@@ -81,6 +91,31 @@ public class SyncViewFragment extends Fragment {
                 super(itemView);
                 mTextView = itemView.findViewById(R.id.tv_text);
             }
+        }
+    }
+    public void exportContacts() {
+        try {
+            String path = Environment.getExternalStorageDirectory().getPath() + "/contacts.vcf";
+
+            ContentResolver cr = getActivity().getContentResolver();
+            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+            int index = cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY);
+            FileOutputStream fout = new FileOutputStream(path);
+            byte[] data = new byte[1024];
+            while (cur.moveToNext()) {
+                String lookupKey = cur.getString(index);
+                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+                AssetFileDescriptor fd = getActivity().getContentResolver().openAssetFileDescriptor(uri, "r");
+                FileInputStream fin = fd.createInputStream();
+                int len = -1;
+                while ((len = fin.read(data)) != -1) {
+                    fout.write(data, 0, len);
+                }
+                fin.close();
+            }
+            fout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
