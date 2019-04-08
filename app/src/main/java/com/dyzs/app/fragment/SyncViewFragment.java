@@ -17,11 +17,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dyzs.app.R;
+import com.dyzs.app.manager.ContactInfo;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author dyzs
@@ -58,7 +64,9 @@ public class SyncViewFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 
-        exportContacts();
+
+        createExportContacts();
+        // exportContacts();
 
     }
 
@@ -93,10 +101,27 @@ public class SyncViewFragment extends Fragment {
             }
         }
     }
+
+    private void createExportContacts() {
+        Observable
+                .create(new ObservableOnSubscribe<Object>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
+                        exportContacts();
+                        //restoreContacts();
+                        emitter.onNext("PPChaos");
+                        emitter.onComplete();
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+    }
+    /**
+     * 默认导出方式
+     */
     public void exportContacts() {
         try {
-            String path = Environment.getExternalStorageDirectory().getPath() + "/contacts.vcf";
-
+            String path = Environment.getExternalStorageDirectory().getPath() + "/contacts_oppo.vcf";
             ContentResolver cr = getActivity().getContentResolver();
             Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
             int index = cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY);
@@ -114,6 +139,16 @@ public class SyncViewFragment extends Fragment {
                 fin.close();
             }
             fout.close();
+            cur.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void restoreContacts() {
+        try {
+            ContactInfo.ContactHandler contactHandler = new ContactInfo.ContactHandler();
+            contactHandler.restoreContacts();
         } catch (Exception e) {
             e.printStackTrace();
         }
