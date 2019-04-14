@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@mipmap/ic_launcher">
@@ -29,6 +30,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -41,4 +43,10 @@
             />
 
     </LinearLayout>
+
+
+    <com.dyzs.common.ui.VortexView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@color/black"/>
 </LinearLayout>

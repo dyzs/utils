@@ -65,7 +65,7 @@ public class SyncViewFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
 
-        createExportContacts();
+        // createExportContacts();
         // exportContacts();
 
     }
