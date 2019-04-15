@@ -1,5 +1,6 @@
 package com.dyzs.common.ui;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -24,8 +25,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-public class VortexView extends View {
-    private static final String TAG = VortexView.class.getSimpleName();
+public class VortexViewVer3 extends View {
+    private static final String TAG = VortexViewVer3.class.getSimpleName();
     private Context mCtx;
     private float mWidth, mHeight;
     private float mSpacing, mPadding;
@@ -34,7 +35,8 @@ public class VortexView extends View {
             android.R.attr.layout_width,
             android.R.attr.layout_height
     };
-    private ArrayList<RectF> mRectFs;
+    private ArrayList<RectF> mRectFs;// Arc Rect
+    private ArrayList<RectF> mSecondFs;
     private RectF mCenterRectF;
     private Paint mPaint, mPaintArc;
     private Path mPath;
@@ -45,7 +47,10 @@ public class VortexView extends View {
             R.color.alice_blue,
             R.color.emma_white,
             R.color.oxygen_yellow,
-            R.color.gray_white
+            R.color.oxygen_green,
+            R.color.cinnabar_red,
+            R.color.alice_blue,
+            R.color.oxygen_yellow
     };
     private ArrayList<SweepGradient> mArcSweepGradients;// 颜色值渐变参数
     private ArrayList<Float> mArcStartAngleValues; // 圆弧起始角度, 固定不变
@@ -53,6 +58,8 @@ public class VortexView extends View {
     private ArrayList<Float> mArcRadians;// 圆弧弧度
     private int mSpeedRateInit = 2;// Arc 速率按照个数依次叠加
 
+    private float mCenterArcStartAngleValues = 30f;
+    private float mCenterArcSweepRadians = 90f;
     //---------文本参数定义区域--------------------------
     private ArrayList<String> mTotalText;
     private ArrayList<String> mCurrText;
@@ -64,34 +71,36 @@ public class VortexView extends View {
     private float mTextPathSegment = 0;
     private float[] mTextPathSegments;
     private ValueAnimator mTextPathMeasureAnimator;
-    private long mTextLineDuration = 5000L;// 两点成线的动画持续时间
+    private long mTextDrawLineDuration = 1000L;// 两点成线的动画持续时间
     private Paint mTextPaint;
+    private float mTextSizeInit = 30f;
+    private float mTextSizeMinimu = 5f;
 
 
     private String[] mTempText2Test = {"上原亚衣","友田彩也香","程潇","张含韵","蒋欣","蒋梦婕","佟亚丽"};
             //,"呵呵哒","张檬","雪莉","刘诗诗","倪妮",
             //"Serena","Alex","古力娜扎","周冬雨","秋瓷炫","新垣结衣"};
     //---------文本参数定义区域--------------------------
-    public VortexView(Context context) {
+    public VortexViewVer3(Context context) {
         this(context, null);
     }
 
-    public VortexView(Context context, AttributeSet attrs) {
+    public VortexViewVer3(Context context, AttributeSet attrs) {
         this(context, attrs, -1);
     }
 
-    public VortexView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public VortexViewVer3(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, -1);
     }
 
-    public VortexView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public VortexViewVer3(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mCtx = context;
         init(context, attrs);
         postDelayed(() -> {
             startAnimator();
-            // startTextAnimator();
-        }, 1000L);
+            startTextAnimator();
+        }, 3000L);
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -101,7 +110,7 @@ public class VortexView extends View {
         mRectFs = new ArrayList<>();
         mCenterRectF = new RectF();
         mRectF = new RectF();
-        mSpacing = 15f;
+        mSpacing = 10f;
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
@@ -128,14 +137,19 @@ public class VortexView extends View {
             // mArcRadians.add(360f / 100 * Math.abs(30 - 5 * i) % 360);
         }
 
+        // 第二区域
+        mSecondFs = new ArrayList<>();
+
         // 初始化文字--------------
+        mTextSizeInit = getResources().getDimensionPixelSize(R.dimen.text_size);
+        mTextSizeMinimu = getResources().getDimensionPixelSize(R.dimen.minimu_text_size);
         mTotalText = new ArrayList<>();
         mCurrText = new ArrayList<>();
         mTextPathMapping = new HashMap<>();
         mTextPathMeasure = new PathMeasure();
         mTextReplacePath = new Path();
         mTextPaint = new Paint();
-        mTextPaint.setTextSize(20f);
+        mTextPaint.setTextSize(mTextSizeInit);
         mTextPaint.setAntiAlias(true);
         mTextPaint.setStyle(Paint.Style.STROKE);
         mTextPaint.setColor(Color.MAGENTA);
@@ -166,26 +180,38 @@ public class VortexView extends View {
 
         // 初始化设置外围 Arc rect 数组，定义 paint stroke width 为 5 等分, 计算最外圈额外留一份 spacing,
         // 重新定义画笔倍数大小为2
-        float leftOutWidth = mWidth / 3;
+        // 次方公式S=2^(N + 1) - 2
+        // 1+n公式：(1 + n) * n / 2
+        float operateWidth = mWidth / 3;
+        float leftOutWidth = operateWidth * 2 / 3;// *2/3 表示剩余的 rect 用于处理其它圆环
         // float tempSize = (leftOutWidth - mSpacing) / mCountOfArc - mSpacing;
         float tempSize = (leftOutWidth - mSpacing * 6);
         float paintBaseStrokeWidth = tempSize / ((1 + mCountOfArc) * mCountOfArc / 2);
         mRectFs.clear();
-        for (int i = 0 ; i < mCountOfArc; i++) {
-            float realWidth = paintBaseStrokeWidth * (i + 1);
-            float totalLastWidth = (1 + i) * i / 2 * paintBaseStrokeWidth;
+        for (int i = 0; i < mCountOfArc; i++) {
+            float realWidth = paintBaseStrokeWidth * (mCountOfArc - i);
+            float totalLastWidth = tempSize - (1 + mCountOfArc - i) * (mCountOfArc - i) / 2 * paintBaseStrokeWidth;
             mArcPaintStrokeWidth[i] = realWidth;
             l = mSpacing + realWidth / 2 + (mSpacing) * i + totalLastWidth;
             t = mSpacing + realWidth / 2 + (mSpacing) * i + totalLastWidth;
             r = mWidth - (mSpacing + realWidth / 2 + (mSpacing) * i + totalLastWidth);
             b = mWidth - (mSpacing + realWidth / 2 + (mSpacing) * i + totalLastWidth);
-            /*mArcPaintStrokeWidth[i] = tempSize;
-            l = mSpacing + tempSize / 2 + (mSpacing + tempSize) * i;  // 需要计算额外计算 tempSize / 2
-            t = mSpacing + tempSize / 2 + (mSpacing + tempSize) * i;
-            r = mWidth - (mSpacing + tempSize / 2 + (mSpacing + tempSize) * i);
-            b = mWidth - (mSpacing + tempSize / 2 + (mSpacing + tempSize) * i);*/
             RectF rectF = new RectF(l, t, r, b);
             mRectFs.add(rectF);
+        }
+
+        float offsetLT = leftOutWidth;
+        float thisSpacing = mSpacing;
+        leftOutWidth = operateWidth / 3;
+        tempSize = leftOutWidth / 3;
+        mSecondFs.clear();
+        for (int i = 0; i < 3; i++) {
+            l = offsetLT + thisSpacing + tempSize * i;
+            t = offsetLT + thisSpacing + tempSize * i;
+            r = mWidth - (offsetLT + thisSpacing + tempSize * i);
+            b = mWidth - (offsetLT + thisSpacing + tempSize * i);
+            RectF rectF = new RectF(l, t, r, b);
+            mSecondFs.add(rectF);
         }
 
         ArrayList<String> list = new ArrayList<>(Arrays.asList(mTempText2Test));
@@ -203,12 +229,19 @@ public class VortexView extends View {
     }
 
     private void drawCenterRegion(Canvas canvas) {
-        float tempSize = 20f;
+        float tempSize = 10f;
+        mPaint.setColor(Color.BLUE);
         mPaint.setStrokeWidth(tempSize);
         float cx = (mCenterRectF.right + mCenterRectF.left) / 2;
         float cy = (mCenterRectF.bottom + mCenterRectF.top) / 2;
         float radius = (mCenterRectF.bottom - mCenterRectF.top) / 2;
         canvas.drawCircle(cx, cy, radius, mPaint);
+
+        mPaint.setColor(Color.CYAN);
+        canvas.save();
+        canvas.rotate(mCenterArcStartAngleValues, cx, cy);
+        canvas.drawArc(mCenterRectF, 0, mCenterArcSweepRadians, false, mPaint);
+        canvas.restore();
     }
 
     private void drawRotateArc(Canvas canvas) {
@@ -220,13 +253,13 @@ public class VortexView extends View {
             mPaintArc.setStrokeWidth(mArcPaintStrokeWidth[i]);
             float startAngle = mArcStartAngleValuesAfterRotate.get(i);
             float sweepRadians = mArcRadians.get(i);
-            canvas.rotate(startAngle, mRectFs.get(i).centerX(), mRectFs.get(i).centerY());
+            canvas.rotate(startAngle, rectF.centerX(), rectF.centerY());
             int[] colors = new int[]{Color.TRANSPARENT, ContextCompat.getColor(getContext(), mArcPaintColor[i]), Color.TRANSPARENT};
             float[] positions = new float[]{0f, sweepRadians / 360f, 1f};
             SweepGradient sweepGradient;
             sweepGradient = new SweepGradient(
-                    mRectFs.get(i).centerX(),
-                    mRectFs.get(i).centerY(),
+                    rectF.centerX(),
+                    rectF.centerY(),
                     colors,
                     positions);
             mPaintArc.setShader(sweepGradient);
@@ -236,19 +269,41 @@ public class VortexView extends View {
             canvas.drawPath(mPath, mPaintArc);
             canvas.restore();
         }
+
+        for (int i = 0; i < mSecondFs.size(); i++) {
+            rectF = mSecondFs.get(i);
+            mPaint.setColor(Color.RED);
+            mPaint.setStrokeWidth(5f);
+            canvas.drawArc(rectF, 0, 360, false, mPaint);
+            // canvas.drawCircle(mCenterRectF.centerX(), mCenterRectF.centerY(), (rectF.right - rectF.left) / 2, mPaint);
+        }
     }
 
+    /**
+     * 设置文字缩放为初始值到0f;
+     * @param canvas
+     */
     private void drawFlyingText(Canvas canvas) {
         if (mTextPathMapping.size() == 0)return;
+        int totalSize = mCountOfShownText * 100;
         for (int i = 0; i < mCurrText.size(); i++) {
             mTextReplacePath.reset();
             Path textPath = mTextPathMapping.get(mCurrText.get(i));
-            float stopD = mTextPathSegment / 100 * mTextPathMeasure.getLength();
+            float stopD = mTextPathSegments[i] % totalSize / totalSize * mTextPathMeasure.getLength();
             mTextPathMeasure.setPath(textPath, false);
             mTextPathMeasure.getSegment(0, stopD, mTextReplacePath, true);
             float pos[] = new float[2], tan[] = new float[2];
             mTextPathMeasure.getPosTan(stopD, pos, tan);
-            canvas.drawPath(mTextReplacePath, mTextPaint);
+            // mTextPaint.setStrokeWidth(2f);
+            // canvas.drawPath(mTextReplacePath, mTextPaint);
+
+            float rate = mTextPathSegments[i] % totalSize / totalSize;
+            float textSize = (1 - rate) * mTextSizeInit;
+            if (textSize < mTextSizeMinimu) {
+                textSize = mTextSizeMinimu;
+            }
+            // mTextPaint.setStrokeWidth(textSize);
+            mTextPaint.setTextSize(textSize);
             canvas.drawText(mCurrText.get(i), pos[0], pos[1], mTextPaint);
         }
     }
@@ -257,24 +312,27 @@ public class VortexView extends View {
         if (list == null)list = new ArrayList<>();
         this.mTotalText = list;
         this.mCurrText.clear();
-        for (int i = 0; i < mTotalText.size(); i++) {
+        this.mCurrText.add(mTotalText.get(0));
+        /*for (int i = 0; i < mTotalText.size(); i++) {
             if (i < mCountOfShownText) {
                 mCurrText.add(mTotalText.get(i));
             }
-        }
+        }*/
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
         LogUtils.v(TAG, "width:[" + width + "], height:[" + height + "]");
         LogUtils.v(TAG, "start calc all the path of text, it will be random automatic generate");
         mTextPathMapping.clear();
-        Path path = new Path();
+        Path path;
         Point center = new Point(width / 2, height / 2);
         Point startPoint;
         Point bezierController;
+        Random random = new Random();
         for (int i = 0; i < mTotalText.size(); i++) {
             path = new Path();
-            startPoint = getTextRandomStartPoint();
-            bezierController = getBezierPoint(startPoint, center);
+            int rpi = random.nextInt(4);
+            startPoint = getTextRandomStartPoint(rpi);
+            bezierController = getBezierPoint(startPoint, center, rpi);
             path.reset();
             path.moveTo(startPoint.x, startPoint.y);
             path.quadTo(bezierController.x, bezierController.y, center.x, center.y);
@@ -287,19 +345,24 @@ public class VortexView extends View {
      * pX = sin(x)+r,
      * pY = cos(x)+r
      * @return point
+     * 不设置 random , 固定 4 个点, 分别代表左上右下
      */
-    private Point getTextRandomStartPoint() {
+    private Point getTextRandomStartPoint(int randomPointIndex) {
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
-        // int radius = (int) Math.sqrt((width / 2) * (width / 2) + height * height / 4);
         int radius = width / 2;
         int pointX, pointY;
-        Random random = new Random();
+        /*Random random = new Random();
         int randomPointIndex = random.nextInt(361);
         pointX = (int) (Math.cos(Math.PI * 2 / 360 * randomPointIndex) * radius) + radius;
         pointY = (int) (Math.sin(Math.PI * 2 / 360 * randomPointIndex) * radius) + radius;
-        LogUtils.v(TAG, "start point:[" + pointX + ", " + pointY + ", " + randomPointIndex + "]");
-        return new Point(pointX, pointY);
+        LogUtils.v(TAG, "start point:[" + pointX + ", " + pointY + ", " + randomPointIndex + "]");*/
+        ArrayList<Point> points = new ArrayList<>();
+        points.add(new Point(0, height / 2));
+        points.add(new Point(width / 2, 0));
+        points.add(new Point(width, height / 2));
+        points.add(new Point(width / 2, height));
+        return points.get(randomPointIndex);
     }
 
     /**
@@ -309,32 +372,22 @@ public class VortexView extends View {
      * @param aPoint
      * @param bPoint
      * @return
+     * 按照控制点为起始点 + 1 计算
      */
-    private Point getBezierPoint(Point aPoint, Point bPoint) {
+    private Point getBezierPoint(Point aPoint, Point bPoint, int randomPointIndex) {
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
         int radius = (int) ((mCenterRectF.bottom - mCenterRectF.top) / 2) * 3 / 2;
         int pointX, pointY;
         int centerX = width / 2;
         int centerY = height / 2;
-        Random random = new Random();
-        int randomPointIndex = random.nextInt(361);
-        pointX = (int) (Math.cos(Math.PI * 2 / 360 * randomPointIndex) * radius) + centerX;
-        pointY = (int) (Math.sin(Math.PI * 2 / 360 * randomPointIndex) * radius) + centerY;
-        LogUtils.v(TAG, "start point:[" + pointX + ", " + pointY + ", " + randomPointIndex + "]");
-        LogUtils.v(TAG, "bezier controller point:[" + pointX + ", " + pointY + "]");
-        return new Point(pointX, pointY);
-        /*int width = getMeasuredWidth();
-        int height = getMeasuredHeight();
-        int radiusLarge = width / 2;
-        float radius = (mCenterRectF.bottom - mCenterRectF.top) / 2;
-        float bezierRadius = radius / 2;
-        float lengthAC = (float) Math.sqrt(radiusLarge * radiusLarge + bezierRadius * bezierRadius);
-        int cPointX = 100, cPointY = 200;
-        cPointX = (int) (aPoint.x + lengthAC * Math.cos(90));
-        cPointY = (int) (aPoint.y + lengthAC * Math.sin(90));
-        LogUtils.v(TAG, "controller point:[" + cPointX + ", " + cPointX + "]" + "///" + Math.cos(90) + "///" + lengthAC);
-        return new Point(cPointX, cPointY);*/
+        ArrayList<Point> points = new ArrayList<>();
+        points.add(new Point(width / 2 - radius, height / 2));
+        points.add(new Point(width / 2, height / 2 - radius));
+        points.add(new Point(width / 2 + radius, height / 2));
+        points.add(new Point(width / 2, height / 2 + radius));
+        int realIndex = (randomPointIndex + 1) % 4;
+        return points.get(realIndex);
     }
 
     private ValueAnimator mAnimator;
@@ -345,6 +398,7 @@ public class VortexView extends View {
         mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
+            mCenterArcStartAngleValues = value * 10 % 360;
             mArcStartAngleValuesAfterRotate.clear();
             for (int i = 0; i < mCountOfArc; i++) {
                 mArcStartAngleValuesAfterRotate.add(mArcStartAngleValues.get(i) + value * (mSpeedRateInit + i) % 360);
@@ -360,88 +414,64 @@ public class VortexView extends View {
 
     /**
      * 开启 path measure 绘制 path 路径
+     * 定义每条 path 路径生命周期为 1000L,
      */
+    private int totalValues = 0;
     public void startTextAnimator() {
+        index = 0;
         mTextPathMeasureAnimator = ValueAnimator.ofInt(0, 100);
-        mTextPathMeasureAnimator.setDuration(mTextLineDuration);
-        mTextPathMeasureAnimator.setRepeatCount(mTotalText.size());
+        mTextPathMeasureAnimator.setDuration(mTextDrawLineDuration);
+        mTextPathMeasureAnimator.setRepeatCount(-1);
         mTextPathMeasureAnimator.setInterpolator(new LinearInterpolator());
         mTextPathMeasureAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int value = (int) animation.getAnimatedValue();
-                mTextPathSegment = value;
-                // LogUtils.v(TAG, "segment value:" + value);
-                postInvalidate();
+                totalValues = value + index % mCountOfShownText * 100 + mCountOfShownText * 100;// 100 * mCountOfShownText 表示初始化多出一圈
+                for (int i = 0; i < mCountOfShownText; i++) {
+                    mTextPathSegments[i] = totalValues - i * 100;
+                }
+                /*mTextPathSegments[0] = totalValues;
+                mTextPathSegments[1] = totalValues - 100;
+                mTextPathSegments[2] = totalValues - 200;
+                mTextPathSegments[3] = totalValues - 300;
+                mTextPathSegments[4] = totalValues - 400;*/
+                // postInvalidate();
+            }
+        });
+
+        mTextPathMeasureAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                LogUtils.v(TAG, "TEXT REPEAT...." + index++);
+                if (index < mTotalText.size()) {
+                    String text = mTotalText.get(index);
+                    if (mCurrText.size() < mCountOfShownText) {
+                        mCurrText.add(text);
+                    } else {
+                        mCurrText.set(index % mCountOfShownText, text);
+                    }
+                }
+
             }
         });
         mTextPathMeasureAnimator.start();
     }
-
-    public void startTextAnimator1() {
-        ValueAnimator mText1Animator = ValueAnimator.ofInt(0, 100);
-        mText1Animator.setDuration(mTextLineDuration);
-        mText1Animator.setRepeatCount(mTotalText.size());
-        mText1Animator.setInterpolator(new LinearInterpolator());
-        mText1Animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int value = (int) animation.getAnimatedValue();
-                mTextPathSegments[1] = value;
-                postInvalidate();
-            }
-        });
-        mText1Animator.start();
-    }
-
-    public void startTextAnimator2() {
-        ValueAnimator mText2Animator = ValueAnimator.ofInt(0, 100);
-        mText2Animator.setDuration(mTextLineDuration);
-        mText2Animator.setRepeatCount(mTotalText.size());
-        mText2Animator.setInterpolator(new LinearInterpolator());
-        mText2Animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int value = (int) animation.getAnimatedValue();
-                mTextPathSegments[2] = value;
-                postInvalidate();
-            }
-        });
-        mText2Animator.start();
-    }
-
-    public void startTextAnimator3() {
-        ValueAnimator mText3Animator = ValueAnimator.ofInt(0, 100);
-        mText3Animator.setDuration(mTextLineDuration);
-        mText3Animator.setRepeatCount(mTotalText.size());
-        mText3Animator.setInterpolator(new LinearInterpolator());
-        mText3Animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int value = (int) animation.getAnimatedValue();
-                mTextPathSegments[3] = value;
-                postInvalidate();
-            }
-        });
-        mText3Animator.start();
-    }
-
-    public void startTextAnimator4() {
-        ValueAnimator mText4Animator = ValueAnimator.ofInt(0, 100);
-        mText4Animator.setDuration(mTextLineDuration);
-        mText4Animator.setRepeatCount(mTotalText.size());
-        mText4Animator.setInterpolator(new LinearInterpolator());
-        mText4Animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int value = (int) animation.getAnimatedValue();
-                mTextPathSegments[4] = value;
-                postInvalidate();
-            }
-        });
-        mText4Animator.start();
-    }
-
     private int index = 0;
 
 

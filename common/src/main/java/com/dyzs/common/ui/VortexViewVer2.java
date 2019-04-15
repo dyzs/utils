@@ -24,8 +24,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-public class VortexView extends View {
-    private static final String TAG = VortexView.class.getSimpleName();
+public class VortexViewVer2 extends View {
+    private static final String TAG = VortexViewVer2.class.getSimpleName();
     private Context mCtx;
     private float mWidth, mHeight;
     private float mSpacing, mPadding;
@@ -39,13 +39,16 @@ public class VortexView extends View {
     private Paint mPaint, mPaintArc;
     private Path mPath;
     private float[] mArcPaintStrokeWidth; // 初始化定义外围的 Arc 宽度
-    private int mCountOfArc = 5;// 初始化定义外围 Arc 个数
+    private int mCountOfArc = 7;// 初始化定义外围 Arc 个数
     private int[] mArcPaintColor = {
             R.color.white,
             R.color.alice_blue,
             R.color.emma_white,
             R.color.oxygen_yellow,
-            R.color.gray_white
+            R.color.oxygen_green,
+            R.color.cinnabar_red,
+            R.color.alice_blue,
+            R.color.oxygen_yellow
     };
     private ArrayList<SweepGradient> mArcSweepGradients;// 颜色值渐变参数
     private ArrayList<Float> mArcStartAngleValues; // 圆弧起始角度, 固定不变
@@ -72,19 +75,19 @@ public class VortexView extends View {
             //,"呵呵哒","张檬","雪莉","刘诗诗","倪妮",
             //"Serena","Alex","古力娜扎","周冬雨","秋瓷炫","新垣结衣"};
     //---------文本参数定义区域--------------------------
-    public VortexView(Context context) {
+    public VortexViewVer2(Context context) {
         this(context, null);
     }
 
-    public VortexView(Context context, AttributeSet attrs) {
+    public VortexViewVer2(Context context, AttributeSet attrs) {
         this(context, attrs, -1);
     }
 
-    public VortexView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public VortexViewVer2(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, -1);
     }
 
-    public VortexView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public VortexViewVer2(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mCtx = context;
         init(context, attrs);
@@ -101,7 +104,7 @@ public class VortexView extends View {
         mRectFs = new ArrayList<>();
         mCenterRectF = new RectF();
         mRectF = new RectF();
-        mSpacing = 15f;
+        mSpacing = 10f;
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
@@ -171,19 +174,14 @@ public class VortexView extends View {
         float tempSize = (leftOutWidth - mSpacing * 6);
         float paintBaseStrokeWidth = tempSize / ((1 + mCountOfArc) * mCountOfArc / 2);
         mRectFs.clear();
-        for (int i = 0 ; i < mCountOfArc; i++) {
-            float realWidth = paintBaseStrokeWidth * (i + 1);
-            float totalLastWidth = (1 + i) * i / 2 * paintBaseStrokeWidth;
+        for (int i = 0; i < mCountOfArc; i++) {
+            float realWidth = paintBaseStrokeWidth * (mCountOfArc - i);
+            float totalLastWidth = tempSize - (1 + mCountOfArc - i) * (mCountOfArc - i) / 2 * paintBaseStrokeWidth;
             mArcPaintStrokeWidth[i] = realWidth;
             l = mSpacing + realWidth / 2 + (mSpacing) * i + totalLastWidth;
             t = mSpacing + realWidth / 2 + (mSpacing) * i + totalLastWidth;
             r = mWidth - (mSpacing + realWidth / 2 + (mSpacing) * i + totalLastWidth);
             b = mWidth - (mSpacing + realWidth / 2 + (mSpacing) * i + totalLastWidth);
-            /*mArcPaintStrokeWidth[i] = tempSize;
-            l = mSpacing + tempSize / 2 + (mSpacing + tempSize) * i;  // 需要计算额外计算 tempSize / 2
-            t = mSpacing + tempSize / 2 + (mSpacing + tempSize) * i;
-            r = mWidth - (mSpacing + tempSize / 2 + (mSpacing + tempSize) * i);
-            b = mWidth - (mSpacing + tempSize / 2 + (mSpacing + tempSize) * i);*/
             RectF rectF = new RectF(l, t, r, b);
             mRectFs.add(rectF);
         }
@@ -220,13 +218,13 @@ public class VortexView extends View {
             mPaintArc.setStrokeWidth(mArcPaintStrokeWidth[i]);
             float startAngle = mArcStartAngleValuesAfterRotate.get(i);
             float sweepRadians = mArcRadians.get(i);
-            canvas.rotate(startAngle, mRectFs.get(i).centerX(), mRectFs.get(i).centerY());
+            canvas.rotate(startAngle, rectF.centerX(), rectF.centerY());
             int[] colors = new int[]{Color.TRANSPARENT, ContextCompat.getColor(getContext(), mArcPaintColor[i]), Color.TRANSPARENT};
             float[] positions = new float[]{0f, sweepRadians / 360f, 1f};
             SweepGradient sweepGradient;
             sweepGradient = new SweepGradient(
-                    mRectFs.get(i).centerX(),
-                    mRectFs.get(i).centerY(),
+                    rectF.centerX(),
+                    rectF.centerY(),
                     colors,
                     positions);
             mPaintArc.setShader(sweepGradient);

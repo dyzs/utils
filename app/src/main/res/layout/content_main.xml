@@ -14,17 +14,20 @@
         android:orientation="vertical">
 
         <com.dyzs.common.ui.magicruf.MagicRUF
+            android:visibility="gone"
             android:id="@+id/magic_ruf"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/black"
             />
         <TextView
+            android:visibility="gone"
             android:id="@+id/chart_redraw"
             style="@style/CommonTextViewItem"
             android:text="chart redraw"
             />
         <com.dyzs.common.ui.LineChartViewWrapper
+            android:visibility="gone"
             android:layout_below="@+id/magic_ruf"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -40,6 +43,11 @@
                 app:lcvXAxisDisplayNumber="4"
                 />
         </com.dyzs.common.ui.LineChartViewWrapper>
+
+        <com.dyzs.common.ui.VortexViewVer3
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:background="@color/black"/>
 
     </LinearLayout>
 
