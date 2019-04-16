@@ -1,29 +1,35 @@
 package com.dyzs.app.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.dyzs.app.R;
-import com.dyzs.base.BaseActivity;
 import com.dyzs.app.presenter.MainPresenter;
 import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.app.view.IMainView;
+import com.dyzs.base.BaseActivity;
 import com.dyzs.common.ui.FullScreenDialogVer2;
+import com.dyzs.common.ui.KnockBackupView;
 import com.dyzs.common.ui.LineChartView;
 import com.dyzs.common.ui.magicruf.MagicRUF;
 import com.dyzs.common.utils.ToastUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,6 +43,8 @@ public class MainActivity extends BaseActivity
 
     @BindView(R.id.chart_redraw)
     TextView chart_redraw;
+    @BindView(R.id.virgin_oil)
+    KnockBackupView mBackupView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,9 +194,22 @@ public class MainActivity extends BaseActivity
         startActivity(intent);
     }
 
-    @OnClick(R.id.chart_redraw)
-    public void chartRedraw() {
-        lcv_yj.setData(lcv_yj.testLoadData(i));
-        lcv_yj.playLineAnimation();
+    @OnClick({R.id.chart_redraw, R.id.tv_start, R.id.tv_stop})
+    public void chartRedraw(View view) {
+        switch (view.getId()) {
+            case R.id.tv_start:
+                mBackupView.setBackgroundColor(ContextCompat.getColor(this, R.color.maria_blue));
+                mBackupView.setAllTexts(new ArrayList<>(Arrays.asList(KnockBackupView.TEXT2TEST)));
+                mBackupView.startAnimation();
+                break;
+            case R.id.tv_stop:
+                // mBackupView.cancelAnimator();
+                mBackupView.setBackgroundColor(Color.parseColor("#FFFF5E4D"));
+                mBackupView.setErrorStyle();
+                break;
+            default:
+
+                break;
+        }
     }
 }

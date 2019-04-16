@@ -18,7 +18,7 @@
             android:id="@+id/magic_ruf"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@color/black"
+            android:background="@color/maria_blue"
             />
         <TextView
             android:visibility="gone"
@@ -44,10 +44,31 @@
                 />
         </com.dyzs.common.ui.LineChartViewWrapper>
 
-        <com.dyzs.common.ui.VortexViewVer3
+        <com.dyzs.common.ui.KnockBackupView
+            android:id="@+id/virgin_oil"
             android:layout_width="350dp"
             android:layout_height="350dp"
-            android:background="@color/black"/>
+            android:background="@color/maria_blue"/>
+
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="start"
+            android:background="@color/maria_blue"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_stop"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="stop"
+            android:background="@color/cinnabar_red"
+            />
 
     </LinearLayout>
 

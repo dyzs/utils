@@ -18,15 +18,15 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.dyzs.common.R;
+import com.dyzs.common.utils.ColorUtils;
 import com.dyzs.common.utils.LogUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-public class VortexViewVer3 extends View {
-    private static final String TAG = VortexViewVer3.class.getSimpleName();
+public class KnockBackupView extends View {
+    private static final String TAG = KnockBackupView.class.getSimpleName();
     private Context mCtx;
     private float mWidth, mHeight;
     private float mSpacing, mPadding;
@@ -36,12 +36,11 @@ public class VortexViewVer3 extends View {
             android.R.attr.layout_height
     };
     private ArrayList<RectF> mRectFs;// Arc Rect
-    private ArrayList<RectF> mSecondFs;
     private RectF mCenterRectF;
     private Paint mPaint, mPaintArc;
     private Path mPath;
     private float[] mArcPaintStrokeWidth; // 初始化定义外围的 Arc 宽度
-    private int mCountOfArc = 5;// 初始化定义外围 Arc 个数
+    private int mCountOfArc = 4;// 初始化定义外围 Arc 个数
     private int[] mArcPaintColor = {
             R.color.white,
             R.color.alice_blue,
@@ -56,10 +55,17 @@ public class VortexViewVer3 extends View {
     private ArrayList<Float> mArcStartAngleValues; // 圆弧起始角度, 固定不变
     private ArrayList<Float> mArcStartAngleValuesAfterRotate; // 圆弧旋转角度
     private ArrayList<Float> mArcRadians;// 圆弧弧度
-    private int mSpeedRateInit = 2;// Arc 速率按照个数依次叠加
+    private int mSpeedRateInit = 5;// Arc 速率按照个数依次叠加
 
-    private float mCenterArcStartAngleValues = 30f;
+    private float mCenterArcStartAngleValues = 0f;
     private float mCenterArcSweepRadians = 90f;
+
+    private ArrayList<RectF> mSecondFs;
+    private int[] mSecondFsColors = {
+            R.color.half_white,
+            R.color.eighty_opacity_white,
+            R.color.misty_white
+    };
     //---------文本参数定义区域--------------------------
     private ArrayList<String> mTotalText;
     private ArrayList<String> mCurrText;
@@ -74,33 +80,31 @@ public class VortexViewVer3 extends View {
     private long mTextDrawLineDuration = 1000L;// 两点成线的动画持续时间
     private Paint mTextPaint;
     private float mTextSizeInit = 30f;
-    private float mTextSizeMinimu = 5f;
-
-
-    private String[] mTempText2Test = {"上原亚衣","友田彩也香","程潇","张含韵","蒋欣","蒋梦婕","佟亚丽"};
-            //,"呵呵哒","张檬","雪莉","刘诗诗","倪妮",
-            //"Serena","Alex","古力娜扎","周冬雨","秋瓷炫","新垣结衣"};
+    private float mTextSizeMinimum = 5f;
+    public static String[] TEXT2TEST = {
+            "上原亚衣","友田彩也香","程潇","张含韵","蒋欣","蒋梦婕",
+            "佟亚丽", "呵呵哒","张檬","雪莉","刘诗诗","倪妮", "Serena",
+            "Alex","古力娜扎","周冬雨","秋瓷炫","新垣结衣"
+    };
     //---------文本参数定义区域--------------------------
-    public VortexViewVer3(Context context) {
+
+    private BackupStatus mBackupStatus = BackupStatus.STATUS_IDLE;
+    public KnockBackupView(Context context) {
         this(context, null);
     }
 
-    public VortexViewVer3(Context context, AttributeSet attrs) {
+    public KnockBackupView(Context context, AttributeSet attrs) {
         this(context, attrs, -1);
     }
 
-    public VortexViewVer3(Context context, AttributeSet attrs, int defStyleAttr) {
+    public KnockBackupView(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, -1);
     }
 
-    public VortexViewVer3(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public KnockBackupView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mCtx = context;
         init(context, attrs);
-        postDelayed(() -> {
-            startAnimator();
-            startTextAnimator();
-        }, 3000L);
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -115,6 +119,7 @@ public class VortexViewVer3 extends View {
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.MAGENTA);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
 
         mPaintArc = new Paint();
         mPaintArc.setAntiAlias(true);
@@ -131,9 +136,9 @@ public class VortexViewVer3 extends View {
         mArcStartAngleValuesAfterRotate = new ArrayList<>();
         mArcRadians = new ArrayList<>();
         for (int i = 0; i < mCountOfArc; i++) {
-            mArcStartAngleValues.add(i * 30f);
-            mArcStartAngleValuesAfterRotate.add(i * 30f);
-            mArcRadians.add(i * 30f + 60f);
+            mArcStartAngleValues.add(i * 360f / mCountOfArc);
+            mArcStartAngleValuesAfterRotate.add(i * 360f / mCountOfArc);
+            mArcRadians.add(360f / mCountOfArc);
             // mArcRadians.add(360f / 100 * Math.abs(30 - 5 * i) % 360);
         }
 
@@ -141,8 +146,8 @@ public class VortexViewVer3 extends View {
         mSecondFs = new ArrayList<>();
 
         // 初始化文字--------------
-        mTextSizeInit = getResources().getDimensionPixelSize(R.dimen.text_size);
-        mTextSizeMinimu = getResources().getDimensionPixelSize(R.dimen.minimu_text_size);
+        mTextSizeInit = getResources().getDimensionPixelSize(R.dimen.backup_view_text_size);
+        mTextSizeMinimum = getResources().getDimensionPixelSize(R.dimen.backup_view_minimum_text_size);
         mTotalText = new ArrayList<>();
         mCurrText = new ArrayList<>();
         mTextPathMapping = new HashMap<>();
@@ -213,34 +218,70 @@ public class VortexViewVer3 extends View {
             RectF rectF = new RectF(l, t, r, b);
             mSecondFs.add(rectF);
         }
-
-        ArrayList<String> list = new ArrayList<>(Arrays.asList(mTempText2Test));
-        setAllTexts(list);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawCenterRegion(canvas);
-
-        drawRotateArc(canvas);
-
-        drawFlyingText(canvas);
+        switch (mBackupStatus) {
+            case STATUS_IDLE:
+            case STATUS_WORKING:
+                drawCenterRegion(canvas);
+                drawRotateArc(canvas);
+                drawFlyingText(canvas);
+                break;
+            case STATUS_SHOW_FAILED:
+                drawCenterRegionErrorStyle(canvas);
+                drawRotateArc(canvas);
+                break;
+        }
     }
 
     private void drawCenterRegion(Canvas canvas) {
         float tempSize = 10f;
-        mPaint.setColor(Color.BLUE);
-        mPaint.setStrokeWidth(tempSize);
         float cx = (mCenterRectF.right + mCenterRectF.left) / 2;
         float cy = (mCenterRectF.bottom + mCenterRectF.top) / 2;
         float radius = (mCenterRectF.bottom - mCenterRectF.top) / 2;
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(Color.parseColor("#4770F7"));
+        canvas.drawCircle(cx, cy, radius, mPaint);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setColor(Color.parseColor("#4661EB"));
+        mPaint.setStrokeWidth(tempSize);
         canvas.drawCircle(cx, cy, radius, mPaint);
 
         mPaint.setColor(Color.CYAN);
         canvas.save();
         canvas.rotate(mCenterArcStartAngleValues, cx, cy);
         canvas.drawArc(mCenterRectF, 0, mCenterArcSweepRadians, false, mPaint);
+        canvas.restore();
+    }
+
+    private void drawCenterRegionErrorStyle(Canvas canvas) {
+        float tempSize = 10f;
+        float cx = (mCenterRectF.right + mCenterRectF.left) / 2;
+        float cy = (mCenterRectF.bottom + mCenterRectF.top) / 2;
+        float radius = (mCenterRectF.bottom - mCenterRectF.top) / 2;
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(Color.RED);
+        canvas.drawCircle(cx, cy, radius, mPaint);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setColor(Color.WHITE);
+        mPaint.setStrokeWidth(tempSize);
+        canvas.drawCircle(cx, cy, radius, mPaint);
+        canvas.save();
+        canvas.rotate(45f, cx, cy);
+        float startX, startY, stopX, stopY;
+        startX = cx - radius / 2;
+        startY = cy;
+        stopX = cx + radius / 2;
+        stopY = cy;
+        canvas.drawLine(startX, startY, stopX, stopY, mPaint);
+        startX = cx;
+        startY = cy - radius / 2;
+        stopX = cx;
+        stopY = cy + radius / 2;
+        canvas.drawLine(startX, startY, stopX, stopY, mPaint);
         canvas.restore();
     }
 
@@ -272,10 +313,9 @@ public class VortexViewVer3 extends View {
 
         for (int i = 0; i < mSecondFs.size(); i++) {
             rectF = mSecondFs.get(i);
-            mPaint.setColor(Color.RED);
+            mPaint.setColor(ContextCompat.getColor(getContext(), mSecondFsColors[i % 3]));
             mPaint.setStrokeWidth(5f);
             canvas.drawArc(rectF, 0, 360, false, mPaint);
-            // canvas.drawCircle(mCenterRectF.centerX(), mCenterRectF.centerY(), (rectF.right - rectF.left) / 2, mPaint);
         }
     }
 
@@ -299,10 +339,11 @@ public class VortexViewVer3 extends View {
 
             float rate = mTextPathSegments[i] % totalSize / totalSize;
             float textSize = (1 - rate) * mTextSizeInit;
-            if (textSize < mTextSizeMinimu) {
-                textSize = mTextSizeMinimu;
+            if (textSize < mTextSizeMinimum) {
+                textSize = mTextSizeMinimum;
             }
-            // mTextPaint.setStrokeWidth(textSize);
+            int textColor = ColorUtils.getCompositeColor(Color.WHITE, ContextCompat.getColor(getContext(), R.color.half_white), 1 - rate);
+            mTextPaint.setColor(textColor);
             mTextPaint.setTextSize(textSize);
             canvas.drawText(mCurrText.get(i), pos[0], pos[1], mTextPaint);
         }
@@ -401,10 +442,10 @@ public class VortexViewVer3 extends View {
             mCenterArcStartAngleValues = value * 10 % 360;
             mArcStartAngleValuesAfterRotate.clear();
             for (int i = 0; i < mCountOfArc; i++) {
-                mArcStartAngleValuesAfterRotate.add(mArcStartAngleValues.get(i) + value * (mSpeedRateInit + i) % 360);
+                mArcStartAngleValuesAfterRotate.add(mArcStartAngleValues.get(i) + value * (mSpeedRateInit) % 360);
                 /*if (i % 2 == 0) {
                 } else {
-                    mArcStartAngleValuesAfterRotate.add(mArcStartAngleValues.get(i) - value * (mSpeedRateInit + i) % 360);
+                    mArcStartAngleValuesAfterRotate.add(mArcStartAngleValues.get(i) - value * (mSpeedRateInit) % 360);
                 }*/
             }
             postInvalidate();
@@ -431,12 +472,6 @@ public class VortexViewVer3 extends View {
                 for (int i = 0; i < mCountOfShownText; i++) {
                     mTextPathSegments[i] = totalValues - i * 100;
                 }
-                /*mTextPathSegments[0] = totalValues;
-                mTextPathSegments[1] = totalValues - 100;
-                mTextPathSegments[2] = totalValues - 200;
-                mTextPathSegments[3] = totalValues - 300;
-                mTextPathSegments[4] = totalValues - 400;*/
-                // postInvalidate();
             }
         });
 
@@ -466,13 +501,54 @@ public class VortexViewVer3 extends View {
                     } else {
                         mCurrText.set(index % mCountOfShownText, text);
                     }
+                } else {
+                    int tempIndex = index % mTotalText.size();
+                    String text = mTotalText.get(tempIndex);
+                    if (mCurrText.size() < mCountOfShownText) {
+                        mCurrText.add(text);
+                    } else {
+                        mCurrText.set(index % mCountOfShownText, text);
+                    }
                 }
 
             }
         });
         mTextPathMeasureAnimator.start();
     }
+
+    public void startAnimation() {
+        mBackupStatus = BackupStatus.STATUS_WORKING;
+        cancelAnimator();
+        postDelayed(() -> {
+            startAnimator();
+            startTextAnimator();
+        }, 500L);
+    }
+
+    public void cancelAnimator() {
+        mBackupStatus = BackupStatus.STATUS_IDLE;
+        if (mAnimator != null && mAnimator.isRunning()) {
+            mAnimator.cancel();
+            mAnimator.removeAllListeners();
+            mAnimator.removeAllUpdateListeners();
+        }
+
+        if (mTextPathMeasureAnimator != null && mTextPathMeasureAnimator.isRunning()) {
+            mTextPathMeasureAnimator.cancel();
+            mTextPathMeasureAnimator.removeAllUpdateListeners();
+            mTextPathMeasureAnimator.removeAllListeners();
+        }
+    }
     private int index = 0;
 
+    public void setErrorStyle() {
+        cancelAnimator();
+        mCurrText.clear();
+        mBackupStatus = BackupStatus.STATUS_SHOW_FAILED;
+        postInvalidate();
+    }
 
+    public enum BackupStatus {
+        STATUS_IDLE, STATUS_WORKING, STATUS_SHOW_FAILED
+    }
 }
