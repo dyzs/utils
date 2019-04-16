@@ -204,7 +204,7 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.tv_stop:
                 // mBackupView.cancelAnimator();
-                mBackupView.setBackgroundColor(Color.parseColor("#FFFF5E4D"));
+                mBackupView.setBackgroundColor(Color.parseColor("#7FFF5E4D"));
                 mBackupView.setErrorStyle();
                 break;
             default:

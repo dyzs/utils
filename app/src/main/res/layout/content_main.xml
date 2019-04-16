@@ -46,8 +46,8 @@
 
         <com.dyzs.common.ui.KnockBackupView
             android:id="@+id/virgin_oil"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
+            android:layout_width="wrap_content"
+            android:layout_height="400dp"
             android:background="@color/maria_blue"/>
 
         <TextView

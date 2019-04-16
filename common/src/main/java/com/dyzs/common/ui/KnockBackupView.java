@@ -113,7 +113,7 @@ public class KnockBackupView extends View {
         ta.recycle();
         mRectFs = new ArrayList<>();
         mCenterRectF = new RectF();
-        mRectF = new RectF();
+        mRectFTemporary = new RectF();
         mSpacing = 10f;
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -163,19 +163,35 @@ public class KnockBackupView extends View {
 
     }
 
-    private RectF mRectF;
+    private RectF mRectFTemporary;
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        LogUtils.v(TAG, "onFinishInflate");
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        LogUtils.v(TAG, "onLayout");
+        calcInitAfterMeasure();
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        LogUtils.v(TAG, "onMeasure");
+        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
-        float l, t, r, b, radius;
-        if (mWidth >= mHeight) {
-            radius = mHeight / 2 - mPadding;
-        } else {
-            radius = mWidth / 2 - mPadding;
+        if (widthSpecMode == MeasureSpec.EXACTLY || mHeight > mWidth) {
+            mHeight = mWidth;
+            setMeasuredDimension((int) mWidth, (int) mHeight);
         }
+    }
 
+    private void calcInitAfterMeasure() {
+        float l, t, r, b;
         // 初始化设置center大小为view 的 1/3
         l = mWidth / 3;
         r = mWidth / 3 * 2;
