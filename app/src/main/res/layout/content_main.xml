@@ -45,6 +45,7 @@
         </com.dyzs.common.ui.LineChartViewWrapper>
 
         <com.dyzs.common.ui.KnockBackupView
+            android:visibility="gone"
             android:id="@+id/virgin_oil"
             android:layout_width="wrap_content"
             android:layout_height="400dp"
@@ -70,6 +71,11 @@
             android:background="@color/cinnabar_red"
             />
 
+        <com.dyzs.common.KnockBackupListSidebar
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:background="@color/blue"
+            />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
