@@ -74,7 +74,7 @@
         <com.dyzs.common.KnockBackupListSidebar
             android:layout_width="wrap_content"
             android:layout_height="300dp"
-            android:background="@color/blue"
+            android:background="@color/half_percent_maria_blue"
             />
     </LinearLayout>
 

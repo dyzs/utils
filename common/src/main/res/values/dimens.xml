@@ -2,4 +2,8 @@
 <resources>
     <dimen name="backup_view_text_size">20dp</dimen>
     <dimen name="backup_view_minimum_text_size">5dp</dimen>
+
+    <dimen name="backup_list_sidebar_text_size">12sp</dimen>
+    <dimen name="backup_list_sidebar_drawable_width">125dp</dimen>
+    <dimen name="backup_list_sidebar_drawable_height">22dp</dimen>
 </resources>
