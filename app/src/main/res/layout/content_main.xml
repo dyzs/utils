@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -14,38 +14,40 @@
         android:orientation="vertical">
 
         <com.dyzs.common.ui.magicruf.MagicRUF
-            android:visibility="gone"
             android:id="@+id/magic_ruf"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/maria_blue"
-            />
-        <TextView
             android:visibility="gone"
+            />
+
+        <TextView
             android:id="@+id/chart_redraw"
             style="@style/CommonTextViewItem"
             android:text="chart redraw"
-            />
-        <com.dyzs.common.ui.LineChartViewWrapper
             android:visibility="gone"
-            android:layout_below="@+id/magic_ruf"
+            />
+
+        <com.dyzs.common.ui.LineChartViewWrapper
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_below="@+id/magic_ruf"
             android:scrollbars="none"
+            android:visibility="gone"
             >
+
             <com.dyzs.common.ui.LineChartView
                 android:id="@+id/lcv_yj"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                app:lcvXYAxisPointColor="@color/carbon_black"
                 app:lcvTextColor="@color/light_pink"
-                app:lcvYAxisDisplay="true"
                 app:lcvXAxisDisplayNumber="4"
+                app:lcvXYAxisPointColor="@color/carbon_black"
+                app:lcvYAxisDisplay="true"
                 />
         </com.dyzs.common.ui.LineChartViewWrapper>
 
         <com.dyzs.common.ui.KnockBackupView
-            android:visibility="gone"
             android:id="@+id/virgin_oil"
             android:layout_width="wrap_content"
             android:layout_height="400dp"
@@ -55,27 +57,44 @@
             android:id="@+id/tv_start"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/maria_blue"
             android:gravity="center"
             android:text="start"
-            android:background="@color/maria_blue"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
             />
 
         <TextView
             android:id="@+id/tv_stop"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@color/cinnabar_red"
             android:gravity="center"
             android:text="stop"
-            android:background="@color/cinnabar_red"
             />
 
-        <com.dyzs.common.KnockBackupListSidebar
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
-            android:background="@color/half_percent_maria_blue"
-            />
+        <RelativeLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_container"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:overScrollMode="never"
+                android:scrollbarThumbVertical="@mipmap/ic_launcher"
+                android:scrollbarTrackVertical="@color/white"
+                android:scrollbars="vertical"/>
+
+            <com.dyzs.common.ui.KnockBackupListSidebar
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:layout_alignParentRight="true"
+                android:background="@color/half_percent_maria_blue"
+                app:kBLSIndicatorColor="@color/oxygen_grey"
+                />
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

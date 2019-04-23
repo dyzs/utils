@@ -109,4 +109,8 @@
         <attr name="ccvCardRegionColor" format="color"/>
         <attr name="ccvCardRatio" format="float"/>
     </declare-styleable>
+
+    <declare-styleable name="KnockBackupListSidebar">
+        <attr name="kBLSIndicatorColor" format="color"/>
+    </declare-styleable>
 </resources>

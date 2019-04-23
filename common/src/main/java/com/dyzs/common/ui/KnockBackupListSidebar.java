@@ -1,24 +1,30 @@
-package com.dyzs.common;
+package com.dyzs.common.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.dyzs.common.R;
 import com.dyzs.common.utils.FontMatrixUtils;
+import com.dyzs.common.utils.LogUtils;
 
 /**
  * Created by dyzs on 2019/4/21.
  */
 public class KnockBackupListSidebar extends View {
+    private static final String TAG = KnockBackupListSidebar.class.getSimpleName();
     private float mSpacing = 10f;
     private float mIndicatorWidth = 10f, mIndicatorHeight = 50f, mIndicatorBgWidth = 6f;
     private Bitmap mDrawable;
@@ -28,25 +34,27 @@ public class KnockBackupListSidebar extends View {
     private Paint mPaint;
     private String mTextDate = "2019-04-22 09:22";
     private float mTextSize = 12f;
-    private int mItemCount = 5;
+    private int mItemCount = 4;
+    private SparseArray<String> mStringDateSparseArray = new SparseArray<>();
 
     private RectF mStartTouchingArea = new RectF();
     public KnockBackupListSidebar(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public KnockBackupListSidebar(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, -1);
     }
 
     public KnockBackupListSidebar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
 
-    private void init() {
+    private void init(@Nullable AttributeSet attrs) {
+        TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.KnockBackupListSidebar);
+
+        ta.recycle();
         // mDrawable = (BitmapDrawable) ContextCompat.getDrawable(getContext(), R.mipmap.icon_backup_date_bg);
         mDrawable = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_backup_date_bg);
         assert mDrawable != null;
@@ -71,7 +79,8 @@ public class KnockBackupListSidebar extends View {
         mHeight = getMeasuredHeight();
         setMeasuredDimension(mWidth, mHeight);
 
-        mStartTouchingArea.set(mWidth / 6 * 5, 0, mWidth, mHeight);
+        mStartTouchingArea.set(0, 0, mWidth, mHeight);
+        mIndicatorHeight = mHeight / mItemCount;
 
     }
 
@@ -90,18 +99,29 @@ public class KnockBackupListSidebar extends View {
         canvas.drawLine(startX, startY, stopX, stopY, mPaint);
 
         // draw indicator
-        mIndicatorHeight = mHeight / mItemCount;
-        startX = mDrawableWidth + mSpacing + mIndicatorWidth / 2;
-        startY = mCurrentIndex * mIndicatorHeight;
-        stopX = startX;
-        stopY = (mCurrentIndex + 1) * mIndicatorHeight;
-        mPaint.setStrokeWidth(mIndicatorWidth);
-        mPaint.setColor(Color.CYAN);
-        canvas.drawLine(startX, startY, stopX, stopY, mPaint);
+        drawIndicator(canvas);
 
         // draw date
         drawPartOfDate(canvas);
 
+    }
+
+    private void drawIndicator(Canvas canvas) {
+        float startX, startY, stopX, stopY;
+        if (mStartTouching) {
+            startX = mDrawableWidth + mSpacing + mIndicatorWidth / 2;
+            startY = mTouchY - mIndicatorHeight / 2;// mCurrentIndex * mIndicatorHeight;
+            stopX = startX;
+            stopY = mTouchY + mIndicatorHeight / 2;//(mCurrentIndex + 1) * mIndicatorHeight;
+        } else {
+            startX = mDrawableWidth + mSpacing + mIndicatorWidth / 2;
+            startY = mCurrentIndex * mIndicatorHeight;
+            stopX = startX;
+            stopY = (mCurrentIndex + 1) * mIndicatorHeight;
+        }
+        mPaint.setStrokeWidth(mIndicatorWidth);
+        mPaint.setColor(Color.CYAN);
+        canvas.drawLine(startX, startY, stopX, stopY, mPaint);
     }
 
     private void drawPartOfDate(Canvas canvas) {
@@ -130,9 +150,33 @@ public class KnockBackupListSidebar extends View {
         canvas.drawText(mTextDate, textX, textY, mPaint);
     }
 
-    public void setItemCount(int itemCount) {
-        mItemCount = itemCount;
+    public void setDateArray(@NonNull SparseArray<String> stringSparseArray) {
+        if (stringSparseArray.size() > 0) {
+            this.mStringDateSparseArray = stringSparseArray;
+            setItemCount(mStringDateSparseArray.size());
+            if (mCurrentIndex >= mStringDateSparseArray.size()) {
+                mCurrentIndex = mStringDateSparseArray.size() - 1;
+            }
+        }
         invalidate();
+    }
+
+    private void setItemCount(int itemCount) {
+        mItemCount = itemCount;
+    }
+
+    public void setCurrentIndex(int index) {
+        mCurrentIndex = index;
+        if (mCurrentIndex >= mStringDateSparseArray.size()) {
+            mCurrentIndex = mStringDateSparseArray.size() - 1;
+        }
+        invalidate();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+
+        return super.dispatchTouchEvent(event);
     }
 
     private int mCurrentIndex = 0;
@@ -148,6 +192,7 @@ public class KnockBackupListSidebar extends View {
         float eventX = event.getX();
         mCurrentIndex = getSelectedIndex(eventY);
 
+        LogUtils.v(TAG, "eventY:["+eventY+"]");
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (mStartTouchingArea.contains(eventX, eventY)) {
@@ -184,14 +229,18 @@ public class KnockBackupListSidebar extends View {
         return super.onTouchEvent(event);
     }
 
-    private int mCurrentY = -1;
+    private int mTouchY = -1;
     private int getSelectedIndex(float eventY) {
-        mCurrentY = (int) eventY;
-        if (mCurrentY <= 0) {
+        mTouchY = (int) eventY;
+        if (mTouchY <= mIndicatorHeight / 2) {
+            mTouchY = (int) (mIndicatorHeight / 2);
             return 0;
         }
+        if (mTouchY >= mHeight - mIndicatorHeight / 2) {
+            mTouchY = (int) (mHeight - mIndicatorHeight / 2);
+        }
 
-        int index = (int) (mCurrentY / this.mIndicatorHeight);
+        int index = (int) (mTouchY / this.mIndicatorHeight);
         if (index >= this.mItemCount) {
             index = this.mItemCount - 1;
         }

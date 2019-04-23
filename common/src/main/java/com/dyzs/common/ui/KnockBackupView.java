@@ -42,29 +42,25 @@ public class KnockBackupView extends View {
     private float[] mArcPaintStrokeWidth; // 初始化定义外围的 Arc 宽度
     private int mCountOfArc = 4;// 初始化定义外围 Arc 个数
     private int[] mArcPaintColor = {
-            R.color.white,
-            R.color.alice_blue,
-            R.color.emma_white,
-            R.color.oxygen_yellow,
-            R.color.oxygen_green,
-            R.color.cinnabar_red,
-            R.color.alice_blue,
-            R.color.oxygen_yellow
+            R.color.knock_backup_view_arc_color3,
+            R.color.knock_backup_view_arc_color4,
+            R.color.knock_backup_view_arc_color5,
+            R.color.knock_backup_view_arc_color6,
     };
     private ArrayList<SweepGradient> mArcSweepGradients;// 颜色值渐变参数
     private ArrayList<Float> mArcStartAngleValues; // 圆弧起始角度, 固定不变
     private ArrayList<Float> mArcStartAngleValuesAfterRotate; // 圆弧旋转角度
     private ArrayList<Float> mArcRadians;// 圆弧弧度
-    private int mSpeedRateInit = 5;// Arc 速率按照个数依次叠加
+    private int mSpeedRateInit = 7;// Arc 速率按照个数依次叠加
 
     private float mCenterArcStartAngleValues = 0f;
     private float mCenterArcSweepRadians = 90f;
 
     private ArrayList<RectF> mSecondFs;
     private int[] mSecondFsColors = {
-            R.color.half_white,
-            R.color.eighty_opacity_white,
-            R.color.misty_white
+            R.color.ten_percent_white,
+            R.color.knock_backup_view_arc_color4,
+            R.color.knock_backup_view_arc_color6
     };
     //---------文本参数定义区域--------------------------
     private ArrayList<String> mTotalText;
@@ -138,7 +134,7 @@ public class KnockBackupView extends View {
         for (int i = 0; i < mCountOfArc; i++) {
             mArcStartAngleValues.add(i * 360f / mCountOfArc);
             mArcStartAngleValuesAfterRotate.add(i * 360f / mCountOfArc);
-            mArcRadians.add(360f / mCountOfArc);
+            mArcRadians.add(360f / 3);
             // mArcRadians.add(360f / 100 * Math.abs(30 - 5 * i) % 360);
         }
 
@@ -279,7 +275,7 @@ public class KnockBackupView extends View {
         float cy = (mCenterRectF.bottom + mCenterRectF.top) / 2;
         float radius = (mCenterRectF.bottom - mCenterRectF.top) / 2;
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(ContextCompat.getColor(getContext(), R.color.knock_backup_view_error_red));
         canvas.drawCircle(cx, cy, radius, mPaint);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.WHITE);
@@ -311,7 +307,18 @@ public class KnockBackupView extends View {
             float startAngle = mArcStartAngleValuesAfterRotate.get(i);
             float sweepRadians = mArcRadians.get(i);
             canvas.rotate(startAngle, rectF.centerX(), rectF.centerY());
-            int[] colors = new int[]{Color.TRANSPARENT, ContextCompat.getColor(getContext(), mArcPaintColor[i]), Color.TRANSPARENT};
+            int[] colors = new int[]{
+                    ContextCompat.getColor(getContext(), R.color.knock_backup_view_white_transparent),
+                    ContextCompat.getColor(getContext(), mArcPaintColor[i]),
+                    ContextCompat.getColor(getContext(), R.color.knock_backup_view_white_transparent)
+            };
+            if(i % 2 == 1) {
+                colors = new int[]{
+                        ContextCompat.getColor(getContext(), mArcPaintColor[i]),
+                        ContextCompat.getColor(getContext(), R.color.knock_backup_view_white_transparent),
+                        ContextCompat.getColor(getContext(), mArcPaintColor[i])
+                };
+            }
             float[] positions = new float[]{0f, sweepRadians / 360f, 1f};
             SweepGradient sweepGradient;
             sweepGradient = new SweepGradient(
@@ -458,11 +465,11 @@ public class KnockBackupView extends View {
             mCenterArcStartAngleValues = value * 10 % 360;
             mArcStartAngleValuesAfterRotate.clear();
             for (int i = 0; i < mCountOfArc; i++) {
-                mArcStartAngleValuesAfterRotate.add(mArcStartAngleValues.get(i) + value * (mSpeedRateInit) % 360);
-                /*if (i % 2 == 0) {
+                if (i % 2 == 0) {
+                    mArcStartAngleValuesAfterRotate.add(mArcStartAngleValues.get(i) + value * (mSpeedRateInit) % 360);
                 } else {
                     mArcStartAngleValuesAfterRotate.add(mArcStartAngleValues.get(i) - value * (mSpeedRateInit) % 360);
-                }*/
+                }
             }
             postInvalidate();
         });
@@ -509,7 +516,6 @@ public class KnockBackupView extends View {
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-                LogUtils.v(TAG, "TEXT REPEAT...." + index++);
                 if (index < mTotalText.size()) {
                     String text = mTotalText.get(index);
                     if (mCurrText.size() < mCountOfShownText) {

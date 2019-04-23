@@ -71,4 +71,14 @@
         <item>@color/girl_pink</item>
         <item>@color/purple</item>
     </integer-array>
+
+    <color name="ten_percent_white">#1AFFFFFF</color>
+    <color name="knock_backup_view_arc_color1">#1AFFFFFF</color>
+    <color name="knock_backup_view_arc_color2">#33FFFFFF</color>
+    <color name="knock_backup_view_arc_color3">#4cFFFFFF</color>
+    <color name="knock_backup_view_arc_color4">#66FFFFFF</color>
+    <color name="knock_backup_view_arc_color5">#7FFFFFFF</color>
+    <color name="knock_backup_view_arc_color6">#99FFFFFF</color>
+    <color name="knock_backup_view_white_transparent">#00FFFFFF</color>
+    <color name="knock_backup_view_error_red">#EE4938</color>
 </resources>
