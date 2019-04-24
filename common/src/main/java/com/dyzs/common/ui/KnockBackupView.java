@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
@@ -37,7 +38,7 @@ public class KnockBackupView extends View {
     };
     private ArrayList<RectF> mRectFs;// Arc Rect
     private RectF mCenterRectF;
-    private Paint mPaint, mPaintArc;
+    private Paint mPaint, mPaintArc, mPaintTick;
     private Path mPath;
     private float[] mArcPaintStrokeWidth; // 初始化定义外围的 Arc 宽度
     private int mCountOfArc = 4;// 初始化定义外围 Arc 个数
@@ -55,6 +56,8 @@ public class KnockBackupView extends View {
 
     private float mCenterArcStartAngleValues = 0f;
     private float mCenterArcSweepRadians = 90f;
+    private float mCenterArcSweepRadiansExtraInFinish = 0f;
+    private Path mPathSymbolTick;
 
     private ArrayList<RectF> mSecondFs;
     private int[] mSecondFsColors = {
@@ -117,6 +120,15 @@ public class KnockBackupView extends View {
         mPaint.setColor(Color.MAGENTA);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
 
+        mPaintTick = new Paint();
+        mPaintTick.setAntiAlias(true);
+        mPaintTick.setStyle(Paint.Style.STROKE);
+        mPaintTick.setColor(Color.CYAN);
+        mPaintTick.setStrokeCap(Paint.Cap.ROUND);
+        mPaintTick.setStrokeWidth(10f);
+        CornerPathEffect cornerPathEffect = new CornerPathEffect(10);
+        mPaintTick.setPathEffect(cornerPathEffect);
+
         mPaintArc = new Paint();
         mPaintArc.setAntiAlias(true);
         mPaintArc.setStyle(Paint.Style.STROKE);
@@ -157,6 +169,7 @@ public class KnockBackupView extends View {
         mTextPaint.setStrokeCap(Paint.Cap.ROUND);
         mTextPathSegments = new float[mCountOfShownText];
 
+        mPathSymbolTick = new Path();
     }
 
     private RectF mRectFTemporary;
@@ -230,6 +243,18 @@ public class KnockBackupView extends View {
             RectF rectF = new RectF(l, t, r, b);
             mSecondFs.add(rectF);
         }
+
+        // 以 mCenterRectF 为中心计算 1/3 点的位置为打勾路径
+        mPathSymbolTick.reset();
+        float x = (mCenterRectF.right - mCenterRectF.left) / 3 + mCenterRectF.left;
+        float y = mCenterRectF.centerY();
+        mPathSymbolTick.moveTo(x, y);
+        x = mCenterRectF.centerX();
+        y = (mCenterRectF.bottom - mCenterRectF.top) / 3 * 2 + mCenterRectF.top;
+        mPathSymbolTick.lineTo(x, y);
+        x = (mCenterRectF.right - mCenterRectF.left) / 3 * 2 + mCenterRectF.left;
+        y = (mCenterRectF.bottom - mCenterRectF.top) / 3 + mCenterRectF.top;
+        mPathSymbolTick.lineTo(x, y);
     }
 
     @Override
@@ -245,6 +270,11 @@ public class KnockBackupView extends View {
             case STATUS_SHOW_FAILED:
                 drawCenterRegionErrorStyle(canvas);
                 drawRotateArc(canvas);
+                break;
+            case STATUS_FINISH_ANIM:
+                drawCenterRegionInFinishAnim(canvas);
+                drawRotateArc(canvas);
+                drawFlyingText(canvas);
                 break;
         }
     }
@@ -295,6 +325,37 @@ public class KnockBackupView extends View {
         stopY = cy + radius / 2;
         canvas.drawLine(startX, startY, stopX, stopY, mPaint);
         canvas.restore();
+    }
+
+    private void drawCenterRegionInFinishAnim(Canvas canvas) {
+        float tempSize = 10f;
+        float cx = (mCenterRectF.right + mCenterRectF.left) / 2;
+        float cy = (mCenterRectF.bottom + mCenterRectF.top) / 2;
+        float radius = (mCenterRectF.bottom - mCenterRectF.top) / 2;
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(Color.parseColor("#4770F7"));
+        canvas.drawCircle(cx, cy, radius, mPaint);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setColor(Color.parseColor("#4661EB"));
+        mPaint.setStrokeWidth(tempSize);
+        canvas.drawCircle(cx, cy, radius, mPaint);
+
+        mPaint.setColor(Color.CYAN);
+        canvas.save();
+        canvas.rotate(mCenterArcStartAngleValues, cx, cy);
+        canvas.drawArc(
+                mCenterRectF,
+                0,
+                mCenterArcSweepRadians + mCenterArcSweepRadiansExtraInFinish,
+                false, mPaint);
+        canvas.restore();
+
+        mTextReplacePath.reset();
+        mTextPathMeasure.setPath(mPathSymbolTick, false);
+        float stopD = mTickValue * 1f / 100 * mTextPathMeasure.getLength();
+        mTextPathMeasure.getSegment(0, stopD, mTextReplacePath, true);
+        canvas.drawPath(mTextReplacePath, mPaintTick);
+
     }
 
     private void drawRotateArc(Canvas canvas) {
@@ -516,6 +577,7 @@ public class KnockBackupView extends View {
 
             @Override
             public void onAnimationRepeat(Animator animation) {
+                index++;
                 if (index < mTotalText.size()) {
                     String text = mTotalText.get(index);
                     if (mCurrText.size() < mCountOfShownText) {
@@ -548,7 +610,7 @@ public class KnockBackupView extends View {
     }
 
     public void cancelAnimator() {
-        mBackupStatus = BackupStatus.STATUS_IDLE;
+        // mBackupStatus = BackupStatus.STATUS_IDLE;
         if (mAnimator != null && mAnimator.isRunning()) {
             mAnimator.cancel();
             mAnimator.removeAllListeners();
@@ -570,7 +632,51 @@ public class KnockBackupView extends View {
         postInvalidate();
     }
 
+    private ValueAnimator mAnimatorDone;
+    private int mTickValue;
+    public void doneWithBackupAnim() {
+        mBackupStatus = BackupStatus.STATUS_FINISH_ANIM;
+        mAnimatorDone = ValueAnimator.ofInt(100);
+        mAnimatorDone.setDuration(1000);
+        mAnimatorDone.setRepeatCount(0);
+        mAnimatorDone.setInterpolator(new LinearInterpolator());
+        mAnimatorDone.addUpdateListener(animation -> {
+            int value = (int) animation.getAnimatedValue();
+            mTickValue = value;
+            mCenterArcSweepRadiansExtraInFinish = (360 - mCenterArcSweepRadians) / 100f * value;
+            LogUtils.v(TAG, "extra value:" + mCenterArcSweepRadiansExtraInFinish + "//va:" + value);
+            if (value > 97) {
+                cancelAnimator();
+            }
+            postInvalidate();
+        });
+        mAnimatorDone.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // mBackupStatus = BackupStatus.STATUS_IDLE;
+                mAnimatorDone.removeAllListeners();
+                // TODO: 2019/4/23 提供 100 进度提醒
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mAnimatorDone.start();
+    }
+
     public enum BackupStatus {
-        STATUS_IDLE, STATUS_WORKING, STATUS_SHOW_FAILED
+        STATUS_IDLE, STATUS_WORKING, STATUS_SHOW_FAILED, STATUS_FINISH_ANIM
     }
 }

@@ -1,7 +1,6 @@
 package com.dyzs.app.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -204,8 +203,9 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.tv_stop:
                 // mBackupView.cancelAnimator();
-                mBackupView.setBackgroundColor(Color.parseColor("#7FFF5E4D"));
-                mBackupView.setErrorStyle();
+                // mBackupView.setBackgroundColor(Color.parseColor("#7FFF5E4D"));
+                // mBackupView.setErrorStyle();
+                mBackupView.doneWithBackupAnim();
                 break;
             default:
 
