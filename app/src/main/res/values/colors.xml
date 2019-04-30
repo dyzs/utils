@@ -7,4 +7,5 @@
     <!--页面整体背景灰色-->
     <color name="app_color_background">#f1f1f1</color>
     <color name="text_color_grey5">#FFBBBBBB</color>
+    <color name="text_color_black2">#464646</color>
 </resources>

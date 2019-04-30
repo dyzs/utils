@@ -1,6 +1,9 @@
 package com.dyzs.app.activity;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,6 +17,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dyzs.app.R;
@@ -25,10 +34,9 @@ import com.dyzs.common.ui.FullScreenDialogVer2;
 import com.dyzs.common.ui.KnockBackupView;
 import com.dyzs.common.ui.LineChartView;
 import com.dyzs.common.ui.magicruf.MagicRUF;
+import com.dyzs.common.utils.ColorUtils;
+import com.dyzs.common.utils.LogUtils;
 import com.dyzs.common.utils.ToastUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,6 +52,13 @@ public class MainActivity extends BaseActivity
     TextView chart_redraw;
     @BindView(R.id.virgin_oil)
     KnockBackupView mBackupView;
+
+    @BindView(R.id.layout_secret_base) RelativeLayout mLayoutSecretBase;
+    @BindView(R.id.item_left) LinearLayout mItemLeft;
+    @BindView(R.id.item_center) LinearLayout mItemCenter;
+    @BindView(R.id.item_right) LinearLayout mItemRight;
+    @BindView(R.id.item_cover) RelativeLayout mItemCover;
+    @BindView(R.id.iv_symbol_add) ImageView mIvSymbolAdd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +81,8 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         initView();
+
+        initReady();
     }
 
     @Override
@@ -193,23 +210,193 @@ public class MainActivity extends BaseActivity
         startActivity(intent);
     }
 
-    @OnClick({R.id.chart_redraw, R.id.tv_start, R.id.tv_stop})
+    @OnClick({R.id.chart_redraw, R.id.tv_start, R.id.tv_stop, R.id.item_center, R.id.item_left, R.id.item_right, R.id.item_cover})
     public void chartRedraw(View view) {
         switch (view.getId()) {
             case R.id.tv_start:
-                mBackupView.setBackgroundColor(ContextCompat.getColor(this, R.color.maria_blue));
+                /*mBackupView.setBackgroundColor(ContextCompat.getColor(this, R.color.maria_blue));
                 mBackupView.setAllTexts(new ArrayList<>(Arrays.asList(KnockBackupView.TEXT2TEST)));
-                mBackupView.startAnimation();
+                mBackupView.startAnimation();*/
+                handleShowAnim();
                 break;
             case R.id.tv_stop:
                 // mBackupView.cancelAnimator();
                 // mBackupView.setBackgroundColor(Color.parseColor("#7FFF5E4D"));
                 // mBackupView.setErrorStyle();
-                mBackupView.doneWithBackupAnim();
+                // mBackupView.doneWithBackupAnim();
+                handleHideAnim();
+                break;
+            case R.id.item_center:
+                ToastUtils.makeText(this, "item center");
+                break;
+            case R.id.item_left:
+                ToastUtils.makeText(this, "item left");
+                break;
+            case R.id.item_right:
+                ToastUtils.makeText(this, "item right");
+                break;
+            case R.id.item_cover:
+                ToastUtils.makeText(this, "item cover");
+                handleHideAnim();
                 break;
             default:
 
                 break;
         }
+    }
+
+    private void initReady() {
+        mLayoutSecretBase.setVisibility(View.INVISIBLE);
+        mItemCover.setVisibility(View.INVISIBLE);
+    }
+
+    private boolean isShowing = false;
+    private ValueAnimator mSecretBaseAnimator;
+    private ValueAnimator mSymbolAddAnimator;
+    private void handleShowAnim() {
+        if (isShowing || (mSecretBaseAnimator != null && mSecretBaseAnimator.isRunning())) {
+            return;
+        }
+        mItemCover.setVisibility(View.VISIBLE);
+        mLayoutSecretBase.setVisibility(View.VISIBLE);
+        int leftHeight = mItemLeft.getMeasuredHeight();
+        int centerHeight = mItemCenter.getMeasuredHeight();
+        int rightHeight = mItemRight.getMeasuredHeight();
+        mItemLeft.setTranslationY(mItemLeft.getMeasuredHeight());
+        mItemCenter.setTranslationY(mItemCenter.getMeasuredHeight());
+        mItemRight.setTranslationY(mItemRight.getMeasuredHeight());
+
+        mItemLeft.setAlpha(0f);
+        mItemCenter.setAlpha(0f);
+        mItemRight.setAlpha(0f);
+        mItemCover.setBackgroundColor(Color.TRANSPARENT);
+
+        mSecretBaseAnimator = ValueAnimator.ofInt(100, 0).setDuration(DURATION);
+        mSecretBaseAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        mSecretBaseAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int value = (int) animation.getAnimatedValue();
+                float rateTransferValue = 1f * value / 100;
+                LogUtils.v("animation", "value:"+ value + "//" + rateTransferValue);
+                mItemLeft.setTranslationY(rateTransferValue * leftHeight);
+                mItemCenter.setTranslationY(rateTransferValue * centerHeight);
+                mItemRight.setTranslationY(rateTransferValue * rightHeight);
+
+                float alpha = 1f - 1f * value / DURATION;
+
+                mItemLeft.setAlpha(alpha);
+                mItemCenter.setAlpha(alpha);
+                mItemRight.setAlpha(alpha);
+                mLayoutSecretBase.setAlpha(alpha);
+                mItemCover.setBackgroundColor(
+                        ColorUtils.getCompositeColorArgb(
+                                ContextCompat.getColor(getApplicationContext(), R.color.transparent_black),
+                                ContextCompat.getColor(getApplicationContext(), R.color.thirty_opacity_black),
+                                alpha));
+            }
+        });
+        mSecretBaseAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isShowing = true;
+                mSecretBaseAnimator.removeAllListeners();
+                mSecretBaseAnimator.removeAllUpdateListeners();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mSecretBaseAnimator.start();
+
+        mSymbolAddAnimator = ValueAnimator.ofInt(0, -135).setDuration(DURATION);
+        mSymbolAddAnimator.setInterpolator(new AnticipateOvershootInterpolator());
+        mSymbolAddAnimator.addUpdateListener(animation -> {
+            int value = (int) animation.getAnimatedValue();
+            mIvSymbolAdd.setRotation(value);
+        });
+        mSymbolAddAnimator.start();
+    }
+
+    private static long DURATION = 300;
+    private void handleHideAnim() {
+        if (!isShowing || (mSecretBaseAnimator != null && mSecretBaseAnimator.isRunning())) {
+            return;
+        }
+        int height = mLayoutSecretBase.getMeasuredHeight();
+        mLayoutSecretBase.setVisibility(View.VISIBLE);
+
+        mSecretBaseAnimator = ValueAnimator.ofInt(0, height * 3 / 2).setDuration(DURATION);
+        mSecretBaseAnimator.setInterpolator(new AccelerateInterpolator());
+        mSecretBaseAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int value = (int) animation.getAnimatedValue();
+                mItemLeft.setTranslationY(value);
+                mItemCenter.setTranslationY(value);
+                mItemRight.setTranslationY(value);
+
+                float alpha = 1f - 1f * value / DURATION;
+
+                LogUtils.v("animation", "value:" + alpha);
+
+                if (alpha < 0f) alpha = 0f;
+                mItemLeft.setAlpha(alpha);
+                mItemCenter.setAlpha(alpha);
+                mItemRight.setAlpha(alpha);
+                mLayoutSecretBase.setAlpha(alpha);
+                mItemCover.setBackgroundColor(
+                        ColorUtils.getCompositeColorArgb(
+                                ContextCompat.getColor(getApplicationContext(), R.color.transparent_black),
+                                ContextCompat.getColor(getApplicationContext(), R.color.thirty_opacity_black),
+                                alpha));
+            }
+        });
+        mSecretBaseAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isShowing = false;
+                mLayoutSecretBase.setVisibility(View.INVISIBLE);
+                mItemCover.setVisibility(View.INVISIBLE);
+                mSecretBaseAnimator.removeAllListeners();
+                mSecretBaseAnimator.removeAllUpdateListeners();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mSecretBaseAnimator.start();
+
+        mSymbolAddAnimator = ValueAnimator.ofInt(-135, 0).setDuration(DURATION);
+        mSymbolAddAnimator.setInterpolator(new AnticipateOvershootInterpolator());
+        mSymbolAddAnimator.addUpdateListener(animation -> {
+            int value = (int) animation.getAnimatedValue();
+            mIvSymbolAdd.setRotation(value);
+        });
+        mSymbolAddAnimator.start();
     }
 }
