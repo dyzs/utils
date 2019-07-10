@@ -42,6 +42,9 @@ public class FragmentFactory {
             case SYNC_VIEW:
                 fragment = new SyncViewFragment();
                 break;
+            case STRETCH_VIEW:
+                fragment = new StretchViewFragment();
+                break;
         }
         //fragments.put(type, fragment);
         return fragment;
@@ -56,6 +59,7 @@ public class FragmentFactory {
         DOTTED_LINE,
         COLOR_PROGRESS,
         CORNER_IMAGE,
-        SYNC_VIEW
+        SYNC_VIEW,
+        STRETCH_VIEW
     }
 }

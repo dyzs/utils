@@ -11,7 +11,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/oxygen_green"
         android:orientation="vertical">
 
         <com.dyzs.common.ui.magicruf.MagicRUF
@@ -26,7 +25,6 @@
             android:id="@+id/chart_redraw"
             style="@style/CommonTextViewItem"
             android:text="chart redraw"
-            android:visibility="gone"
             />
 
         <com.dyzs.common.ui.LineChartViewWrapper
@@ -56,6 +54,7 @@
             android:background="@color/maria_blue"/>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_start"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -67,6 +66,7 @@
             />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_stop"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -99,6 +99,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:visibility="gone"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginBottom="9dp">
@@ -120,12 +121,24 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/item_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <include
                 layout="@layout/layout_main_item_secret_base"/>
         </RelativeLayout>
+
+
+        <com.dyzs.common.ui.StretchView_VerBackup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/oxygen_grey">
+
+            <include layout="@layout/item_stretch_up"/>
+
+            <include layout="@layout/item_stretch_down"/>
+        </com.dyzs.common.ui.StretchView_VerBackup>
 
     </LinearLayout>
 

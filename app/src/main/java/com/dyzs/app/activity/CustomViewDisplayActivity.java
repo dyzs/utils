@@ -59,6 +59,9 @@ public class CustomViewDisplayActivity extends BaseActivity{
             case "SyncView":
                 type = FragmentFactory.Type.SYNC_VIEW;
                 break;
+            case "StretchView":
+                type = FragmentFactory.Type.STRETCH_VIEW;
+                break;
         }
         transaction.add(R.id.container, FragmentFactory.createFragment(type), viewName);
         transaction.commit();

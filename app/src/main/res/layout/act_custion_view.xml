@@ -56,5 +56,11 @@
             style="@style/CommonTextViewItem"
             android:text="Sync View"
             />
+
+        <TextView
+            android:id="@+id/stretchView"
+            style="@style/CommonTextViewItem"
+            android:text="Stretch View"
+            />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

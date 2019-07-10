@@ -45,7 +45,9 @@ public class CustomViewActivity extends BaseActivity<CustomViewPresenter> implem
     }
 
     @OnClick({R.id.solar_eclipse_loading, R.id.chasing_loading, R.id.compass_servant, R.id.multi_player,
-            R.id.dotted_line, R.id.color_progress, R.id.corner_image, R.id.head_scroll_wrapper})
+            R.id.dotted_line, R.id.color_progress, R.id.corner_image, R.id.head_scroll_wrapper,
+            R.id.stretchView
+    })
     public void go2SolarEclipseLoading(TextView textView) {
         Intent intent = null;
         switch (textView.getId()) {
@@ -79,6 +81,10 @@ public class CustomViewActivity extends BaseActivity<CustomViewPresenter> implem
             case R.id.head_scroll_wrapper:
                 intent = new Intent(this, CustomViewDisplayActivity.class);
                 intent.putExtra("viewName", "SyncView");
+                break;
+            case R.id.stretchView:
+                intent = new Intent(this, CustomViewDisplayActivity.class);
+                intent.putExtra("viewName", "StretchView");
                 break;
         }
         startActivity(intent);
