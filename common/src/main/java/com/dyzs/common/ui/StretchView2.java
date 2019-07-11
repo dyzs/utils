@@ -34,8 +34,9 @@ public class StretchView2 extends ViewGroup {
     private int mPartReferencesHeight;
     private int mPartSliderWidth;
     private int mPartSliderHeight;
-    private boolean isInTouching = false;
+    private boolean isAutoScrolling = false;
     private StretchViewStatus mStretchViewStatus = StretchViewStatus.STATUS_INIT;
+    private OverScroller mPicOverScroller;
 
     public StretchView2(Context context) {
         super(context);
@@ -56,6 +57,7 @@ public class StretchView2 extends ViewGroup {
         mPartSlider = getChildAt(1);
         mViewDragHelper = ViewDragHelper.create(this, new StretchDragHelper());
 
+        mPicOverScroller = new OverScroller(getContext());
     }
 
     @Override
@@ -96,28 +98,41 @@ public class StretchView2 extends ViewGroup {
      */
     class StretchDragHelper extends  ViewDragHelper.Callback {
 
+        private String getStateValue(int state) {
+            if (state == 1) {
+                return "拖拽";
+            }
+            if (state == 2) {
+                return "自动滚动";
+            }
+            return "静止";
+        }
         @Override
         public void onViewDragStateChanged(int state) {
-            super.onViewDragStateChanged(state);
-            showTag("onViewDragStateChanged:[" + state + "]");
+            // showTag("onViewDragStateChanged:状态码：[" + state + "] /// 状态值:[" + getStateValue(state) + "]");
             if (state == 0) {
                 switch (mStretchViewStatus) {
+                    // up 状态与 init 状态下, Cover 偏移和 Pic 偏移一样
+                    case STATUS_PUSH_UP:
                     case STATUS_INIT:
                         if (mHoldCoverView != null && mHoldCoverView.getTop() != 0) {
-                            showTag("--------------------------init");
                             mHoldCoverView.layout(0, mPartPicTotalOffset, mHoldCoverView.getMeasuredWidth(), mHoldCoverView.getMeasuredHeight() + mPartPicTotalOffset);
                         }
-                        mHoldPartPicView.layout(0, 0, mHoldPartPicView.getMeasuredWidth(), mHoldPartPicView.getMeasuredHeight());
+                        if (mHoldPartPicView != null) {
+                            mHoldPartPicView.layout(0, 0, mHoldPartPicView.getMeasuredWidth(), mHoldPartPicView.getMeasuredHeight());
+                        }
                         break;
                     case STATUS_PULL_DOWN:
                         if (mHoldCoverView != null && mHoldCoverView.getTop() != mPartReferencesHeight) {
-                            showTag("--------------------------init2");
                             mHoldCoverView.layout(0, mPartPicTotalOffset + mPartReferencesHeight, mHoldCoverView.getMeasuredWidth(), mHoldCoverView.getMeasuredHeight() + mPartReferencesHeight + mPartPicTotalOffset);
                         }
-                        mHoldPartPicView.layout(0, mPartPicTotalOffset, mHoldPartPicView.getMeasuredWidth(), mPartPicTotalOffset + mHoldPartPicView.getMeasuredHeight());
+                        if (mHoldPartPicView != null) {
+                            mHoldPartPicView.layout(0, mPartPicTotalOffset, mHoldPartPicView.getMeasuredWidth(), mPartPicTotalOffset + mHoldPartPicView.getMeasuredHeight());
+                        }
                         break;
                 }
             }
+            super.onViewDragStateChanged(state);
         }
 
         /**
@@ -159,7 +174,7 @@ public class StretchView2 extends ViewGroup {
         @Override
         public int clampViewPositionVertical(View child, int top, int dy) {
             //return super.clampViewPositionVertical(child, top, dy);
-            showTag("clampViewPositionVertical  "+ top);
+            // showTag("clampViewPositionVertical  "+ top);
 
             /*if (mStretchViewStatus == StretchViewStatus.STATUS_PULL_DOWN) {
                 if (top < 0) top = 0;
@@ -184,27 +199,33 @@ public class StretchView2 extends ViewGroup {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             switch (mStretchViewStatus) {
                 case STATUS_INIT:
-                    if (top >= 0) {
-                        // scrollCoverView(dy);
-                        if (top > mPartReferencesHeight) top = mPartReferencesHeight;
-                        mHoldCoverView.layout(0, top + mPartPicTotalOffset, mHoldCoverView.getMeasuredWidth(), top + mPartPicTotalOffset + mHoldCoverView.getMeasuredHeight());
-                        if (top > mPartPicTotalOffset) top = mPartPicTotalOffset;
-                        mHoldPartPicView.layout(0, top, mHoldPartPicView.getMeasuredWidth(), top + mHoldPartPicView.getMeasuredHeight());
+                    mHoldPartPicView.layout(0, top, mHoldPartPicView.getMeasuredWidth(), top + mHoldPartPicView.getMeasuredHeight());
+                    mHoldCoverView.layout(0, top + mPartPicTotalOffset, mHoldCoverView.getMeasuredWidth(), top + mPartPicTotalOffset + mHoldCoverView.getMeasuredHeight());
+
+                    if (top < 0) { // 当释放拖拽状态，改变为初始化时，如果 top 小于 0，则限制 pic 上移
+                        mHoldPartPicView.layout(0, 0, mHoldPartPicView.getMeasuredWidth(), mHoldPartPicView.getMeasuredHeight());
+                        mHoldCoverView.layout(0, mPartPicTotalOffset, mHoldCoverView.getMeasuredWidth(), mPartPicTotalOffset + mHoldCoverView.getMeasuredHeight());
+                    }
+                    if (top > mPartPicTotalOffset) {
+                        mHoldPartPicView.layout(0, mPartPicTotalOffset, mHoldPartPicView.getMeasuredWidth(), mPartPicTotalOffset + mHoldPartPicView.getMeasuredHeight());
+                    }
+
+                    if (top > mPartReferencesHeight) {
+                        mHoldCoverView.layout(0, mPartReferencesHeight + mPartPicTotalOffset, mHoldCoverView.getMeasuredWidth(), mPartReferencesHeight + mPartPicTotalOffset + mHoldCoverView.getMeasuredHeight());
                     }
                     break;
                 case STATUS_PULL_DOWN:
                     if (top < 0) top = 0;
-                    if (top <= mPartReferencesHeight) {
-                        // scrollCoverView(dy);
-                        mHoldCoverView.layout(0, top + mPartPicTotalOffset, mHoldCoverView.getMeasuredWidth(), top + mPartPicTotalOffset + mHoldCoverView.getMeasuredHeight());
-                        if (top < mPartPicTotalOffset && top >= 0) {
-                            mHoldPartPicView.layout(0, top, mHoldPartPicView.getMeasuredWidth(), top + mHoldPartPicView.getMeasuredHeight());
-                        }
+                    mHoldPartPicView.layout(0, top, mHoldPartPicView.getMeasuredWidth(), top + mHoldPartPicView.getMeasuredHeight());
+                    if (top > mPartPicTotalOffset) {
+                        mHoldPartPicView.layout(0, mPartPicTotalOffset, mHoldPartPicView.getMeasuredWidth(), mPartPicTotalOffset + mHoldPartPicView.getMeasuredHeight());
                     }
+                    /*if (top <= mPartReferencesHeight) {
+                    }*/
+                    mHoldCoverView.layout(0, top + mPartPicTotalOffset, mHoldCoverView.getMeasuredWidth(), top + mPartPicTotalOffset + mHoldCoverView.getMeasuredHeight());
                     break;
                 case STATUS_PUSH_UP:
                     if (top >= 0) {
-                        // scrollCoverView(dy);
                         mHoldCoverView.layout(0, top + mPartPicTotalOffset, mHoldCoverView.getMeasuredWidth(), top + mPartPicTotalOffset + mHoldCoverView.getMeasuredHeight());
                         if (top > mPartPicTotalOffset) top = mPartPicTotalOffset;
                         mHoldPartPicView.layout(0, top, mHoldPartPicView.getMeasuredWidth(), top + mHoldPartPicView.getMeasuredHeight());
@@ -224,10 +245,7 @@ public class StretchView2 extends ViewGroup {
             // 方法的参数里面没有top，那么我们就采用 getTop()这个方法
             int releasePartTop = mPartSlider.getTop();
             showTag("onViewReleased:[" + yVel + "]" + "///releasePartTop[" + releasePartTop + "]");
-
-            int touchSlop = mViewDragHelper.getTouchSlop();
-            showTag("touchSlop:[" + touchSlop + "]");
-            float changeStatusValue = 3000;
+            float changeStatusValue = 500;
             switch (mStretchViewStatus) {
                 case STATUS_INIT:
                     if (yVel > changeStatusValue) {// 快速滑动
@@ -319,7 +337,9 @@ public class StretchView2 extends ViewGroup {
     public void computeScroll() {
         //super.computeScroll();
         // 把捕获的View适当的时间移动，其实也可以理解为 smoothSlideViewTo 的模拟过程还没完成
-        if(mViewDragHelper.continueSettling(true)){
+        isAutoScrolling = mViewDragHelper.continueSettling(true);
+        // showTag("computeScroll:" + isAutoScrolling);
+        if(isAutoScrolling) {
             // invalidate();
             ViewCompat.postInvalidateOnAnimation(this);  //是，刷新重绘viewGroup
         }
@@ -327,13 +347,26 @@ public class StretchView2 extends ViewGroup {
         // 1、smoothSlideViewTo方法进行模拟数据，模拟后就就调用invalidate();
         // 2、invalidate()最终调用computeScroll，computeScroll做一次细微动画，
         //    computeScroll判断模拟数据是否彻底完成，还没完成会再次调用invalidate
-        // 3、递归调用，知道数据noni完成。
+        // 3、递归调用，知道数据模拟完成。
     }
 
+    /**
+     * 检查是否可以拦截touch事件
+     * 如果onInterceptTouchEvent可以return true 则进一步执行onTouchEvent
+     */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return mViewDragHelper.shouldInterceptTouchEvent(ev); //拦截处理触摸事件，并传递给ViewDragHelper
         // return super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        /*if (isAutoScrolling) {
+            showTag("dispatchTouchEvent: is auto scrolling, can't be dispatch touch event");
+            return false;
+        }*/
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -366,7 +399,7 @@ public class StretchView2 extends ViewGroup {
 
 
     private View mHoldPartPicView;
-    private int mPartPicTotalOffset = 0;// toolbar 实际高度
+    private int mPartPicTotalOffset = 50;// toolbar 实际高度
     public void invokePartPicView(View view, int totalOffset) {
         this.mHoldPartPicView = view;
         this.mPartPicTotalOffset = totalOffset;

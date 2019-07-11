@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@drawable/shape_round_corner_for_info"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="200dp"
         android:orientation="vertical">
 
         <com.dyzs.common.ui.TabViewPagerIndicator
@@ -34,12 +34,4 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:background="@drawable/shape_round_corner_for_info"
-        />
-
-</RelativeLayout>
+</LinearLayout>

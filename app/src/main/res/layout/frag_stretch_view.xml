@@ -38,7 +38,7 @@
             android:id="@+id/view_cover"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="@color/half_percent_maria_blue"/>
+            android:background="@color/fifty_opacity_black"/>
     </LinearLayout>
 
     <!-- body layer -->
