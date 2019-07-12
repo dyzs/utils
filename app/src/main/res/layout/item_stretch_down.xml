@@ -26,11 +26,13 @@
             android:background="@drawable/shape_round_corner_for_info_extra"/>
 
         <android.support.v4.view.ViewPager
+            android:tag="ChildViewPager"
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/oxygen_yellow"
-            />
+            android:background="@color/oxygen_yellow">
+
+        </android.support.v4.view.ViewPager>
 
     </LinearLayout>
 

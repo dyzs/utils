@@ -1,6 +1,7 @@
 package com.dyzs.common.ui;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
@@ -8,7 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.widget.OverScroller;
+import android.widget.RelativeLayout;
 
 import com.dyzs.common.utils.LogUtils;
 
@@ -36,7 +37,7 @@ public class StretchView2 extends ViewGroup {
     private int mPartSliderHeight;
     private boolean isAutoScrolling = false;
     private StretchViewStatus mStretchViewStatus = StretchViewStatus.STATUS_INIT;
-    private OverScroller mPicOverScroller;
+    private int mTouchSlop;
 
     public StretchView2(Context context) {
         super(context);
@@ -55,9 +56,9 @@ public class StretchView2 extends ViewGroup {
         super.onFinishInflate();
         mPartSliderReferences = getChildAt(0);
         mPartSlider = getChildAt(1);
-        mViewDragHelper = ViewDragHelper.create(this, new StretchDragHelper());
+        mViewDragHelper = ViewDragHelper.create(this, 1f,  new StretchDragHelper());
 
-        mPicOverScroller = new OverScroller(getContext());
+        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     }
 
     @Override
@@ -77,16 +78,18 @@ public class StretchView2 extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        // 摆放滑动参照物的位置
-        mPartReferencesWidth = mPartSliderReferences.getMeasuredWidth();
-        mPartReferencesHeight = mPartSliderReferences.getMeasuredHeight();
-        mPartSliderReferences.layout(0,0, mPartReferencesWidth, mPartReferencesHeight);
+        LogUtils.v(TAG, "onLayout...........");
+        if (changed) {
+            // 摆放滑动参照物的位置
+            mPartReferencesWidth = mPartSliderReferences.getMeasuredWidth();
+            mPartReferencesHeight = mPartSliderReferences.getMeasuredHeight();
+            mPartSliderReferences.layout(0,0, mPartReferencesWidth, mPartReferencesHeight);
 
-        // 摆放滑动部分的位置
-        mPartSliderWidth = mPartSlider.getMeasuredWidth();
-        mPartSliderHeight = mPartSlider.getMeasuredHeight();
-        mPartSlider.layout(0, 0,
-                mPartSliderWidth, mPartSliderHeight);
+            // 摆放滑动部分的位置
+            mPartSliderWidth = mPartSlider.getMeasuredWidth();
+            mPartSliderHeight = mPartSlider.getMeasuredHeight();
+            mPartSlider.layout(0, 0, mPartSliderWidth, mPartSliderHeight);
+        }
         
     }
 
@@ -98,18 +101,23 @@ public class StretchView2 extends ViewGroup {
      */
     class StretchDragHelper extends  ViewDragHelper.Callback {
 
+        @Override
+        public int getViewVerticalDragRange(@NonNull View child) {
+            return 1;
+        }
+
         private String getStateValue(int state) {
             if (state == 1) {
-                return "拖拽";
+                return "dragging";
             }
             if (state == 2) {
-                return "自动滚动";
+                return "auto scroll";
             }
-            return "静止";
+            return "idle";
         }
         @Override
         public void onViewDragStateChanged(int state) {
-            // showTag("onViewDragStateChanged:状态码：[" + state + "] /// 状态值:[" + getStateValue(state) + "]");
+            showTag("onViewDragStateChanged:状态码：[" + state + "] /// 状态值:[" + getStateValue(state) + "]");
             if (state == 0) {
                 switch (mStretchViewStatus) {
                     // up 状态与 init 状态下, Cover 偏移和 Pic 偏移一样
@@ -161,6 +169,7 @@ public class StretchView2 extends ViewGroup {
          */
         @Override
         public int clampViewPositionHorizontal(View child, int left, int dx) {
+            // showTag("clampViewPositionHorizontal left: " + left + "///dx:" + dx);
             return super.clampViewPositionHorizontal(child, left, dx);
         }
 
@@ -173,13 +182,6 @@ public class StretchView2 extends ViewGroup {
          */
         @Override
         public int clampViewPositionVertical(View child, int top, int dy) {
-            //return super.clampViewPositionVertical(child, top, dy);
-            // showTag("clampViewPositionVertical  "+ top);
-
-            /*if (mStretchViewStatus == StretchViewStatus.STATUS_PULL_DOWN) {
-                if (top < 0) top = 0;
-            }*/
-
             return top;
 
         }
@@ -356,30 +358,20 @@ public class StretchView2 extends ViewGroup {
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return mViewDragHelper.shouldInterceptTouchEvent(ev); //拦截处理触摸事件，并传递给ViewDragHelper
-        // return super.onInterceptTouchEvent(ev);
+        return mViewDragHelper.shouldInterceptTouchEvent(ev);
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        /*if (isAutoScrolling) {
-            showTag("dispatchTouchEvent: is auto scrolling, can't be dispatch touch event");
-            return false;
-        }*/
-        return super.dispatchTouchEvent(ev);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent ev) {
         //return super.onTouchEvent(event);
         /**Process a touch event received by the parent view. This method will dispatch callback events
          as needed before returning. The parent view's onTouchEvent implementation should call this. */
-        mViewDragHelper.processTouchEvent(event); // 使用ViewDragHelper必须复写onTouchEvent并调用这个方法
-        return true; //消费这个touch
+        mViewDragHelper.processTouchEvent(ev);
+        return true;
     }
 
 
-    private void showTag(String str){
+    private void showTag(String str) {
         LogUtils.v(TAG, str);
     }
 
@@ -394,8 +386,6 @@ public class StretchView2 extends ViewGroup {
             ViewCompat.offsetTopAndBottom(mHoldCoverView, offset);
         }
     }
-
-    private ViewDragHelper mCoverDragHelper;
 
 
     private View mHoldPartPicView;
