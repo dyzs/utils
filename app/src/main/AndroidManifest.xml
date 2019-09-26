@@ -91,6 +91,7 @@
         <activity android:name=".activity.SampleHotfixActivity" />
 
         <activity android:name=".activity.RxPermissionSampleActivity"/>
+        <activity android:name=".activity.HardcodeFilterActivity" />
     </application>
 
 </manifest>

@@ -1,1 +1,1 @@
-include ':app', ':common', ':base', ':review'
+include ':app', ':common', ':base', ':review', ':hardcodefinder'

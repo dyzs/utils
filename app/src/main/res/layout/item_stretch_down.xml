@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -20,7 +21,7 @@
         android:layout_marginRight="15dp"
         android:orientation="vertical">
 
-        <com.dyzs.common.ui.TabViewPagerIndicator
+        <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/shape_round_corner_for_info_extra"/>

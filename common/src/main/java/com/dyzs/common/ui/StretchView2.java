@@ -38,6 +38,7 @@ public class StretchView2 extends ViewGroup {
     private boolean isAutoScrolling = false;
     private StretchViewStatus mStretchViewStatus = StretchViewStatus.STATUS_INIT;
     private int mTouchSlop;
+    private int mVerticalDragRange = 1;
 
     public StretchView2(Context context) {
         super(context);
@@ -103,7 +104,7 @@ public class StretchView2 extends ViewGroup {
 
         @Override
         public int getViewVerticalDragRange(@NonNull View child) {
-            return 1;
+            return mVerticalDragRange;
         }
 
         private String getStateValue(int state) {
@@ -358,6 +359,11 @@ public class StretchView2 extends ViewGroup {
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        // 当前状态滑动时，同时状态为 up，同时
+        if (ev.getAction() == MotionEvent.ACTION_MOVE &&
+                mStretchViewStatus == StretchViewStatus.STATUS_PUSH_UP &&
+                mPartSlider.getTop() == -mPartReferencesHeight) {
+        }
         return mViewDragHelper.shouldInterceptTouchEvent(ev);
     }
 
