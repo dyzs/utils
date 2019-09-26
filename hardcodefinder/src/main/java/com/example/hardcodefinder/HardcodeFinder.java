@@ -11,11 +11,17 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import static com.example.hardcodefinder.RegexUtils.REGEX_SET_CONTENT;
+import static com.example.hardcodefinder.RegexUtils.XML_ANDROID_TEXT;
+
 
 public class HardcodeFinder {
 
     // public static final String DEF_PATH = "D:\\knock_workspace\\knock-app-android2\\app\\src\\main\\java\\com\\knocknock\\android\\mvp";
-    public static final String DEF_PATH = "D:\\knock_workspace\\knock-app-android2\\app\\src\\main\\res\\layout";
+    // public static final String DEF_PATH = "D:\\knock_workspace\\knock-app-android2\\app\\src\\main\\res\\layout";
+    //public static final String DEF_PATH = "D:\\Android\\Projects\\knock-app-android2\\app\\src\\main\\java\\com\\knocknock\\android\\mvp";
+    //public static final String DEF_PATH = "D:\\Android\\Projects\\knock-app-android2\\app\\src\\main\\res\\layout";
+    public static final String DEF_PATH = "D:\\dyzs_test_all_files";
     public static final String OUTPUT_PATH = "D:\\dyzs_output\\output.txt";
     public static final String OUTPUT_FILENAME = "output.txt";
 
@@ -76,7 +82,7 @@ public class HardcodeFinder {
         if (outputFile.isFile() && outputFile.exists()) {
             fileOutputStream = new FileOutputStream(outputFile, true);
         } else {
-            FileUtils.createFileDir(outputFile);
+            outputFile.createNewFile();
             fileOutputStream = new FileOutputStream(outputFile);
         }
         FileInputStream fileInputStream;
@@ -96,37 +102,40 @@ public class HardcodeFinder {
     }
 
     // 包含有一个中文字符，则取出当前字符串
-    public static String REGEX_SET_CONTENT = "\\.setContent\\(\"(.)*[\\u4e00-\\u9fa5](.)*\"\\)";
-    public static String SET_TITLE = "\\.setTitle\\(\"(.)*[\\u4e00-\\u9fa5](.)*\"\\)";
-    public static String XML_ANDROID_TEXT = "android:text\\=\"(.)*\"";
 
-    /**
-     * 字符串优先匹配
-     */
     public static String REGEX_SET_CONTENT_STR = ".setContent";
+    public static String SET_CONTENT_TEXT_STR = ".setContent";
     public static String SET_TITLE_STR = ".setTitle";
     public static String XML_ANDROID_TEXT_STR = "android:text=";
+    public static String SET_CONTENT_TITLE_STR = ".setContentTitle";
     private void regexAndGetString(String line) {
         if (line == null || "".equals(line)) {
             return;
         }
-        if (line.contains(REGEX_SET_CONTENT_STR) || line.contains(SET_TITLE_STR) || line.contains(XML_ANDROID_TEXT_STR)) {
+        if (line.contains(REGEX_SET_CONTENT_STR) || line.contains(SET_TITLE_STR) || line.contains(XML_ANDROID_TEXT_STR) || line.contains(SET_CONTENT_TITLE_STR)) {
             String str = RegexUtils.stringFilter(REGEX_SET_CONTENT, line);
-            // System.out.println(line);
-            if (!"".equals(str)) {
+            boolean match = RegexUtils.stringFilterMatch(REGEX_SET_CONTENT, line);
+            if (!"".equals(str) && match) {
                 String chs = RegexUtils.gotTheChineseString(str);
-            }
-            str = RegexUtils.stringFilter(SET_TITLE, line);
-            if (!"".equals(str)) {
-                // System.out.println("REGEXXXXXXXXXXXXXXXXXXXXX:" + str);
-            }
-            str = RegexUtils.stringFilter(XML_ANDROID_TEXT, line);
-            if (!"".equals(str)) {
-                System.out.println("REGEXXXXXXXXXXXXXXXXXXXXX:" + str);
-                String chs = RegexUtils.gotTheChineseString(str);
-                if (!"".equals(chs)) {
-                    System.out.println("chinese:" + chs);
+                boolean b = RegexUtils.gotTheChinese(str);
+                if (chs != null && !"".equals(chs)) {
+                    System.out.println("REGEX_SET_CONTENT_STR   =======" + str);
                 }
+            }
+
+            str = RegexUtils.stringFilter(XML_ANDROID_TEXT, line);
+            match = RegexUtils.stringFilterMatch(XML_ANDROID_TEXT, line);
+            if (!"".equals(str) && match) {
+                String chs = RegexUtils.gotTheChineseString(str);
+                boolean b = RegexUtils.gotTheChinese(str);
+                if (chs != null && !"".equals(chs)) {
+                    System.out.println("XML_ANDROID_TEXT_STR   =======" + str);
+                }
+            }
+
+            boolean b = RegexUtils.gotTheChinese(str);
+            if (b) {
+                System.out.println("lines///////////////" + line);
             }
         }
     }

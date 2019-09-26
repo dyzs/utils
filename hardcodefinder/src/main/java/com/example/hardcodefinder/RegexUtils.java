@@ -5,9 +5,8 @@ import java.util.regex.Pattern;
 
 public class RegexUtils {
 
-    public static String REGEX_SET_CONTENT = "\\.setContent(\"(.)*[\\u4e00-\\u9fa5](.)*\")";
-    public static String SET_TITLE = "\\.setTitle(\"(.)*[\\u4e00-\\u9fa5](.)*\")";
-    public static String XML_ANDROID_TEXT = "android:text=\"(.)*[\\u4e00-\\u9fa5](.)*\"";
+    public static String REGEX_SET_CONTENT = "\\.(setContent||setContentTitle||setTitle||setContentText)\\(\"(.)*[\\u4e00-\\u9fa5]*(.)*\"\\)";
+    public static String XML_ANDROID_TEXT = "android\\:text\\=\"(.)*[\\u4e00-\\u9fa5](.)*\"";
 
     public static String REGEX_CHECK_CH = "[\\u4e00-\\u9fa5]";
 
@@ -18,6 +17,12 @@ public class RegexUtils {
             return m.group(0);
         }
         return m.replaceAll("").trim();
+    }
+
+    public static boolean stringFilterMatch(String regex, String str) {
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(str);
+        return m.find();
     }
 
     public static String[] stringFilters(String regex, String str) {
@@ -38,12 +43,15 @@ public class RegexUtils {
     public static String gotTheChineseString(String str) {
         Pattern p = Pattern.compile(REGEX_CHECK_CH);
         Matcher m = p.matcher(str);
-        int groupCount = m.groupCount();
-        String[] matches = new String[groupCount];
         while (m.find()) {
             return m.group();
         }
         return "";
+    }
 
+    public static boolean gotTheChinese(String str) {
+        Pattern p = Pattern.compile(REGEX_CHECK_CH);
+        Matcher m = p.matcher(str);
+        return m.find();
     }
 }
