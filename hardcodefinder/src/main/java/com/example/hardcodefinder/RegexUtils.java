@@ -5,10 +5,11 @@ import java.util.regex.Pattern;
 
 public class RegexUtils {
 
-    public static String REGEX_SET_CONTENT = "\\.(setContent||setContentTitle||setTitle||setContentText)\\(\"(.)*[\\u4e00-\\u9fa5]*(.)*\"\\)";
+    public static String REGEX_SET_CONTENT = "\\.(setContent|setContentTitle|setTitle|setContentText|onNext|onError)\\(\"(.)*[\\u4e00-\\u9fa5]*(.)*\"\\)";
     public static String XML_ANDROID_TEXT = "android\\:text\\=\"(.)*[\\u4e00-\\u9fa5](.)*\"";
 
     public static String REGEX_CHECK_CH = "[\\u4e00-\\u9fa5]";
+    public static String REGEX_CHECK_CH_S = "[^0-9]*";
 
     public static String stringFilter(String regex, String str) {
         Pattern p = Pattern.compile(regex);
