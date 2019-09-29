@@ -1,0 +1,1414 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <string name="scrolling_view_behavior" translatable="false">com.knocknock.android.mvp.ui.widget.cpdesign.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="search_hint">이름/전화번호/회사 검색</string>
+    <string name="search_hint_country">국가/지역 검색</string>
+
+    <string name="left_add_email">이메일 주소 추가</string>
+    <string name="email_refresh">点击刷新</string>
+    <string name="email_item_empty">空白只是暂时的</string>
+    <string name="email_valid_fail">계정 보안을 위해 이 이메일 재검증 필요</string>
+    <string name="email_goto_valid">검증</string>
+
+    <string name="validate_fail">검증 실패</string>
+    <string name="email_fail_reasons">以下原因可能导致失败：\n1.未开启IMAP服务（频发） \n2.账号密码错误 \n3.邮箱服务器配置错误</string>
+
+    <string name="unknown_recipient"><![CDATA[<Unknown Recipient>]]></string>
+
+    <string name="set_imap"><u>IMAP을 어떻게 설정합니까 ?</u></string>
+    <string name="search_contact_hint">이름/전화번호/회사 검색</string>
+    <string name="search_email_hint">主题/内容/姓名</string>
+    <string name="search_no_data_notes">暂无相关结果</string>
+
+    <string name="unknown_error">参数错误</string>
+
+    <string name="email_signature_placeholder">이메일 서명：%1$s"</string>
+    <string name="view_recommend_more">더 많은 추천 보기</string>
+    <string name="confirm_title_tv">确认%s信息</string>
+    <string name="confirm_hint_tv">可点击修改识别信息</string>
+    <string name="name">이름</string>
+    <string name="email">邮箱</string>
+    <string name="phone">핸드푼</string>
+    <string name="album">앨범</string>
+    <string name="mobile">전화</string>
+    <string name="add_as_receicer">添加为%s</string>
+    <string name="scan_add_email">扫名片识邮箱</string>
+    <string name="scan_add_phone">스캔해서 수신인 추가</string>
+
+    <string name="dial">拨号</string>
+    <string name="cancel">취소</string>
+    <string name="open_it">开启</string>
+    <string name="try_again">重试</string>
+    <string name="dialog_prompt">제시</string>
+    <string name="dialog_logout_content">是否退出登录</string>
+
+    <string name="set_default_email">기본 메일로 설정</string>
+    <string name="is_default_email">기본 메일로 설정했습니다</string>
+
+    <string name="recommend_source_prefix">「新名片」来自%1$s</string>
+    <string name="recommend_source_call">手机通话记录</string>
+    <string name="recommend_source_sms">手机短信记录</string>
+    <string name="recommend_source_contact">핸드푼 주소록</string>
+    <string name="recommend_source_email_send">메일 발송</string>
+    <string name="recommend_source_email_receive">邮件签名聚合</string>
+    <string name="recommend_source_ocr"> Ocr</string>
+    <string name="recommend_source_not_take_in">인식했는데 수납하지 않음</string>
+
+    <string name="recommend_auto_complete_notes">「完善名片信息」%1$s</string>
+
+    <string name="recommend_add">저장</string>
+    <string name="recommend_new_contacts">알만한 사람</string>
+
+    <string name="contacts_update">기준의 연락처에 추가</string>
+    <string name="contacts_add">연락처 추가</string>
+
+    <string name="contacts_take_it_and_use">수령하여 사용하다</string>
+
+    <string name="toast_load_error">加载出错&#046;&#046;&#046;</string>
+
+
+    <string name="another_login">40022</string>
+    <string name="hint">제시</string>
+    <string name="click_create">点击创建</string>
+    <string name="no_card">您还没有名片，点击创建</string>
+    <string name="caller_recog">수신명함 인식</string>
+
+    <string name="page_no_data_placeholder">没有数据</string>
+
+    <string name="mass_make_phone_call">스마트 다이얼</string>
+    <string name="mass_send_message">그룹 메세지</string>
+    <string name="mass_send_email">그룹 메일</string>
+
+    <string name="recommend_save">저장</string>
+    <string name="recommend_ignore">무시</string>
+    <string name="recommend_list_tips">AI 분석에 의해 최근에 필요할 연락처를 추천드립니다</string>
+    <string name="recommend_list_gesture_tips">「左滑保存, 右滑忽略」</string>
+    <string name="new_contacts_bottom_tips">Business Intelligence</string>
+    <string name="new_contacts_ignore">무시</string>
+    <string name="new_contacts_ignore_confirm">무시 확인</string>
+    <string name="new_contacts_save">저장</string>
+    <string name="new_contacts_save_confirm">저장 확인</string>
+    <string name="new_contacts_saving">正在保存&#046;&#046;&#046;</string>
+    <string name="new_contacts_ignoring">正在忽略&#046;&#046;&#046;</string>
+    <string name="new_contacts_select_all">전체선택</string>
+    <string name="new_contacts_cancel_select_all">전체선택 취소</string>
+
+    <string name="ai_secretary_notes_1">AI 秘书, 为您完善%1$s名片信息</string>
+    <string name="ai_secretary_notes_2">AI 秘书, 发现您可能需要的联系人</string>
+    <string name="date_pattern_1">yyyy/MM/dd</string>
+    <string name="date_pattern_2">yyyy.MM.dd</string>
+
+    <string name="title_share_my_card">您好这是 %1$s 的名片, 望惠存</string>
+
+    <string name="find_my_card_notes">发现可能是我的名片(来自邮件签名聚合)</string>
+    <string name="claim_my_card_notes">받기</string>
+    <string name="have_no_my_card_and_go_create">你还没有名片,去创建一个吧</string>
+
+    <string name="setting_about_knock">KNOCKNOCK에 관한</string>
+    <string name="setting_logout">로그아웃</string>
+    <string name="pop_item_share_card">명함 공유</string>
+    <string name="pop_item_edit_card">명함 편집</string>
+    <string name="pop_item_delete_card">명함삭제</string>
+    <string name="pop_item_combine_card">合并名片(0)</string>
+    <string name="pop_item_manual">작성하고 수납하다.</string>
+    <string name="pop_item_group_sms">그룹 메세지</string>
+    <string name="pop_item_qr_scan">스캔하세요</string>
+    <string name="pop_item_feedback">조언 피드백</string>
+    <string name="pop_item_backup_more_records">백업 기록 더 보기</string>
+    <string name="pop_item_backup_setup">설정</string>
+
+
+    <string name="search_which_might_be_looking_for">찾으시는 건</string>
+    <string name="search_result_count">共 %1$s 张</string>
+    <string name="searching">搜索中&#046;&#046;&#046;</string>
+
+    <string name="qr_scan_light_notes">轻触照亮</string>
+    <string name="qr_scan_light_notes_reverse">轻触关闭</string>
+    <string name="qr_scan_album">앨범</string>
+    <string name="qr_scan_error_notices">不可识别, 非诺客二维码</string>
+    <string name="qr_code_save">保存二维码</string>
+    <string name="qr_code_scan">스캔하세요</string>
+    <string name="qr_code_cancel">취소</string>
+    <string name="biz_card_not_been_added_to_mailbox">名片尚未添加邮箱</string>
+
+    <string name="dialog_phone_number_list">需要拨打的号码</string>
+    <string name="company_uneditable">企业已设定不可修改</string>
+
+    <string name="please_wait_a_moment">请稍候&#046;&#046;&#046;</string>
+    <string name="dialog_title_add_email">이메일을 추가하여 더 많은 비즈니스 기능 켜기</string>
+    <string name="dialog_add_email">이메일 주소 추가</string>
+    <string name="dialog_title_email_bind_notice">邮箱暂未验证，请先验证</string>
+    <string name="dialog_go2_bind">검증</string>
+    <string name="dialog_still_save">취소</string>
+    <string name="dialog_title_node_claim">노드명함 받기</string>
+    <string name="dialog_title_is_allow_clear_all_call_records">통화 기록을 비우시겠습니까?</string>
+    <string name="dialog_harvest">获取</string>
+    <string name="phone_number_placeholder">%1$s&#042;&#042;&#042;&#042;%2$s</string>
+    <string name="please_type_phone_number">핸드폰 번호를 입력하십시오.</string>
+    <string name="please_type_company">请输入公司名称</string>
+    <string name="please_type_unit">부서를 입력하세요</string>
+    <string name="please_type_job">직위를 입력하세요</string>
+
+    <string name="saving">保存中&#046;&#046;&#046;</string>
+    <string name="toast_save_success">保存成功</string>
+    <string name="toast_nothing_selected">未选中任何记录</string>
+    <string name="rescan">다시 스캔</string>
+    <string name="select_template">템플릿 변경</string>
+    <string name="toast_net_error">网络状况不佳</string>
+    <string name="dialog_dealing">처리중&#046;&#046;&#046;</string>
+    <string name="toast_we_chat_is_not_install">请安装微信</string>
+    <string name="toast_qq_is_not_install">请安装QQ</string>
+
+    <string name="toast_recommend_save_success">已成功保存</string>
+    <string name="toast_recommend_save_failed">저장에 실패했으니 재시도하십시오</string>
+    <string name="toast_recommend_ignore_success">忽略成功</string>
+    <string name="toast_recommend_ignore_failed">忽略失败，请重试</string>
+    <string name="toast_saved_into_phone">存入手机成功</string>
+    <string name="toast_card_add_success">名片添加成功</string>
+    <string name="toast_card_add_failed">名片添加失败，请重试</string>
+    <string name="toast_online_card_notices">线上联系人在对方更新名片信息后同步至您的手机上</string>
+    <string name="toast_contact_is_already_saved">该联系人已存入手机</string>
+    <string name="toast_invalid_email">非有效邮箱</string>
+    <string name="toast_please_bind_email_account">请绑定邮箱账号</string>
+    <string name="toast_user_phone_not_null">请填写手机号码</string>
+    <string name="toast_email_not_null">邮箱账号不能为空</string>
+    <string name="toast_email_is_not_add">名片尚未添加邮箱</string>
+    <string name="toast_contact_have_no_phone_mobile">该联系人没有手机号码，请添加手机号</string>
+    <string name="toast_contact_have_no_email">该联系人没有邮箱，无法发送邮件</string>
+    <string name="toast_card_has_set_unsharable">명함을 공유할 수 없도록 설정했습니다</string>
+    <string name="toast_default_card_is_not_allow_delete">默认名片不可以删除&#046;&#046;&#046;</string>
+    <string name="toast_gps_locating">位置定位中, 请稍候再试</string>
+    <string name="toast_search_without_result">查询无结果</string>
+    <string name="toast_email_delete_success">邮件删除成功</string>
+    <string name="toast_email_can_not_move_in_inbox">所有收件箱模式下不能移动邮件!</string>
+    <string name="toast_phone_number_incorrect_format">手机号格式不正确</string>
+    <string name="toast_not_get_item_of_email_signature">未获取到签名编辑项</string>
+    <string name="toast_card_claim_success">名片领取成功!</string>
+    <string name="toast_no_signature_template_for_now">暂无签名模板</string>
+    <string name="toast_app_store_no_found">未发现有手机应用商店</string>
+    <string name="toast_call_records_permission_denied">通话记录权限已被禁用，请先打开通话记录权限。</string>
+    <string name="toast_card_does_not_exist">名片不存在</string>
+    <string name="toast_have_no_effective_email_account">暂无有效的邮箱账号！</string>
+    <string name="toast_permission_denied">权限被拒绝</string>
+    <string name="toast_share_link_address_not_null">分享链接不能为空</string>
+    <string name="toast_picture_chosen_error_happened">选择图片异常&#046;&#046;&#046;</string>
+    <string name="toast_captcha_code_not_match">验证码不正确</string>
+    <string name="toast_feedback_commit_success">反馈提交成功</string>
+    <string name="toast_phone_number_not_null">手机号不能为空</string>
+    <string name="toast_upload_id_card_front_success">上传身份证正面照成功！</string>
+    <string name="toast_upload_id_card_back_success">上传身份证反面照成功！</string>
+    <string name="toast_email_wait_to_validate">尚未验证邮箱</string>
+    <string name="toast_contact_without_phone_number">联系人暂无手机号码</string>
+    <string name="toast_password_reset_success">密码重置成功</string>
+    <string name="toast_node_validate_failed">节点验证失败, 请重试!</string>
+    <string name="toast_pls_choose_pic_try_again">请重新选择图片</string>
+    <string name="toast_setup_success">设置成功</string>
+    <string name="open_camera_failed">打开相机失败！</string>
+
+    <string name="dialog_title_is_clear_sys_msg">确定要清空系统消息吗？</string>
+    <string name="dialog_title_call_official">통화하기 +400&#8211;8335&#8211;663？</string>
+    <string name="dialog_title_is_delete">确认删除？</string>
+    <string name="dialog_title_email_send_arrived_feedback">开启通知，第一时间获知邮件到达通知，还有发送邮件进度反馈哦</string>
+    <string name="dialog_title_is_clear_recommend_card">您确定清空推荐名片吗？</string>
+    <string name="dialog_title_pic_uploading">图片上传中，请稍后&#046;&#046;&#046;</string>
+    <string name="dialog_title_pic_saving">图片保存中&#046;&#046;&#046;</string>
+    <string name="dialog_is_up_to_validate">正在提交审核&#046;&#046;&#046;</string>
+    <string name="dialog_is_doing_delete">正在删除中，请稍后&#046;&#046;&#046;</string>
+    <string name="dialog_is_getting_data">데이터를 가져오는 중&#046;&#046;&#046;</string>
+    <string name="dialog_screen_shot_creating">正在生成截图&#046;&#046;&#046;</string>
+    <string name="dialog_data_initialization">数据初始化中&#046;&#046;&#046;</string>
+    <string name="dialog_business_license_uploading">营业执照上传中，请稍后&#046;&#046;&#046;</string>
+    <string name="dialog_claiming">认领中&#046;&#046;&#046;</string>
+
+    <string name="main_page_company">내 기업 (%1$s)</string>
+    <string name="dialog_net_request_failed">数据获取失败</string>
+    <string name="have_not_email_for_now">暂无邮箱</string>
+    <string name="ineffective_email">非有效邮箱</string>
+    <string name="ineffective_phone">非有效号码</string>
+    <string name="have_not_phone_number_for_now">暂无手机号</string>
+    <string name="dialog_make_phone_call">拨打普通电话</string>
+    <string name="dialog_flash_msg">拨打身份电话</string>
+    <string name="toast_username_not_null">请填写姓名</string>
+    <string name="search_page_no_data_for_now">검색 기록이 없음</string>
+    <string name="search_page_no_data_for_result">暂无搜索结果</string>
+    <string name="confirm">확인</string>
+    <string name="load_all">전체 다운로드</string>
+
+    <string name="group_email_hint">请输入你要搜索的邮箱/姓名</string>
+    <string name="group_sms_hint">请输入你要搜索的姓名/手机号</string>
+    <string name="filter">필터</string>
+
+    <string name="share_title_recommend_knock">KNOCKNOCK- AI주소록</string>
+    <string name="share_content_recommend_knock">연락처를 지능형 인식하고 자주적으로 신분을 보여줌으로써 낯선 의사소통을 더 효율적으로 만든다.</string>
+    <string name="share_url_knock">http://www.knocknock.com/static/share/android.html</string>
+    <string name="ocr_rescan">识别不清晰？重新扫描</string>
+    <string name="attach_load_fail">附件%s下载失败，请重试</string>
+
+    <string name="keyboard_one">1</string>
+    <string name="keyboard_two">2</string>
+    <string name="keyboard_three">3</string>
+    <string name="keyboard_four">4</string>
+    <string name="keyboard_five">5</string>
+    <string name="keyboard_six">6</string>
+    <string name="keyboard_seven">7</string>
+    <string name="keyboard_eight">8</string>
+    <string name="keyboard_nine">9</string>
+    <string name="keyboard_zero">0</string>
+    <string name="keyboard_symbol_asterisk">*</string>
+    <string name="keyboard_symbol_pound">#</string>
+    <string name="keyboard_q">Q</string>
+    <string name="keyboard_w">W</string>
+    <string name="keyboard_e">E</string>
+    <string name="keyboard_r">R</string>
+    <string name="keyboard_t">T</string>
+    <string name="keyboard_y">Y</string>
+    <string name="keyboard_u">U</string>
+    <string name="keyboard_i">I</string>
+    <string name="keyboard_o">O</string>
+    <string name="keyboard_p">P</string>
+
+    <string name="keyboard_a">A</string>
+    <string name="keyboard_s">S</string>
+    <string name="keyboard_d">D</string>
+    <string name="keyboard_f">F</string>
+    <string name="keyboard_g">G</string>
+    <string name="keyboard_h">H</string>
+    <string name="keyboard_j">J</string>
+    <string name="keyboard_k">K</string>
+    <string name="keyboard_l">L</string>
+
+    <string name="keyboard_z">Z</string>
+    <string name="keyboard_x">X</string>
+    <string name="keyboard_c">C</string>
+    <string name="keyboard_v">V</string>
+    <string name="keyboard_b">B</string>
+    <string name="keyboard_n">N</string>
+    <string name="keyboard_m">M</string>
+
+    <string name="keyboard_one_under_text"> </string>
+    <string name="keyboard_two_under_text">ABC</string>
+    <string name="keyboard_three_under_text">DEF</string>
+    <string name="keyboard_four_under_text">GHI</string>
+    <string name="keyboard_five_under_text">JKL</string>
+    <string name="keyboard_six_under_text">MNO</string>
+    <string name="keyboard_seven_under_text">PQRS</string>
+    <string name="keyboard_eight_under_text">TUV</string>
+    <string name="keyboard_nine_under_text">WXYZ</string>
+    <string name="keyboard_zero_under_text">+</string>
+    <string name="keyboard_symbol_t9">9키</string>
+    <string name="keyboard_symbol_asterisk_under_text">QWERTY</string>
+    <string name="keyboard_symbol_pound_under_text">붙여넣기</string>
+
+    <string name="tag_text_container">text_container</string>
+    <string name="tag_delete">delete</string>
+    <string name="tag_key_one">one</string>
+    <string name="tag_key_two">two</string>
+    <string name="tag_key_three">three</string>
+    <string name="tag_key_four">four</string>
+    <string name="tag_key_five">five</string>
+    <string name="tag_key_six">six</string>
+    <string name="tag_key_seven">seven</string>
+    <string name="tag_key_eight">eight</string>
+    <string name="tag_key_nine">nine</string>
+    <string name="tag_key_asterisk">asterisk</string>
+    <string name="tag_key_zero">zero</string>
+    <string name="tag_key_pound">pound</string>
+    <string name="tag_flash_msg">flash_message</string>
+    <string name="tag_phone_call">make_phone_call</string>
+
+    <string-array name="smart_keyboard_mapping_tags">
+        <item name="item_up_and_down">up_and_down</item>
+        <item name="item_text_container">text_container</item>
+        <item name="item_delete">delete</item>
+        <item name="item_key_one">one</item>
+        <item name="item_key_two">two</item>
+        <item name="item_key_three">three</item>
+        <item name="item_key_four">four</item>
+        <item name="item_key_five">five</item>
+        <item name="item_key_six">six</item>
+        <item name="item_key_seven">seven</item>
+        <item name="item_key_eight">eight</item>
+        <item name="item_key_nine">nine</item>
+        <item name="item_key_asterisk">asterisk</item>
+        <item name="item_key_zero">zero</item>
+        <item name="item_key_pound">pound</item>
+        <item name="item_flash_msg">flash_message</item>
+        <item name="item_phone_call">make_phone_call</item>
+    </string-array>
+
+    <string-array name="sort_array">
+        <item name="item_new">按最新收纳排序</item>
+        <item name="item_time">按最早收纳排序</item>
+        <item name="item_company">按公司名称排序</item>
+        <item name="item_name">按姓名排序</item>
+    </string-array>
+
+    <string-array name="sort_array2">
+        <item name="item_name">按姓名</item>
+        <item name="item_company">按公司</item>
+        <item name="item_new">按最新</item>
+        <item name="item_time">按最早</item>
+    </string-array>
+
+    <string name="t9_make_phone_call">일반 전화</string>
+
+    <string name="act_title_intelligent">스마트 다이얼</string>
+    <string name="act_title_settings">설정</string>
+    <string name="act_title_about_knock">KNOCKNOCK에 관한</string>
+    <string name="act_title_left_text_done">완성</string>
+    <string name="act_title_left_text_navigation">네비게이션</string>
+    <string name="act_title_country">选择国家和地区</string>
+    <string name="act_title_identity_authentication">신분 인증 심사</string>
+    <string name="act_title_identity_authentication_process">个人认证审核进度</string>
+    <string name="act_title_authentication_process">审核进度</string>
+    <string name="act_title_group_authentication">企业认证审核</string>
+    <string name="act_title_identity_process">신분 전화</string>
+    <string name="act_title_feedback">조언 피드백</string>
+    <string name="act_title_message_list">消息中心</string>
+    <string name="act_title_change_template">명함 양식 선택</string>
+    <string name="act_title_card_select_page">选择名片</string>
+    <string name="act_title_contacts_backup">주소록 동기화</string>
+    <string name="act_title_backup_setting">설정 백업</string>
+    <string name="act_title_backup_get_captcha">백업 비밀번호 재설정</string>
+    <string name="act_title_backup_records_list">기록 백업</string>
+    <string name="act_title_contact_batch_delete">대량으로 삭제하다</string>
+    <string name="act_title_card_combine">명함 합치</string>
+    <string name="act_title_theme_setup">主题设置</string>
+    <string name="act_title_settings_mine">我的</string>
+    <string name="act_title_caller_recog">수신명함 인식</string>
+    <string name="act_title_create_digital">디지털 신분을 만들기기</string>
+    <string name="act_title_qr_scan">扫描名片码</string>
+    <string name="act_title_email_server_set">서버 설정</string>
+    <string name="act_title_email_accounts_set">이메일 설정</string>
+    <string name="act_title_email_emoji_list">빠른 회신 양식</string>
+    <string name="act_title_email_emoji_add">답장 상세내용</string>
+    <string name="act_title_card_history_track_details">历史详情</string>
+    <string name="act_title_show_parse_signature">연락처 선택</string>
+    <string name="act_title_company_list">내 기업</string>
+    <string name="act_title_email_settings_guide">邮箱设置指引</string>
+    <string name="act_title_email_edit_sender_name">발신자 이름</string>
+    <string name="act_title_email_edit_email_signature">이메일 서명</string>
+    <string name="act_title_add_or_edit_email_sign">서명 편집</string>
+    <string name="act_title_add_contact_1">수취인  선택</string>
+    <string name="act_title_add_contact_2">수신인 선택</string>
+    <string name="act_title_add_contact_3">选择群发收件人</string>
+    <string name="act_title_email_qq_auth">라이선스 코드 받기</string>
+    <string name="act_title_my_card">나의 명함</string>
+    <string name="act_title_gmail_auth">Google Gmail권한을 주다</string>
+    <string name="act_title_select_email_signature">이메일 서명</string>
+    <string name="act_title_message">消息</string>
+    <string name="act_title_privacy">사용권 계약 및 개인정보 보호 정책</string>
+    <string name="act_title_official_website">공식사이트</string>
+    <string name="act_title_function_introduce">기능 소개</string>
+
+    <string name="official_telephone">400&#8211;833&#8211;5663</string>
+
+    <string name="flash_message_tips">신분 전화를 사용해 다이얼을 돌리면 상대방의 핸드푼에 당신의 신분을 보여 접속율을 높일 수 있습니다.</string>
+    <string name="flash_message_tips_a">단말기 전시로 상대방이 앱을 설치할 필요 없음</string>
+    <string name="flash_message_tips_b">비즈니스와 개인 전화를 구분하여 신분보기 선택가</string>
+    <string name="flash_message_tips_c">모든 중국 통신망이 가능하여 전신운영회사를 가리지 않음</string>
+
+    <string name="dialog_title_delete_card">确认删除该名片？</string>
+    <string name="dialog_del_confirm">삭제 확인</string>
+    <string name="toast_sim_check_exist">请检查是否插入手机 SIM 卡</string>
+
+    <string name="loading_tips_getting_node_data">正在从节点中获取数据，请稍等</string>
+    <string name="login_failed_plz_retry">登录失败，请重试！</string>
+    <string name="node_validate_failed_plz_retry">节点验证失败, 请重试!</string>
+
+    <string name="today">오늘</string>
+    <string name="yestoday">어제</string>
+
+    <string name="dialog_title_choose_map">选择地图</string>
+    <string name="map_baidu">바이뚜 지도</string>
+    <string name="map_gaode">고덕지도</string>
+    <string name="map_tencent">텐센트 지도</string>
+
+    <string name="click_and_claim">领取节点名片</string>
+    <string name="node_name_placeholder">노드이름：%1$s</string>
+    <string name="node_name">노드이름</string>
+    <string name="get_pass_code">인증번호 받기</string>
+    <string name="pass_code_sending">验证码发送中&#8230;&#8230;&#8230;</string>
+    <string name="resend_pass_code">재전송</string>
+    <string name="pass_code_failed">발송 실패</string>
+
+    <string name="node_claim_count">您有%1$s张「区块链节点名片」需要验证领取</string>
+    <string name="search_from_channel_tips">搜索来源「%1$s」</string>
+    <string name="search_from_channel_company">내 기업</string>
+    <string name="search_from_channel_mine">나의 명함</string>
+    <string name="search_from_channel_contacts">나의 연락처</string>
+    <string name="search_from_channel_recommend">알만한 사람</string>
+    <string name="search_from_channel_phone_contacts">핸드푼 주소록</string>
+
+
+    <string name="app_name">knock</string>
+    <string name="remote_control_label">K-9 Mail 远程控制</string>
+    <string name="remote_control_desc">允许这个程序控制 K-9 Mail 的行为和设置。</string>
+    <!--Used in the about dialog-->
+    <!--Welcome message-->
+    <!--Default signature-->
+    <string name="default_signature">发送自诺客</string>
+    <!--General strings that include the app name-->
+    <!--=== App Store-specific strings =======================================================-->
+    <!--=== General strings ==================================================================-->
+    <string name="read_attachment_label">阅读邮件附件</string>
+    <string name="read_attachment_desc">允许该程序读取邮件附件。</string>
+    <string name="read_messages_label">显示邮件</string>
+    <string name="read_messages_desc">允许该程序读取邮件。</string>
+    <string name="delete_messages_label">이메일 삭제</string>
+    <string name="delete_messages_desc">允许该程序删除邮件。</string>
+    <string name="compose_title_compose">新邮件</string>
+    <string name="compose_title_reply">회신</string>
+    <string name="compose_title_reply_all">全部回复</string>
+    <string name="compose_title_forward">전달</string>
+    <string name="status_loading_account_folder">正在接收 <xliff:g id="folder">%s:</xliff:g>: <xliff:g id="progress">%s</xliff:g>, <xliff:g id="account">%s</xliff:g></string>
+    <string name="status_loading_account_folder_headers">正在接收邮件头: <xliff:g id="folder">%s</xliff:g>: <xliff:g id="progress">%s</xliff:g>, <xliff:g id="account">%s</xliff:g></string>
+    <string name="status_sending_account">正在发送 <xliff:g id="progress">%s</xliff:g>: <xliff:g id="account">%s</xliff:g></string>
+    <string name="status_processing_account">正在处理 <xliff:g id="command">%s</xliff:g>: <xliff:g id="progress">%s</xliff:g>: <xliff:g id="account">%s</xliff:g></string>
+    <string name="folder_progress">\u0020<xliff:g id="completed">%d</xliff:g>/<xliff:g id="total">%d</xliff:g></string>
+    <string name="status_next_poll">下次接收 <xliff:g id="nexttime">%s</xliff:g></string>
+    <string name="status_no_network">同步已禁用 - 无网络</string>
+    <string name="status_no_background">同步已禁用 - 无后台活动</string>
+    <string name="status_syncing_blocked">同步被阻止</string>
+    <string name="status_syncing_off">同步已禁用</string>
+    <!--Used to confirm acceptance of dialog boxes, warnings, errors, etc.-->
+    <string name="cancel_action">취소</string>
+    <string name="empty_subject">主题为空</string>
+    <string name="discard_action">초고를 저장하지 않음</string>
+    <string name="save_draft_action">保存为草稿</string>
+    <string name="search_results">搜索结果</string>
+    <!--Shown in place of the subject when a message has no subject. Showing this in parentheses is customary.-->
+    <string name="general_no_subject">(无主题)</string>
+    <string name="status_network_error">连接错误</string>
+    <string name="status_invalid_id_error">邮件未找到</string>
+    <string name="status_loading_error">消息加载错误</string>
+    <string name="abbrev_gigabytes">GB</string>
+    <string name="abbrev_megabytes">MB</string>
+    <string name="abbrev_kilobytes">KB</string>
+    <string name="abbrev_bytes">B</string>
+    <string name="notification_bg_sync_ticker">正在检查邮件：<xliff:g id="account">%s</xliff:g>：<xliff:g id="folder">%s</xliff:g></string>
+    <string name="notification_bg_sync_title">正在检查邮件</string>
+    <string name="notification_bg_send_ticker"> 正在发送邮件至:<xliff:g id="account">%s</xliff:g></string>
+    <string name="notification_bg_send_title">邮件发送中...</string>
+    <string name="notification_bg_title_separator">：</string>
+    <string name="special_mailbox_name_inbox">받은메일함</string>
+    <string name="special_mailbox_name_outbox">보낸메일함</string>
+    <string name="special_mailbox_name_drafts">초안저장소</string>
+    <string name="special_mailbox_name_trash">삭제편지함</string>
+    <string name="special_mailbox_name_sent">보낸 메일</string>
+    <string name="special_mailbox_name_archive">归档</string>
+    <string name="special_mailbox_name_spam">스팸 메일</string>
+    <string name="message_compose_content_hint">正文</string>
+    <string name="message_compose_quote_header_separator">--------原始邮件--------</string>
+    <string name="message_compose_quote_header_subject">제목：</string>
+    <string name="message_compose_quote_header_send_date">발송시각：</string>
+    <string name="message_compose_quote_header_from">보낸사람：</string>
+    <string name="message_compose_quote_header_to">받는사람：</string>
+    <string name="message_compose_quote_header_cc">사본을 보내기：</string>
+    <string name="message_compose_reply_header_fmt"><xliff:g id="sender">%s</xliff:g> 写到：</string>
+    <string name="message_compose_reply_header_fmt_with_date">于 <xliff:g id="sent_date">%1$s</xliff:g>, <xliff:g id="sender">%2$s</xliff:g> 写到:</string>
+    <string name="message_compose_error_no_recipients">您必须添加至少一个收件人。</string>
+    <string name="error_contact_address_not_found">没有找到该联系人的邮件地址。</string>
+    <string name="message_compose_show_quoted_text_action">引用消息</string>
+    <string name="message_to_label">받는사람：</string>
+    <string name="message_view_status_attachment_not_saved">无法将附件保存到SD卡。</string>
+    <string name="message_view_status_no_space">存储空间不足，无法保存附件。</string>
+    <string name="message_view_no_viewer">无法打开<xliff:g id="mimetype">%s</xliff:g>。找不到可以阅读该文件的程序。</string>
+    <!--NOTE: The following message refers to strings with id account_setup_incoming_save_all_headers_label and account_setup_incoming_title-->
+    <string name="message_discarded_toast">邮件已丢弃</string>
+    <string name="message_saved_toast">邮件已保存为草稿</string>
+    <string name="local_storage_provider_external_label">外部存储（SD卡）</string>
+    <string name="local_storage_provider_internal_label">正常内部存储</string>
+    <string name="local_storage_provider_samsunggalaxy_label">%1$s 额外的内部存储</string>
+    <string name="account_setup_failed_dlg_auth_message_fmt">授权验证失败</string>
+    <string name="account_setup_failed_name_or_pwd_error">用户名或密码错误</string>
+    <string name="account_setup_failed_dlg_certificate_message_fmt">服务器提供了一个无效的SSL证书。</string>
+    <string name="account_setup_failed_dlg_server_message_fmt">无法连接到服务器。</string>
+    <string name="default_identity_description">初始身份标识</string>
+    <string name="sort_earliest_first">优先显示最早的邮件</string>
+    <string name="sort_latest_first">优先显示最近的邮件</string>
+    <string name="sort_stick_first">优先显示置顶的邮件</string>
+    <string name="sort_stick_last">优先显示没有置顶的邮件</string>
+    <string name="sort_subject_alpha">按主题升序</string>
+    <string name="sort_subject_re_alpha">按主题降序</string>
+    <string name="sort_sender_alpha">发件人字母</string>
+    <string name="sort_sender_re_alpha">发件人字母反序</string>
+    <string name="sort_flagged_first">优先显示带有星标的邮件</string>
+    <string name="sort_flagged_last">优先显示没有星标的邮件</string>
+    <string name="sort_unread_first">优先显示未读邮件</string>
+    <string name="sort_unread_last">优先显示已读邮件</string>
+    <string name="sort_attach_first">优先显示带有附件的邮件</string>
+    <string name="sort_unattached_first">优先显示没有附件的邮件</string>
+    <string name="account_setup_failed_dlg_invalid_certificate_title">无法识别的证书信息</string>
+    <string name="account_setup_failed_dlg_invalid_certificate_reject">拒绝密钥</string>
+    <string name="search_title"><xliff:g id="search_name">%s</xliff:g> <xliff:g id="modifier">%s</xliff:g></string>
+    <string name="unread_modifier"> - 未读</string>
+    <string name="search_all_messages_title">所有邮件</string>
+    <string name="search_all_messages_detail">可搜索文件夹中的所有邮件</string>
+    <string name="sum_inbox_title">모든 수신함</string>
+    <string name="integrated_inbox_detail">所有收件箱中的所有邮件</string>
+    <string name="error_activity_not_found">没有找到可以用于这一操作的程序。</string>
+    <string name="save_or_discard_draft_message_instructions_fmt">保存还是丢弃这封邮件？</string>
+    <string name="confirm_discard_draft_message">确定丢弃该邮件？</string>
+    <string name="select_text_now">选择需要拷贝的文本。</string>
+    <string name="dialog_confirm_delete_title">删除确认</string>
+    <string name="dialog_confirm_delete_message">你确定要删除这封邮件么？</string>
+    <string name="dialog_confirm_delete_confirm_button">删除</string>
+    <string name="dialog_confirm_delete_cancel_button">不要删除</string>
+    <string name="account_unavailable">账户\"<xliff:g id="account">%s</xliff:g>\"不可用；请检查存储</string>
+    <string name="webview_empty_message">没有文本</string>
+    <string name="message_list_loading">加载中…</string>
+    <string name="loading_attachment">加载中…</string>
+    <string name="loading_attachment_error">加载错误</string>
+    <string name="auth_external_error">无法认证。服务器未公告SASL EXTERNAL。这可能是由于客户端证书有问题（已过期，或者未知的认证机构），或者是由于其它的配置问题。</string>
+    <!--=== Client certificates specific ==================================================================-->
+    <string name="client_certificate_retrieval_failure">无法获取别名 \"<xliff:g id="alias">%s</xliff:g>\" 的客户端证书</string>
+    <string name="client_certificate_expired">客户端证书 \"<xliff:g id="certificate_alias">%1$s</xliff:g>\" 已经过期，或者尚未开始生效。 (<xliff:g id="exception_message">%2$s</xliff:g>)</string>
+    <!--Note: This references message_view_download_remainder-->
+    <string name="preview_encrypted">*已加密*</string>
+    <string name="address_type_home">住宅</string>
+    <string name="address_type_work">工作</string>
+    <string name="address_type_other">기타</string>
+    <string name="address_type_mobile">핸드푼</string>
+    <string name="compose_error_no_draft_folder">此账户没有设置草稿文件夹！</string>
+    <string name="error_crypto_inline_attach">PGP/INLINE 模式不支持附件！</string>
+    <string name="status_poll_and_push_disabled">Polling and pushing disabled</string>
+    <string name="unread_widget_title"><xliff:g id="account_name">%1$s</xliff:g> - <xliff:g id="folder_name">%2$s</xliff:g></string>
+    <string name="compose_title_forward_as_attachment">作为附件转发</string>
+    <string name="compose_error_incomplete_recipient">%s字段包含不完整的输入！\n%s</string>
+
+    <string name="show_outbox_toast">您有 %d 封发送失败邮件，请前往「发件箱」处理</string>
+    <string name="sina_mailbox_name_drafts">草稿夹</string>
+    <string name="knock_sign_label">Signature is customized by Knocknock.AI</string>
+
+    <string name="what_is_caller">什么是「来电名片识别」？</string>
+    <string name="caller_introduce">「来电名片识别」是将您诺客中的联系人在没有存入手机通讯录时也能知道来电方是谁。\n\n注：该功能只能识别诺客中已有的联系人。</string>
+    <string name="caller_tips">开启来电名片识别，来电号码无需将联系人存入手机通讯录也可以将诺客中的联系人识别出来</string>
+    <string name="caller_is_open_recognize">수신명함 인식 켜기</string>
+    <string name="caller_recognize_cancel">暂不开启</string>
+    <string name="caller_recognize_open">去开启</string>
+
+    <string name="please_check_net">连接失败，请检查您的网络设置</string>
+    <string name="input_email_account">이메일 계정을 입력하십시오</string>
+    <string name="input_email_pwd">이메일 비밀번호를 입력하십시오</string>
+    <string name="input_email_token">请输入邮箱密码/授权码</string>
+    <string name="exmple_email">exmple@email.com</string>
+    <string name="next_step">다음단계</string>
+    <string name="confirm_auth">确认授权</string>
+    <string name="auth_explain">如何获取授权码？</string>
+    <string name="check_relogin">检测到您重新登录或 更换过设备</string>
+    <string name="email_valid_hint">계정 보안을 위해 아래 이메일 재검증 필요</string>
+
+    <string name="ignore_tg">넘어가기</string>
+    <string name="country_code_placeholder">+%1$s</string>
+
+    <string name="email_validing">正在验证，请稍候…%ds</string>
+    <string name="login_phone">登录或者注册</string>
+    <string name="bind_phone">핸드폰 번호 연동</string>
+    <string name="bind_hint">绑定会让你的账号更安全，并能开启更多功能。</string>
+    <string name="email_waiting">已发送（%ds）</string>
+    <string name="knock_title1">为邮箱赋能</string>
+    <string name="knock_subtitle1">向邮箱注入多源通讯录联系人\n</string>
+    <string name="knock_title2">智能来电识别</string>
+    <string name="knock_subtitle2">来电时智能识别「诺客」联系人，无需存入\n手机通讯录</string>
+    <string name="knock_title3">AI + OCR 名片扫描</string>
+    <string name="knock_subtitle3">智能归集联系人，信息自动更新\n</string>
+
+    <string name="skip">넘어가기</string>
+    <string name="permission_tips_1st">为确保诺客能够正常使用需要您提供以下权限</string>
+    <string name="permission_tips_2nd">弹出权限窗口请选择「允许」</string>
+    <string name="permission_tips_3rd">1.读取手机联系人权限</string>
+    <string name="permission_tips_4th">2.读写手机存储权限</string>
+    <string name="permission_tips_5th">注：请放心，诺客会严格保护您的个人隐私。</string>
+    <string name="permission_tips_6th">3.悬浮窗权限</string>
+    <string name="unauthorized">允许</string>
+    <string name="authorized"> </string>
+    <string name="apply_permission">开始使用</string>
+
+    <string name="the_way_of_login_with_phone">핸드푼 로그인</string>
+    <string name="the_way_of_login_with_we_chat">微信登录</string>
+    <string name="the_way_of_login_with_email">이메일로 로그인합니다</string>
+    <string name="the_way_of_login_other_way">其它登录方式</string>
+    <string name="select_email_band">请选择邮箱品牌</string>
+    <string name="other_band">其他邮箱</string>
+
+    <string name="bind_right_now">立即绑定</string>
+
+    <string name="data_statistics_contacts">나의 연락처</string>
+    <string name="data_statistics_companies">내 기업</string>
+    <string name="data_statistics_phone_contacts">本地通讯录</string>
+    <string name="data_statistics_ocr">来自OCR</string>
+    <string name="data_statistics_we_chat">来自微信</string>
+    <string name="data_count_placeholder">%1$s人</string>
+    <string name="company_manager_phone_number_placeholder">***********</string>
+    <string name="we_chat_is_not_install">您未安装微信</string>
+    <string name="gmail_auth_hint">根据 Google 要求，需要在 Google 授权页中输入密码</string>
+    <string name="imap_hint">이메일에 로그인할 수 없습니까? IMAP을 켜보십시오</string>
+    <string name="qq_auth_hint">QQ 이메일 라이센스를 어떻게 취득하는지 알아보기</string>
+    <string name="may_switch_email">没有收到邮件？更换邮箱</string>
+    <string name="email_pd_hint">邮箱配置已预制，可直接登录</string>
+    <string name="email_pa_hint">活动邀请函邮件已经发送到%s，登录邮箱领取验证码</string>
+    <string name="qq_hint">请输入QQ邮箱授权码</string>
+    <string name="email_auth_login">授权登录</string>
+
+    <string name="knock_scan">KNOCKNOCK로 스캔하기</string>
+    <string name="we_chat_scan">위쳇으로 스캔하기</string>
+
+    <string name="tips_knock_scan">使用诺客扫一扫, 保存我的名片</string>
+    <string name="tips_we_chat_scan">使用微信扫一扫, 保存我的名片</string>
+
+    <string name="commit_and_auth_identity">제출 심사</string>
+    <string name="group_auth_identity">申请企业身份电话</string>
+    <string name="tips_upload_id_card_back">请上传身份证反面（人像面）</string>
+    <string name="tips_upload_id_card_front">请上传身份证正面（国徽面）</string>
+    <string name="tips_upload_business_license">请上传营业执照</string>
+    <string name="commit_success">提交成功!请耐心等待</string>
+    <string name="tips_personal_id_card_commit_success"> </string>
+    <string name="tips_group_commit_success">将会有客服与您联系</string>
+    <string name="notice_of_personal_identity_info_safety">根据国家相关政策以及运营商规定，使用「身份电话」需上传身份证审核，以确保您的身份真实有效。诺客将严格遵守法律规定保护您的个人信息。</string>
+    <string name="i_know_it">我知道了</string>
+    <string name="tips_auth_verifying">请耐心等待审核结果，审核通过后我们将\n\t第一时间告知您，届时您可以开启身份电话服务</string>
+    <string name="tips_auth_group_verifying">请耐心等待审核，审核过程中将会有专人与您联系，请确保手机通畅，审核通过后我们将第一时间告知您，届时为您开启企业级的身份电话服务。</string>
+    <string name="tips_auth_verified_success">审核成功！您可以使用身份电话了</string>
+    <string name="try_use_intelligent_phone">试用身份电话</string>
+    <string name="verify_info_upgrade">更改审核信息</string>
+    <string name="tips_use_intelligent_phone">当您使用身份电话拨号时，对方会收到以下内容</string>
+
+    <string name="clear_all_message">지우기</string>
+
+    <!-- growing io event id -->
+    <string name="event_done_with_login_validate">event_done_with_login_validate</string>
+    <string name="event_main_page_pop_item_manual_create">event_main_page_pop_item_manual_create</string>
+    <string name="event_main_ocr_scan_and_go_to_create">event_main_ocr_scan_and_go_to_create</string>
+    <string name="event_create_page_change_template">event_create_page_change_template</string>
+    <string name="event_create_page_click_rescan">event_create_page_click_rescan</string>
+    <string name="event_new_account_and_first_scan_page">event_new_account_and_first_scan_page</string>
+    <string name="event_new_account_and_first_scan_page_save_event">event_new_account_and_first_scan_page_save_event</string>
+    <string name="event_new_account_and_first_manual_create_success">event_new_account_and_first_manual_create_success</string>
+    <string name="event_no_secret_page_authorize_success">event_no_secret_page_authorize_success</string>
+    <string name="event_no_secret_page_auth_succ_and_login_succ">event_no_secret_page_auth_succ_and_login_succ</string>
+    <string name="event_no_secret_page_click_switch_account">event_no_secret_page_click_switch_account</string>
+    <string name="select_sign_style">选择签名样式</string>
+
+    <string name="backup_start_backup">创建身份验证密码</string>
+    <string name="backup_plz_set_pwd">백업 암호 설정하십시오</string>
+    <string name="backup_plz_set_pwd_confirm">백업 암호를 다시 입력하십시오</string>
+    <string name="backup_biology_cipher">바이오인식 인증</string>
+    <string name="backup_biology_cipher_tips">验证生物识别增强安全性。一般情况下，我们将使用指纹识别进行身份验证。</string>
+    <string name="backup_fingerprint_success">指纹验证成功</string>
+    <string name="backup_fingerprint_not_match_times">指纹不匹配，剩余 %1d 次机会</string>
+    <string name="backup_fingerprint_failed">验证失败，结束，是设备锁定</string>
+    <string name="backup_fingerprint_start_failed">开始失败，设备暂时锁定</string>
+
+    <string name="backup_fingerprint_description">验证指纹以继续操作</string>
+    <string name="backup_fingerprint_hint">请触摸传感器</string>
+    <string name="backup_fingerprint_validate">지문 신원 확인</string>
+    <string name="backup_fingerprint_recognize">지문 인식</string>
+    <string name="backup_reset_password">백업 비밀번호 재설정</string>
+    <string name="backup_contacts_sync_and_backup">주소록 동기화 백업</string>
+    <string name="backup_contacts_sync_and_backup_tips">연락처가 더 이상 잃어버리지 않습니다. 안전하고 편리한 한 키 동기화</string>
+
+    <string name="backup_contacts_in_syncing_tips1">正在把通讯录同步至</string>
+    <string name="cloud">클라우드</string>
+    <string name="chain">区块链</string>
+    <string name="no_backup_item">没有可用的备份选项</string>
+    <string name="backup_contacts_in_syncing_tips2">请不要对本地通讯录进行操作\n\t也不要关闭诺客以免造成数据出错</string>
+    <string name="backup_contacts_sync_failed_tips1">同步失败</string>
+    <string name="backup_contacts_sync_failed_tips2">请检查网络后重新同步，备份期间请不要对\n\t通讯录进行操作</string>
+    <string name="backup_restoring_text">正在将通讯录数据恢复至手机通讯录中，请勿离开本页面！</string>
+    <string name="backup_restore_success">恢复完成</string>
+    <string name="backup_restore_failed">恢复失败！</string>
+    <string name="backup_list_count_all">共%1$s个联系人</string>
+    <string name="backup_list_count_category">诺客%1$s人 手机通讯录%2$s人</string>
+    <string name="backup_list_count_all_2">共备份%1$s人，诺客%2$s人，手机%3$s人</string>
+    <string name="backup_page_click_and_sync">点击开始同步</string>
+    <string name="backup_page_create_backup">创建备份</string>
+    <string name="backup_page_restore_to_local">로컬로 복원하기</string>
+    <string name="backup_page_finish_backup">백업 완료</string>
+    <string name="backup_page_finger_unlock">使用指纹解锁</string>
+    <string name="backup_page_number_unlock">비밀번호를 사용하여 잠금 해제하십시오</string>
+    <string name="backup_page_pls_type_number_pwd">请输入备份密码</string>
+    <string name="backup_page_pls_type_finger_pwd">请验证指纹密码</string>
+    <string name="backup_page_pwd_error_pls_retry">비밀번호가 틀렸습니다. 다시 시도하십시오.</string>
+    <string name="backup_page_three_times_failed">验证3次不成功</string>
+    <string name="backup_page_device_is_locked_pls_wait">设备指纹已被锁定，请稍后再试。</string>
+    <string name="backup_page_net_error_tips">请检查网络是否异常</string>
+    <string name="backup_page_restore_progress">已恢复 %1$s &#037;</string>
+    <string name="backup_page_can_you_restore_confirm">确定要恢复至本地通讯录吗？</string>
+    <string name="backup_page_delete_failed_pls_retry">删除失败，请重试！</string>
+    <string name="backup_page_delete_success">删除成功！</string>
+    <string name="backup_page_restore_success">恢复成功</string>
+    <string name="backup_page_contact_sync">通讯录同步</string>
+
+    <string name="backup_has_got_file_stream">已获取文件流</string>
+    <string name="backup_file_stream_transfer_success">文件流转换成功</string>
+    <string name="backup_zip_decompression_error">Zip包解压异常</string>
+    <string name="backup_backup_records_without_contacts">此记录为无联系人的备份</string>
+    <string name="backup_address_book_contacts_writing_error">通讯录写入联系人出错</string>
+
+    <string name="backup_reset_pls_type_number_pwd">현재 백업에 대한 비밀번호를 입력하십시오</string>
+    <string name="backup_reset_pls_type_new_number_pwd">새 백업 비밀번호 입력하십시오</string>
+    <string name="backup_reset_pls_type_new_number_pwd_once_more">백업 암호를 다시 입력하십시오</string>
+    <string name="backup_reset_pwd_error">密码错误</string>
+    <string name="backup_reset_three_times_check_failed">3次验证失败，请重新输入备份密码</string>
+    <string name="backup_reset_pwd_is_not_same">密码不一致</string>
+    <string name="backup_reset_fingerprint_auth_close">已关闭指纹验证</string>
+    <string name="backup_reset_fingerprint_auth_open">指纹验证已打开</string>
+    <string name="backup_reset_fingerprint_auth_failed">指纹验证失败</string>
+
+    <string name="page_settings_item_login_phone">핸드푼번호 로그인</string>
+    <string name="page_settings_item_theme_setup">主题设置</string>
+    <string name="page_settings_item_about_knock">KNOCKNOCK에 관한</string>
+    <string name="page_settings_item_support">점수 평가</string>
+    <string name="page_settings_item_share">친구에게 공유</string>
+
+    <string name="page_feedback_content_tips">（必填）请描述您遇到的问题或对诺客的建议</string>
+
+    <string name="turn_back_to_intelligent_phone">返回智能拨号</string>
+    <string name="page_my_settings_count_of_backup">共有%1$s位联系人已备份</string>
+    <string name="dialog_we_chat_auth_alert_tips">绑定微信后，可将「诺客」与「名片盒」 无缝连接，开启更多商务可能</string>
+    <string name="dialog_permission_authorize_tips">获取以上权限有助于「诺客」为您提供更好的用户体验，您的个人信息仅用于以上用途，我们非常重视用户个人隐私，请放心使用。</string>
+    <string name="app_name_knock">诺客</string>
+    <string name="downloading">正在下载</string>
+
+
+    <string name="de_center">탈중심화</string>
+    <string name="de_center_explain">어떠한 클라우드 플랫폼도 신뢰하지 않으며 프라이빗 키는 스스로 보관한다.</string>
+    <string name="create_new_wallet">새로운 전자 지갑 만들기</string>
+    <string name="create_wallet">새로운 전자 지갑 만들기</string>
+    <string name="already_had_wallet">나는 이미 전자 지갑이 하나 있습니다.</string>
+    <string name="will_create_wallet">전자지갑 만들기 시작하겠습니다</string>
+    <string name="chain_create_hint">在下一步中，您将看到12个帮助您恢复钱包的助记词</string>
+    <string name="chain_warning">엄제든 어떤 사람과도 연상단어를 공유하지 않고 그것을 안전한 곳에 저장하십시오.</string>
+    <string name="chain_about_check">我已了解，如果我丢失了助记词，将无法找回钱包与备份的 通讯录</string>
+    <string name="wallet_name">전자 지갑 이름</string>
+    <string name="pwd">비밀번호</string>
+    <string name="confirm_pwd">비밀번호를 다시 입력하십시오</string>
+    <string name="backup_words">지갑 연상단어를 적으세요</string>
+    <string name="input_backup_words">지갑 연상단어를 확인한다</string>
+    <string name="backup_words_hint">助记词用于恢复钱包或重置钱包密码，将它准确的抄写 到纸上，并存放在只有你知道的安全的地方。</string>
+    <string name="backup_words_input_hint">당신의 백업 연상단어가 올바른지 확인하려면 연상단어를 차례로 클릭하십시오.</string>
+
+    <string name="process_backup">전자지갑 백업</string>
+    <string name="process_valid">바이오인식</string>
+    <string name="process_finish">설정완료</string>
+
+    <string name="no_backup_method">暂无可用的备份方式</string>
+    <string name="choose_backup_to">으로 백업하기</string>
+    <string name="cost">费用</string>
+    <string name="clear_wallet_data">清除钱包数据</string>
+    <string name="confirm_clear">确定清除?</string>
+    <string name="combine_page_field_name">이름</string>
+    <string name="combine_page_field_mobile">핸드푼</string>
+    <string name="combine_page_field_card">名片</string>
+    <string name="combine_page_field_card_combine_success">名片合并完成</string>
+
+    <string name="new_contact_page_have_no_contact_for_now">새 연락처 없음</string>
+
+    <string name="emoji_list_page_reset">초기화</string>
+    <string name="emoji_list_page_new_add">새로만들기</string>
+    <string name="emoji_list_page_edit">편집</string>
+    <string name="emoji_list_page_finish">완성</string>
+
+    <string name="email_register_page_pls_code_captcha_tips">请输入%1$s位验证码</string>
+    <string name="email_register_page_resend">재전송</string>
+    <string name="email_register_page_sending">발송 중</string>
+
+    <string name="email_register_page_captcha_has_sent_pls_checkout">验证码请到注册邮箱中查看</string>
+    <string name="email_register_page_verifying">확인중&#046;&#046;&#046;</string>
+    <string name="email_register_page_captcha_code_error">验证码错误，请重新输入</string>
+    <string name="email_register_page_verified_success">验证成功</string>
+    <string name="email_register_page_gmail_authorized_failed">Gmail授权失败</string>
+    <string name="email_register_page_captcha_sent_failed">发送验证码失败，请重新发送</string>
+    <string name="email_register_page_return_back">돌아가기</string>
+    <string name="email_register_page_manual_verify">手动验证</string>
+    <string name="email_register_page_mail_has_send">已向该邮箱发送验证邮件</string>
+    <string name="email_register_page_email_login_failed">邮箱登录失败</string>
+    <string name="email_register_page_retype_password">重输密码</string>
+    <string name="email_register_page_senior_setup">고급설정</string>
+    <string name="email_register_page_how_to_get_authorization_code">如何获取授权码</string>
+    <string name="email_register_page_email_account_not_null">邮箱账号不能为空</string>
+    <string name="email_register_page_email_account_type_error">邮箱账号格式错误</string>
+    <string name="email_register_page_email_account_pwd_not_null">密码不能为空</string>
+    <string name="email_register_page_getting_email_conf">正在获取邮箱配置</string>
+    <string name="email_register_page_email_logging_in">正在登录邮箱</string>
+
+    <string name="card_history_track_new_add">新增%1$s</string>
+    <string name="card_history_track_delete">删除了%1$s</string>
+    <string name="card_history_track_update">更新了%1$s</string>
+
+    <string name="welcome_page_go_next">다음단계</string>
+    <string name="welcome_page_privacy">사용권 계약 및 개인정보 보호 정책</string>
+
+    <string name="my_qr_code_page_knock_scan_and_save_tips">使用诺客扫描二维码，保存我的名片</string>
+    <string name="my_qr_code_page_we_chat_scan_and_save_tips">使用微信扫描二维码，保存我的名片</string>
+
+    <string name="ocr_scan_page_in_recognition">识别中&#046;&#046;&#046;</string>
+    <string name="ocr_scan_page_in_screen_shot">截图中&#046;&#046;&#046;</string>
+    <string name="ocr_scan_page_in_auto_recognition">자동 인식</string>
+    <string name="ocr_scan_page_in_close_recognition">识别关闭</string>
+    <string name="ocr_scan_page_in_close_the_light">轻触关闭</string>
+    <string name="ocr_scan_page_in_open_the_light">轻触照亮</string>
+
+    <string name="email_login_page_can_not_add_duplicate_email">不能重复添加邮箱</string>
+    <string name="email_login_page_pls_type_qq_email_auth_code">QQ 이메일 라이선스 코드 입력</string>
+    <string name="email_login_page_auth_confirm">确认授权</string>
+    <string name="email_login_page_mail_server_qq">QQ邮箱</string>
+    <string name="email_login_page_mail_server_sina">Sina邮箱</string>
+    <string name="email_login_page_mail_server_126">126/163邮箱</string>
+    <string name="email_login_page_mail_server_google">Gmail邮箱</string>
+    <string name="email_login_page_imap_guide">开启IMAP引导</string>
+    <string name="email_login_page_email_account_abnormal">邮箱账号异常</string>
+
+    <string name="data_loading">加载中&#046;&#046;&#046;</string>
+    <string name="email_band_page_add_189_email_success">已成功添加189免密邮箱</string>
+
+    <string name="main_presenter_set_to_top">맨 위에 고정하기</string>
+    <string name="main_presenter_cancel_set_to_top">맨 위에 고정 취소</string>
+    <string name="main_presenter_make_top">맨 위에 고정</string>
+    <string name="main_presenter_add_mark_asterisk">별표 추가</string>
+    <string name="main_presenter_cancel_mark_asterisk">별표 취소</string>
+    <string name="main_presenter_mark_asterisk">별표</string>
+    <string name="main_presenter_make_had_read">읽은 것으로 표시</string>
+    <string name="main_presenter_make_not_read_yet">읽지 않음으로 표시</string>
+    <string name="main_presenter_make_mark">표기</string>
+    <string name="main_presenter_cancel_select_all">전체선택 취소</string>
+    <string name="main_presenter_select_all">전체선택</string>
+    <string name="main_presenter_mark_email">표기메일</string>
+
+    <string name="message_container_downloading">下载中</string>
+    <string name="message_container_downloaded">다운로드 완료</string>
+    <string name="message_container_finish_download">다운로드 완료</string>
+    <string name="message_container_download_all">전체 다운로드</string>
+
+    <string name="phone_contact_page_not_contact_record_for_now">暂无手机通讯录记录</string>
+
+    <string name="permission_auth_apply_permission">申请权限</string>
+    <string name="permission_auth_start_use">开始使用</string>
+    <string name="permission_auth_permission_denied_and_tips">有权限未获取导致 APP 无法正常运行</string>
+
+    <string name="show_parse_page_can_save">可保存</string>
+    <string name="show_parse_page_can_update">可更新</string>
+    <string name="show_parse_page_has_exist">已存在</string>
+    <string name="show_parse_page_exist_and_you_do_not_need_to_save">이 연락처가 이미 존재하므로, 다시 저장할 필요가 없습니다.</string>
+
+    <string name="email_adapter_sending">正在发送中&#046;&#046;&#046;</string>
+    <string name="email_adapter_waiting_send">等待发送中&#046;&#046;&#046;</string>
+    <string name="email_adapter_not_receiver">&lt;无收件人&gt;</string>
+    <string name="email_adapter_email_read_mark">标记为已读</string>
+    <string name="email_adapter_email_not_read_mark">标记为未读</string>
+    <string name="email_adapter_edit">편집</string>
+    <string name="email_adapter_turn_to_draft">转为草稿</string>
+    <string name="email_adapter_resent">재전송</string>
+    <string name="email_adapter_delete">삭제</string>
+
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+
+    <string name="compose_page_reply">회신:</string>
+    <string name="compose_page_relay">전달:%1$s</string>
+    <string name="compose_page_company">회사：%1$s</string>
+    <string name="compose_page_email">메일박스：%1$s</string>
+    <string name="compose_page_phone">핸드푼：%1$s</string>
+    <string name="compose_page_address">주소：%1$s</string>
+    <string name="compose_page_can_not_send">暂无法发送</string>
+    <string name="compose_page_pls_wait_attachment_download">附件尚未下载完成，请等待附件下载完成后重试</string>
+    <string name="compose_page_still_send">仍然发送</string>
+    <string name="compose_page_edit_go_on">继续编辑</string>
+    <string name="compose_page_preview">미리보기</string>
+    <string name="compose_page_insert_text">插入正文</string>
+    <string name="compose_page_delete">삭제</string>
+    <string name="compose_page_download_retry">리로딩</string>
+    <string name="compose_page_downloading">%1$s로딩 중&#046;&#046;&#046;</string>
+    <string name="compose_page_delete_confirm">삭제 확인</string>
+    <string name="compose_page_delete_picture_confirm">确认删除该图片?</string>
+    <string name="compose_page_cancel">취소</string>
+    <string name="compose_page_confirm">확인</string>
+
+    <string name="identity_auth_identity_phone_try_count_times">当前剩余次数：%1$s次</string>
+    <string name="identity_auth_content_example_model">示例[您好：我是微位科技的XXX，如您方便请接听，谢谢！]</string>
+    <string name="identity_auth_telephone_example_model">示例[1899999999]</string>
+    <string name="identity_auth_authorization_complete">审核完成</string>
+    <string name="identity_auth_authorization_failed">审核失败</string>
+
+    <string name="intelligent_keyboard_no_search_result_for_now">暂无搜索结果</string>
+    <string name="intelligent_keyboard_no_record_result_for_now">통화기록이 없다</string>
+    <string name="intelligent_keyboard_no_register_flash_msg_user">未注册闪信用户</string>
+
+    <string name="contact_details_edit_card">명함 편집</string>
+    <string name="contact_details_add_card">명함 추가</string>
+
+    <string name="mail_exchange_receiver">来自%1$s</string>
+    <string name="mail_exchange_sender">发自%1$s</string>
+
+    <string name="message_view_receiver">받는사람：%1$s</string>
+    <string name="message_view_sender">보낸사람：%1$s</string>
+    <string name="message_view_send_time">발송시각：%1$s</string>
+    <string name="message_view_contact_has_been_exist">이 연락처가 이미 존재하므로, 다시 저장할 필요가 없습니다.</string>
+    <string name="message_view_no_contact_to_add">暂无联系人可以添加，试试其他邮件吧</string>
+    <string name="message_view_add_contact">연락처 추가</string>
+    <string name="message_view_view_contact">연락처 보기</string>
+    <string name="message_view_send_email">이메일을 발송하다</string>
+    <string name="message_view_save">저장</string>
+    <string name="message_view_share">공유</string>
+    <string name="message_view_attachment_download_tips">该附件较大，是否使用移动网络下载</string>
+    <string name="message_view_cur_network_is_cmcc">현재 모바일 네트워크다</string>
+    <string name="message_view_thinking">在想想</string>
+    <string name="message_view_download_again">다운로드 계속</string>
+    <string name="message_view_add">추가</string>
+    <string name="message_view_reply_tight_pls_wait">回复过于频繁，请30秒后再次尝试</string>
+    <string name="message_view_revoke">취소</string>
+    <string name="message_view_sending">正在发送中</string>
+    <string name="message_view_email_reply_content_tips">이 이메일에 대한 귀하의 이번 회신은 다음과 같습니다</string>
+    <string name="message_view_email_reply_content_is">您对该邮件的回复是「%1$s」</string>
+    <string name="message_view_email_send_failed_pls_retry">发送失败，点击重试</string>
+    <string name="message_view_ox_xx">기다리다%1$s사람</string>
+    <string name="message_view_reply_to_name">에 회신%1$s기다리다</string>
+    <string name="message_view_reply_to">에 회신%1$s</string>
+    <string name="message_view_reply_is_contain_attachment">转发是否包含附件?</string>
+    <string name="message_view_reply_is_contain_attachment_yes">NO</string>
+    <string name="message_view_reply_is_contain_attachment_no">YES</string>
+    <string name="message_view_has_been_mark_asterisk_email">별표 이메일 추가</string>
+    <string name="message_view_cancel_mark_asterisk_email">已取消为星标邮件</string>
+    <string name="message_view_email_delete_success">邮件删除成功</string>
+    <string name="message_view_email_delete_confirm">确定要删除此邮件？</string>
+    <string name="message_view_email_delete_confirm_delete">删除</string>
+
+    <string name="company_list_data_load_failed">数据加载失败, 请刷新重试</string>
+    <string name="company_list_member_wait_to_conf">管理员暂未配置成员信息</string>
+
+    <string name="validate_captcha_get_a_new_one_captcha">重新获取验证码</string>
+    <string name="validate_captcha_code_has_sent_arrived">발송되었습니다: %1$s</string>
+
+    <string name="contact_details_card_collection">名片收藏成功</string>
+    <string name="contact_details_share_tips">연락처를 위챗친구에게 공유해 보십시오</string>
+    <string name="contact_details_content_has_been_copied">已复制内容：%1$s</string>
+    <string name="url_link_address_incorrect_format">链接地址格式不正确</string>
+    <string name="contact_details_share_content_company">회사:%1$s</string>
+    <string name="contact_details_share_content_mobile">전화:%1$s</string>
+    <string name="contact_details_combine_card_count">명함 합치(%1$s)</string>
+    <string name="contact_details_combine_notice">有%1$s张相似名片需要您手动合并，是否现在合并？</string>
+    <string name="contact_details_combine_after">잠시 뒤에</string>
+    <string name="contact_details_combine_go_right_now">합치하러</string>
+    <string name="contact_details_fields_list">명함정보</string>
+    <string name="contact_details_mail_exchange">往来邮件</string>
+    <string name="contact_details_history_track">历史轨迹</string>
+    <string name="contact_details_card_info_has_been_copied_into_clipboard">已将主要信息复制到剪切板</string>
+
+    <string name="email_fragment_has_validated">검증됨</string>
+    <string name="email_fragment_go_and_validate">검증</string>
+    <string name="email_fragment_title_sender">보낸사람</string>
+    <string name="email_fragment_title_receiver">받는사람</string>
+    <string name="email_fragment_title_subject">제목</string>
+    <string name="email_fragment_title_all">전부</string>
+    <string name="email_fragment_list_is_on_bottom_tips">到底啦~还有邮件未加载？</string>
+    <string name="email_fragment_exist_another_email">有邮件未加载？</string>
+    <string name="email_fragment_list_is_on_bottom_tips_2">到底啦~还有已发送邮件未加载？</string>
+    <string name="email_fragment_exist_another_email_2">已发送的邮件未加载？</string>
+
+    <string name="company_member_has_no_member_tips">暂无成员列表数据</string>
+
+    <string name="just_save">저장</string>
+
+    <string name="add_or_edit_email_page_xo">自定义（%1$s个字符以内）</string>
+    <string name="add_or_edit_email_page_xo_xo">%1$s（%2$s个字符以内）</string>
+
+    <string name="add_contact_dialog_content">你已选择[仅显示有效邮箱/号码的联系人]，该页面下无有效邮箱/号码的联系人将不会显示</string>
+    <string name="add_contact_un_recognize">未识别到</string>
+    <string name="add_contact_phone_number">핸드푼 번호</string>
+    <string name="add_contact_email_account">메일박스</string>
+    <string name="add_contact_pls_manual_input">请手动输入</string>
+
+    <string name="go_to_phone_settings_page">前往手机权限设置页？</string>
+    <string name="date_pattern_yyyy_mm_dd_hh_mm_ss">yyyy年MM月dd日 HH:mm:ss</string>
+
+    <string name="email_server_set_email_configuration">正在验证邮箱配置</string>
+    <string name="email_server_set_validate_receive_server">正在验证收件服务器</string>
+    <string name="email_server_set_validate_send_server">正在验证发件服务器</string>
+
+    <string name="email_logging_in">正在登录邮箱&#046;&#046;&#046;</string>
+    <string name="dealing_with">正在处理&#046;&#046;&#046;</string>
+    <string name="claiming_with">正在领取中&#046;&#046;&#046;</string>
+    <string name="getting_auth_code">正在获取授权码&#046;&#046;&#046;</string>
+    <string name="getting_user_info">正在获取用户信息&#046;&#046;&#046;</string>
+    <string name="email_login_failed">邮箱登录失败</string>
+    <string name="right_text_add">추가</string>
+    <string name="right_text_done">완성</string>
+    <string name="latest_version_tips">当前已是最新版本</string>
+    <string name="getting_latest_version">正在获取最新版本信息</string>
+
+    <string name="make_phone_call_manage_sorry_receive_times_out_of_limit">抱歉，对方收取身份电话次数已达上限</string>
+    <string name="make_phone_call_manage_this_number_require_to_buy_more_times">이 번호는 요청제한에 초과</string>
+    <string name="make_phone_call_manage_today_quota_is_running_out_of_times">您今日的拨打限额已用尽</string>
+    <string name="make_phone_call_manage_month_quota_is_running_out_of_times">您的本月身份电话次数已用完</string>
+    <string name="make_phone_call_manage_the_receiver_could_not_get_your_info">상대방이 귀하의 신분 정보를 받지 못했을 수도 있습니다</string>
+    <string name="make_phone_call_manage_thirty_seconds_is_not_out_going_call">30秒内未拨打号码，对方可能无法收到您的身份信息</string>
+    <string name="make_phone_call_manage_use_sys_default_make_phone_call">使用系统拨号</string>
+
+    <string name="select_avatar_resource_from">选择头像来源</string>
+    <string name="take_photo">촬영</string>
+    <string name="select_on_gallery">핸드폰 앨범에서 선택</string>
+    <string name="email_account_set_default">设置默认邮箱成功</string>
+
+    <string name="update_manage_have_a_new_version">有新的版本可以更新</string>
+    <string name="update_manage_version_code">版本号：</string>
+    <string name="update_manage_not_to_update">暂不更新</string>
+    <string name="update_manage_upgrade_right_now">立即更新</string>
+    <string name="update_manage_knock_update">诺客更新</string>
+    <string name="update_manage_downloading_in_background">后台下载中&#046;&#046;&#046;</string>
+    <string name="update_manage_storage_permission_denied">无存储权限无法更新！</string>
+
+    <string name="caller_recog_function_dialog_content">小米手机来电显示功能需要单独开启，是否前往？</string>
+    <string name="caller_recog_function_dialog_cancel">暂不开启</string>
+    <string name="caller_recog_function_dialog_ok">点击前往设置</string>
+    <string name="caller_recog_pls">请</string>
+    <string name="caller_recog_slide_to_bottom">下滑至页面底部</string>
+    <string name="caller_recog_found">找到</string>
+    <string name="caller_recog_screen_lock_and_display">「锁屏显示」</string>
+    <string name="caller_recog_and">与</string>
+    <string name="caller_recog_flow_window">「显示悬浮窗」</string>
+    <string name="caller_recog_choose_positive">选择允许</string>
+
+    <string name="logging_in">正在登录中&#046;&#046;&#046;</string>
+
+    <string name="backup_data_restore_failed">通讯录恢复失败，</string>
+    <string name="backup_data_error_text_unpressed_exception">获取解压缩密码异常</string>
+
+    <string name="contact_type">联系人类型</string>
+    <string name="all_contacts">所有联系人</string>
+    <string name="shown_effective_email">仅展示有效邮箱</string>
+    <string name="just_knock_contact">仅诺客联系人</string>
+    <string name="just_phone_contact">仅本机联系人</string>
+    <string name="front_of_card">명함 앞면</string>
+    <string name="back_of_card">명함 뒤면</string>
+    <string name="email_server_add_email_text">이메일 주소 추가</string>
+    <string name="email_server_new_email_notice">새 메일 알림</string>
+    <string name="email_server_knock_signature_mark">KNOCKNOCK서명 표시</string>
+    <string name="email_server_quick_reply">빠른 답장 설정</string>
+    <string name="email_server_email_settle_guide">邮箱设置指引</string>
+
+    <string name="welcome_xml_intelligent_card">智能名片</string>
+    <string name="welcome_xml_create_your_digital_id_card">创建你的电子名片，分享给新认识的朋友</string>
+    <string name="welcome_xml_build_your_business_relationship">快速建立你的商务</string>
+    <string name="welcome_xml_new_relationship">新人脉</string>
+    <string name="xml_welcome_1_tips">无论是商业交流、工作对接，还是发邮件</string>
+    <string name="xml_welcome_1_let_you">让你</string>
+    <string name="xml_welcome_1_feeling_ez">更省心</string>
+    <string name="xml_welcome_3_tips">手机处理邮件更迅速，不再错过企业邮箱里的</string>
+    <string name="xml_welcome_3_title">邮箱管理</string>
+    <string name="xml_welcome_3_more_import">重要信息，</string>
+    <string name="xml_welcome_3_immediate_up">即时跟进</string>
+    <string name="xml_welcome_3_business_cooperation">商务合作新动态</string>
+    <string name="xml_welcome_3_getting_start">向左滑动开始使用</string>
+    <string name="size_small">小</string>
+    <string name="size_middle">中</string>
+    <string name="size_large">大</string>
+    <string name="forgot_password">비밀번호를 잊어버려요?</string>
+
+    <string name="xml_add_contact_search">搜索</string>
+    <string name="xml_add_contact_chosen_receiver">已选收件人</string>
+    <string name="xml_add_contact_group_send_sms">그룹 메세지 보내기</string>
+    <string name="xml_add_contact_send_email">이메일을 발송하다</string>
+    <string name="xml_add_contact_group_send_email">群发邮件\n群发一封邮件</string>
+    <string name="xml_add_contact_distribute_email">分发邮件\n给每人单独发邮件</string>
+    <string name="xml_add_contact_scan_email">扫名片识邮箱</string>
+
+    <string name="xml_camera_scan_2_put_card_in_frame">명함을 프레임 내부에서 정려해 스캔</string>
+    <string name="xml_camera_scan_2_create_digital_id">디지털 신분을 만들기기</string>
+    <string name="xml_camera_scan_2_choose_gallery">相册选择</string>
+    <string name="xml_camera_scan_2_manual_create">手动创建名片</string>
+    <string name="xml_camera_scan_2_create">작성</string>
+    <string name="xml_camera_scan_2_pls_align_card_and_scan">명함에 맞춰 스캔하십시오</string>
+
+    <string name="xml_frag_group_contact_name">联系人姓名</string>
+    <string name="xml_frag_group_contact_phone">联系电话</string>
+    <string name="xml_frag_group_company_name">公司名称</string>
+    <string name="xml_frag_group_make_sure_id_phone_is_real">为确保身份电话的真实性，开通需要审核您的身份</string>
+    <string name="auth_validating">审核中</string>
+    <string name="your_file_is_auth_validated">您的信息已进行审核</string>
+    <string name="sry_auth_failed">抱歉，您的信息审核失败</string>
+    <string name="pls_check_your_info_and_commit">请确认您的信息是否正确后并再次提交</string>
+
+    <string name="xml_emoji_add_text">텍스트</string>
+    <string name="xml_emoji_add_icon">아이콘</string>
+    <string name="xml_emoji_add_reply_content_details">답장내용 상세사항</string>
+
+    <string name="caller_recognize_status">수신명함 인식상태</string>
+
+    <string name="frag_contact_xml_bind_phone_tips">핸드폰 번호를 연동시켜 계정보안 확보하고 핸드폰으로 로그인 할 수 있게</string>
+    <string name="frag_contact_xml_we_chat_bind">微信授权，同步[名片盒]小程序联系人</string>
+
+    <string name="share_to">分享至</string>
+    <string name="share_we_chat">위챗</string>
+    <string name="share_we_moment">朋友圈</string>
+    <string name="share_sms">短信</string>
+    <string name="share_email">이메일</string>
+    <string name="share_more_options">더보기</string>
+
+    <string name="show_card_xml_template_name">模板名称</string>
+    <string name="show_card_xml_preview">위 명함 효과는 미리보기로 제공</string>
+
+    <string name="bind_we_chat_and_sync">绑定微信,与「名片盒」信息同步</string>
+    <string name="after_bind">稍后绑定</string>
+    <string name="go_bind">연동을 시키다</string>
+    <string name="phone_number">핸드푼 번호</string>
+    <string name="captcha">验证码</string>
+    <string name="pls_type_captcha">인증번호를 입력하십시오</string>
+    <string name="claim">받기</string>
+    <string name="keyboard_alphabet">切换到全键盘</string>
+    <string name="bind_we_chat">위챗을 연동하기</string>
+    <string name="open_more_function">开启更多功能</string>
+
+    <string name="search_between_name_and_phone">请输入您要搜索的姓名/手机号</string>
+
+    <string name="go_back">돌아가기</string>
+    <string name="be_ok">네</string>
+    <string name="reset_password">비밀번호 재설정</string>
+
+    <string name="backup_list_xml_contacts_restoring">正在把通讯录恢复至本地</string>
+    <string name="backup_list_xml_not_allow_operate_for_this_moment">请不要对本地通讯录进行操作</string>
+
+    <string name="we_chat_business_card_has_been_registered">您已经注册了微信小程序「名片盒」，</string>
+    <string name="bind_we_chat_will_import_business_card_data">绑定微信后将导入「名片盒」数据</string>
+    <string name="will_not_auth_for_now">暂不授权</string>
+    <string name="delete_only">삭제</string>
+
+    <string name="field_avatar">프로필사진</string>
+    <string name="field_name">이름</string>
+    <string name="field_name_hint">이름을 입력하세요(필수 기입)</string>
+    <string name="field_phone">핸드푼</string>
+    <string name="field_phone_hint">请输入手机号码（必填）</string>
+    <string name="field_email">메일박스</string>
+    <string name="field_email_hint">请输入邮箱（必填）</string>
+    <string name="field_company">회사</string>
+    <string name="field_company_hint">请输入公司</string>
+    <string name="field_department">부서</string>
+    <string name="field_department_hint">请输入公司</string>
+    <string name="field_job">직위</string>
+
+    <string name="feedback_xml_tips">若您方便留下QQ/邮箱，我们会与您沟通问题。</string>
+    <string name="feedback_xml_commit_feedback">피드백 제출</string>
+
+    <string name="contact_official_customer_service">고객센터에 연락하기</string>
+    <string name="will_use_first">, 먼저 체험 가능</string>
+    <string name="maybe_looking_for_is">찾고 싶은 것은</string>
+
+    <string name="theme_setup_xml_style_qj">浅净</string>
+    <string name="theme_setup_xml_style_kh">酷黑</string>
+    <string name="theme_setup_xml_auth_switch_theme">主题智能切换</string>
+    <string name="theme_setup_xml_auth_switch_theme_tips">开启主题智能切换后会在设定的时间内转换主题风格</string>
+    <string name="theme_setup_xml_text_off">  </string>
+    <string name="theme_setup_xml_text_on">  </string>
+
+    <string name="official_website">공식사이트</string>
+    <string name="official_website_url">www.knocknock.ai</string>
+    <string name="official_customer_telephone">고객센터전화</string>
+    <string name="official_customer_telephone_number">400&#8211;833&#8211;5663</string>
+    <string name="official_all_rights_reserved">© 2017 &#8211; 2018 Knocknock Inc. All Rights Reserved</string>
+
+    <string name="camera_card_scan">명함 스캔</string>
+    <string name="camera_qr_code_scan">QR코드  스캔</string>
+
+    <string name="compose_xml_email_group_send">그룹 메일 보내기</string>
+    <string name="compose_xml_distribute_email">이메일 배포</string>
+    <string name="compose_xml_send_email">메일 발송</string>
+    <string name="compose_xml_email_receiver">받는사람：</string>
+    <string name="compose_xml_email_all_sender">사본을 보내기/몰래 보냄，보낸사람：</string>
+    <string name="compose_xml_email_copy_send">사본을 보내기</string>
+    <string name="compose_xml_email_secret_send">몰래 보냄</string>
+    <string name="compose_xml_email_sender">보낸사람：</string>
+    <string name="compose_xml_email_sender_hint">보낸사람</string>
+    <string name="compose_xml_email_subject">제목：</string>
+
+    <string name="email_edit_xml_sender_name">발신자 이름</string>
+    <string name="email_edit_xml_recommend_name">推荐姓名</string>
+
+    <string name="more_options">더보기</string>
+    <string name="contact">연락처</string>
+    <string name="words_not_enough">助记词不能小于12个</string>
+    <string name="keystore_or_pwd_is_empty">keystore或者密码为空</string>
+    <string name="private_key_is_empty">私钥为空</string>
+
+    <string name="settings_import_success_header">导入成功</string>
+    <string name="settings_import_failed_header">导入失败</string>
+    <string name="function_introduce">기능 소개</string>
+    <string name="login_means_consent">로그인할 때 바로 동의를 표시하다.</string>
+    <string name="user_privacy_and_policy">《사용권 계약 및 개인정보 보호 정책》</string>
+    <string name="no_more_card">没有更多名片</string>
+    <string name="save_qr_code_as_pic">保存为图片</string>
+    <string name="bind_account_will_be_safest">绑定会让您的账号更安全，并能开启更多功能</string>
+
+    <string name="china">中国</string>
+
+    <string name="use_no_secret_login">비밀번호 없이 로그인 사용하기</string>
+    <string name="open_email_service_agreement">开启邮件服务协议</string>
+    <string name="click_and_generate_auth_code">点击生成授权码</string>
+    <string name="existing_auth_Code_for_login">기준 라이선스 코드로 바로 로그인합니다</string>
+    <string name="get_auth_code_for_login">라이선스 코드를 받아 로그인합니다</string>
+    <string name="get_auth_code">라이선스 코드 받기</string>
+    <string name="contacts_maybe_looking_for_is">你可能想找的联系人</string>
+    <string name="using_email_signature_can_supply_contacts">通过邮件签名档，可补充以下联系人</string>
+    <string name="manage_my_card">내 명함을 관리하다</string>
+    <string name="app_current_version">当前版本</string>
+    <string name="enterprise_mailbox">기업 이메일</string>
+    <string name="personal_mailbox">개인 ㅇ메일</string>
+    <string name="enterprise_mailbox_for_tencent">腾讯企业邮箱</string>
+    <string name="enterprise_mailbox_for_neteast">网易企业邮箱</string>
+    <string name="enterprise_mailbox_for_ali">阿里企业邮箱</string>
+    <string name="enterprise_mailbox_for_sina">新浪企业邮箱</string>
+    <string name="enterprise_mailbox_for_189">189企业邮箱</string>
+    <string name="personal_mailbox_qq">QQ邮箱</string>
+    <string name="personal_mailbox_163">163邮箱</string>
+    <string name="personal_mailbox_126">126邮箱</string>
+    <string name="personal_mailbox_189">189邮箱</string>
+    <string name="personal_mailbox_139">139邮箱</string>
+    <string name="personal_mailbox_sina">新浪邮箱</string>
+    <string name="you_have_189_email_can_add_without_password">189 이메일을 비밀번호 없이 추가할 수 있습니다</string>
+    <string name="save_contact">연락처 저장</string>
+    <string name="send">보내기</string>
+    <string name="pls_type_reply_content">답장 내용을 입력하십시오</string>
+    <string name="scan_card">扫描名片</string>
+    <string name="manual_add_card">手动添加</string>
+    <string name="auto_recognition">자동 인식</string>
+    <string name="add_more_options">添加更多项</string>
+    <string name="you_have_no_contact_yet">还没有联系人哦~现在添加一个吧</string>
+    <string name="pls_type_6_bit_captcha">请输入6位验证码</string>
+    <string name="management">관리</string>
+    <string name="my_contacts">나의 연락처</string>
+    <string name="profile_avatar">프로필사진</string>
+    <string name="modify_avatar">프로필 변경</string>
+    <string name="email_sender_name">发件人名称</string>
+    <string name="setup_complete">完成设置</string>
+    <string name="setup_skip">跳过设置</string>
+    <string name="email_signature">이메일 서명</string>
+    <string name="server_setup">서버 설정</string>
+    <string name="delete_email_account">메일 삭제</string>
+    <string name="email_receiving_server">수신 서버</string>
+    <string name="email_sender_server">발송 서버</string>
+    <string name="pls_enter_email_receiving_server">请输入收件服务器</string>
+    <string name="pls_enter_email_sender_server">请输入发件服务器</string>
+    <string name="email_receiving_server_port">수신 단자번호</string>
+    <string name="email_sender_server_port">발송 단자번호</string>
+    <string name="email_account">계정</string>
+    <string name="details">자세한 상황</string>
+
+    <string name="open_imap_server">IMAP 서비스 켜기</string>
+    <string name="create_success">설정성공</string>
+    <string name="share_my_card_to_my_we_chat_friends">将自己的名片分享给微信好友，即可免费获得最美证件照的拍照机会</string>
+    <string name="share_to_friends">分享好友</string>
+    <string name="not_share_for_now">暂不分享</string>
+    <string name="starting_sync">동기화 시작</string>
+    <string name="use_mnemonic_word_to_reset_password">비밀번호를 잊어버렸거나 지문을 사용할 수 없을 때 연상단어를 사용하여 비밀번호를 재설정해야 합니다.</string>
+    <string name="account_validation_failed">계정 검증 실패, 설정으로 이동</string>
+    <string name="edit_only">편집</string>
+    <string name="searching_nodes_pls_wait">正在从节点中搜索，请稍候&#046;&#046;&#046;</string>
+    <string name="one_hundred_eighty_human">180人</string>
+    <string name="add_only">추가</string>
+    <string name="dialog_title_choose_needs_to_add">选择需要添加的信息</string>
+    <string name="pls_enter_password">请输入密码</string>
+    <string name="default_email">기본 이메일주소</string>
+    <string name="re_enter_the_password">비밀번호 다시 입력</string>
+    <string name="upgrade_to_enterprise_edition">升级至企业版</string>
+    <string name="go_to_use">去使用</string>
+    <string name="identity_phone">신분 전화</string>
+    <string name="reply_to_all">전체 회신</string>
+    <string name="move_to">移动到</string>
+    <string name="reply_only">회신</string>
+    <string name="no_signature">서명 사용 안 함</string>
+    <string name="quick_reply">즉시 회신</string>
+    <string name="delete_signature">서명 삭제</string>
+    <string name="load_more">加载更多</string>
+    <string name="choose_the_operation_you_need">할 동작을 선택하십시오</string>
+    <string name="send_sms">메시지 보내기</string>
+    <string name="call_only">통화하기</string>
+    <string name="hide_only">숨김</string>
+    <string name="user_name">아이디</string>
+    <string name="pls_enter_user_name">请输入用户名</string>
+    <string name="sort_order">순서를 배열하는 방식</string>
+    <string name="sort_by_name">이름 별</string>
+    <string name="sort_by_company">회사 별</string>
+    <string name="sort_by_latest">최신 별</string>
+    <string name="sort_by_oldest">최초 별</string>
+    <string name="display_form">전시방식</string>
+    <string name="display_form_by_avatar">프로필로 전시</string>
+    <string name="display_form_by_card">명함으로 전시</string>
+    <string name="manage_my_contacts">연락처 관리</string>
+    <string name="batch_delete">대량으로 삭제하다</string>
+    <string name="combine_card">명함 합치</string>
+    <string name="mail_attachment_with_symbol">첨부：</string>
+    <string name="mail_attachment">첨부</string>
+    <string name="email_message_date">    시간：</string>
+    <string name="cc_list_with_symbol">抄送人：</string>
+    <string name="default_only">默认</string>
+    <string name="verifying_fingerprint">지문 신원 확인</string>
+    <string name="caller_records">통화기록</string>
+    <string name="recover_only">복원</string>
+    <string name="close_only">닫기</string>
+    <string name="sms_only">短信</string>
+    <string name="tips_only">小贴士</string>
+    <string name="search_tiny_knock">搜索“諾小客 (</string>
+    <string name="search_tiny_knock_and_input">e) ”可依次在拨号键盘中输入</string>
+    <string name="create_card">创建名片</string>
+    <string name="conflict_with_name_of_an_existing_card">检测到与已有名片姓名冲突，请选择</string>
+    <string name="name_has_exist">기준 명합중의 이름:</string>
+    <string name="name_in_email_signature">이메일 서명중의 이름:</string>
+    <string name="select_pictures">选择图片</string>
+    <string name="take_photo_2">拍照</string>
+    <string name="choice_mode">选择方式</string>
+    <string name="pls_choose_mode_of_dialing">请选择拨打方式</string>
+    <string name="miui_permission">小米手机需开启以下权限</string>
+    <string name="miui_permission_open">去开启</string>
+    <string name="access_my_contacts">访问通讯录</string>
+    <string name="use_to_shown_and_backup_contacts">用于展示联系人以及备份联系人</string>
+    <string name="allowed_only">允许</string>
+    <string name="camera">相机</string>
+    <string name="permissions_you_need">需要以下权限</string>
+    <string name="permission_storage">本地存储权限</string>
+    <string name="to_use_ocr_recognize_or_qr_scan">用于OCR识别名片及扫描二维码</string>
+    <string name="permission_request">权限请求</string>
+    <string name="bind_we_chat_and_share_card">위챗을 연동하고 명합을 공유한다.</string>
+    <string name="bind_we_chat_and_share_card_tips">위챗을 연동하면 공유한 명합이 더 보기 좋고 기능이 전면적이다.</string>
+    <string name="bind_and_share">연동하고 명합을 공유한다.</string>
+    <string name="share_immediately">바로 공유한다</string>
+    <string name="loading">다운로드 중&#046;&#046;&#046;</string>
+    <string name="write_business_card">填写名片</string>
+    <string name="from_address_book">来自通讯录</string>
+    <string name="make_phone_call">전화하기</string>
+    <string name="widget_make_phone_call">전화하기</string>
+    <string name="widget_send_card">发名片</string>
+    <string name="widget_scan_card">扫名片</string>
+    <string name="widget_send_email">메일 발송</string>
+    <string name="email_and_folder">이메일 및 폴더</string>
+    <string name="is_in_downloading">下载中&#046;&#046;&#046;</string>
+    <string name="picture_downloading">图片下载中</string>
+    <string name="create_only">만들기</string>
+    <string name="progress_only">진행</string>
+    <string name="we_chat_auth">微信授权</string>
+    <string name="has_send">보낸 메일</string>
+    <string name="has_send_to">로</string>
+    <string name="reply_has_quoted_the_original_text">이미 원문을 인용해 답장했습니다.</string>
+    <string name="reply_content_is_not_null">回复内容不能为空</string>
+    <string name="card_signature">名片签名</string>
+    <string name="text_signature">文字签名</string>
+    <string name="no_text_signature_for_now_pls_add">暂无文字签名，点击右上角添加</string>
+    <string name="download_progress">下载进度：</string>
+    <string name="download_already_done">已经下载完成</string>
+    <string name="carry_on">계속</string>
+    <string name="import_only">도입</string>
+    <string name="qq_explanation_tips_1">QQ邮箱默认邮件服务协议都是关闭的，您需要手动进行开启或者由诺客帮助您开启。</string>
+    <string name="qq_explanation_tips_2">如果您未开通QQ密码保护，开启服务协议前，QQ邮箱会提示您开通QQ密码保护，开通成功后或者已开通密码保护，点击生成授权码,也可由诺客帮您完成</string>
+    <string name="qq_explanation_tips_3">按QQ邮箱要求，编辑短信“配置邮件客户端”发送至1069070069；发送成功，点击“我已发送”会自动生成授权码，此时将授权码填入「授权码」处即可登录邮箱。</string>
+    <string name="email_login_xml_hint_1">189/126/QQ等</string>
+    <string name="email_login_xml_hint_2">이메일 비밀번호/허가 코드</string>
+    <string name="vp_keystore_xml_tips_1">复制粘贴以太坊钱包地址Keystore文件内容至输入框。</string>
+    <string name="vp_keystore_xml_pls_enter_wallet_pwd">전자 지갑 비밀번호를 입력하십시오</string>
+    <string name="vp_private_xml_tips_1">输入Private Key文件内容至输入框。</string>
+    <string name="vp_private_xml_enter_key">개인 키 압력</string>
+    <string name="vp_words_xml_tips_1">연상단어를 도입하는 동시에 지갑 비밀번호 수정 가능</string>
+    <string name="vp_words_xml_tips_2">연상단어를 입력하여 빈칸으로 구분</string>
+
+
+</resources>
