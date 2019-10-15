@@ -155,6 +155,8 @@ public class MainActivity extends BaseActivity
             presenter.go2RxPermission();
         } else if (id == R.id.nav_manage) {
             presenter.go2SampleHotfix();
+        } else if (id == R.id.nav_permission) {
+            presenter.go2AndroidPermission();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -207,6 +209,12 @@ public class MainActivity extends BaseActivity
     @Override
     public void go2RxPermission() {
         Intent intent = new Intent(this, RxPermissionSampleActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void go2AndroidPermissionRequest() {
+        Intent intent = new Intent(this, PermissionRequestActivity.class);
         startActivity(intent);
     }
 

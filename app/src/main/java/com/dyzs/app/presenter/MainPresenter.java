@@ -37,4 +37,8 @@ public class MainPresenter extends BasePresenter {
     public void go2RxPermission() {
         iView.go2RxPermission();
     }
+
+    public void go2AndroidPermission() {
+        iView.go2AndroidPermissionRequest();
+    }
 }

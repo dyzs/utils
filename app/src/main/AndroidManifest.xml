@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dyzs.app" >
+    <!--
+        android 8.0 存在：Only fullscreen opaque activities can request orientation
+        因为 android:screenOrientation="portrait" 与 windowIsTranslucent 属性无法兼容异常
+        解释 in Android O, the translucent activity will have the same orientation as its parent activity
+        所以去除 android:screenOrientation="portrait"
+     -->
     <!-- 友盟统计相关 -->
     <meta-data
         android:name="UMENG_APPKEY"
@@ -59,9 +65,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.CustomViewActivity" >
+        <activity android:name=".activity.CustomViewActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.dyzs.common.action.TEST" />
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -92,6 +99,7 @@
 
         <activity android:name=".activity.RxPermissionSampleActivity"/>
         <activity android:name=".activity.HardcodeFilterActivity" />
+        <activity android:name=".activity.PermissionRequestActivity" />
     </application>
 
 </manifest>

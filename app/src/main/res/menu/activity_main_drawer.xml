@@ -17,7 +17,11 @@
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="SampleHotfix" />
+        <item
+            android:id="@+id/nav_permission"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="AndroidPermissions" />
     </group>
 
     <item android:title="Communicate">

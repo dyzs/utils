@@ -15,4 +15,6 @@ public interface IMainView extends IBaseView {
     void go2SampleHotfix();
 
     void go2RxPermission();
+
+    void go2AndroidPermissionRequest();
 }
