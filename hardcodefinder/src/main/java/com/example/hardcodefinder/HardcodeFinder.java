@@ -336,6 +336,109 @@ public class HardcodeFinder {
     }
 
 
+    public static void readStringEnAndTransferAndOutput(String fileEn, String xmlWaitToReplaceFile, String outputFileAbs) {
+        try {
+            HashMap<String, String> originalAndTranslationHashMap = new HashMap<>();
+            ArrayList<String> originalEnList = new ArrayList<>();
+            ArrayList<String> xmlStringList = new ArrayList<>();
+            FileInputStream fileInputStream;
+            File file = new File(fileEn);
+            if (file.isFile() && file.exists()) {
+                fileInputStream = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
+                String line = null;
+                while((line = reader.readLine()) != null) {
+                    originalEnList.add(line.trim());
+                }
+            }
+            System.out.println("-----en translate file size:" + originalEnList.size());
+
+            for (int i = 0; i < originalEnList.size(); i++) {
+                String line = originalEnList.get(i);
+                boolean b = RegexUtils.stringFilterMatch(RegexUtils.REGEX_EN_TRANSLATE_TEXT, line);
+                if (b) {// 存在符合规则的字符串
+                    line = line.replace("\";", "");
+                    line = line.substring(1);
+                    String[] strs = line.split("\",\"");
+                    // System.out.println("line replace:" + line);
+                    if (strs.length == 2) {
+                        String key = strs[0];
+                        String value = strs[1];
+                        originalAndTranslationHashMap.put(key, value);
+                    }
+                }
+            }
+            System.out.println("-----en translate file hash map size:" + originalAndTranslationHashMap.size());
+
+            // 读取string xml
+            file = new File(xmlWaitToReplaceFile);
+            if (file.isFile() && file.exists()) {
+                fileInputStream = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
+                String line = null;
+                while((line = reader.readLine()) != null) {
+                    xmlStringList.add(line);
+                }
+            }
+
+            HashMap<String, String> replaceHash = new HashMap<>();
+            for (int i = 0; i < xmlStringList.size(); i++) {
+                String key = xmlStringList.get(i);
+                String line = xmlStringList.get(i);
+                boolean b = RegexUtils.gotTheChinese(line);
+                if (b) {
+                    line = line.replaceAll("</string>", "");
+                    line = line.replaceAll("<string name=\"", "");
+                    line = line.replaceAll("<u>", "").replaceAll("</u>", "");
+                    int lastIndexOf = line.lastIndexOf("\">");
+                    if (lastIndexOf != -1) {
+                        line = line.substring(lastIndexOf);
+                        line = line.replaceAll("\">","");
+                        if (!"".equals(line)) {
+                            line.trim();
+                        }
+                    }
+                    replaceHash.put(key, line);
+                }
+            }
+
+            ArrayList<String> afterReplaceList = new ArrayList<>();
+            // 遍历待替换文件
+            Set<Map.Entry<String, String>> entrySet = originalAndTranslationHashMap.entrySet();
+            String hashKey, hashValue, xmlStringLine;
+            for (int i = 0; i < xmlStringList.size(); i++) {
+                xmlStringLine = xmlStringList.get(i);
+
+                if (replaceHash.containsKey(xmlStringLine)) {// 判断当前是否存在带替换文本
+                    String valueWaitToReplace = replaceHash.get(xmlStringLine);
+                    for (Map.Entry<String, String> entry : entrySet) {
+                        hashKey = entry.getKey();
+                        hashValue = entry.getValue();
+                        if (valueWaitToReplace.equals(hashKey)) {// 判断带替换文本与翻译原文是否相同
+                            xmlStringLine = xmlStringLine.replaceAll(hashKey, hashValue);
+                        }
+                    }
+                }
+                afterReplaceList.add(xmlStringLine);
+            }
+
+            // 写出文件
+            FileOutputStream fileOutputStream;
+            File outputFile = new File(outputFileAbs);
+            outputFile.createNewFile();
+            fileOutputStream = new FileOutputStream(outputFile);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+            for (String s : afterReplaceList) {
+                bw.write(s);
+                bw.newLine();
+            }
+            bw.close();
+            fileOutputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+        }
+    }
+
 
     
 }

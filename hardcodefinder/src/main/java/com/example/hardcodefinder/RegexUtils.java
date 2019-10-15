@@ -11,6 +11,9 @@ public class RegexUtils {
     public static String REGEX_CHECK_CH = "[\\u4e00-\\u9fa5]";
     public static String REGEX_CHECK_CH_S = "[^0-9]*";
 
+    // "您的联系人空茫茫，雪白白","NO";
+    public static String REGEX_EN_TRANSLATE_TEXT = "\"(.)*\",\"(.)*\";";
+
     public static String stringFilter(String regex, String str) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(str);
