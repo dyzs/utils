@@ -17,3 +17,13 @@
 
 # 再次 commit & push
 
+
+# 创建分支
+# 创建本地分支
+# git branch 新分支名
+# 切换本地分支
+# git checkout 新分支名
+# 上传本地分支到github上
+# git push origin 新分支名
+# 删除远程分支
+# git push origin :develop
