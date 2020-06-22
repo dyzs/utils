@@ -83,6 +83,12 @@ public class MainActivity extends BaseActivity
         initView();
 
         initReady();
+
+        loadNdk();
+    }
+
+    private void loadNdk() {
+
     }
 
     @Override

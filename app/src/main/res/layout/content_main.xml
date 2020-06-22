@@ -134,7 +134,6 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:background="@android:color/transparent"
-                android:onClick="camera"
                 android:src="@mipmap/pic_main_item_camera_close_style"/>
 
             <ImageView
