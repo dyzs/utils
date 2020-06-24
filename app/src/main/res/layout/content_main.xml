@@ -42,12 +42,18 @@
             android:layout_height="200dp">
 
             <RelativeLayout
+                android:id="@+id/rl_aidl_test"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/dimen_20dp"
                 android:background="@drawable/layer_list_shadow">
 
-
+                <TextView
+                    android:id="@+id/tv_show_aidl_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    />
 
             </RelativeLayout>
 

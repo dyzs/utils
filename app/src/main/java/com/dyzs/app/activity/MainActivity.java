@@ -2,9 +2,13 @@ package com.dyzs.app.activity;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -25,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dyzs.aidl.IMyAidlInterface;
 import com.dyzs.app.R;
 import com.dyzs.app.presenter.MainPresenter;
 import com.dyzs.app.service.CBMonitorService;
@@ -59,6 +64,10 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.item_right) LinearLayout mItemRight;
     @BindView(R.id.item_cover) RelativeLayout mItemCover;
     @BindView(R.id.iv_symbol_add) ImageView mIvSymbolAdd;
+
+    @BindView(R.id.tv_show_aidl_text) TextView mTvAidlText;
+    @BindView(R.id.rl_aidl_test) RelativeLayout rl_aidl_test;
+    private IMyAidlInterface iMyAidlInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +89,32 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        initView();
-
         initReady();
 
         loadNdk();
+
+        initAidl();
     }
 
     private void loadNdk() {
 
+    }
+
+    private void initAidl() {
+        Intent intent = new Intent();
+        intent.setAction("com.dyzs.aidl.AIDL_SERVER");// aidl server intent filter action
+        intent.setPackage("com.dyzs.aidl");// aidl package name
+        bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                iMyAidlInterface = IMyAidlInterface.Stub.asInterface(service);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        }, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -107,13 +133,25 @@ public class MainActivity extends BaseActivity
         findViewById(R.id.magic_ruf).setOnClickListener((v)-> {
                 ((MagicRUF) v).startTension(0);
         });
+
+        rl_aidl_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String pwd = iMyAidlInterface.getEncryptPwd();
+                    mTvAidlText.setText(pwd);
+                } catch (RemoteException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
     private static int i = 11;
 
     @Override
     public void initData() {
-        Intent intent = new Intent(this, CBMonitorService.class);
-        startService(intent);
+        /*Intent intent = new Intent(this, CBMonitorService.class);
+        startService(intent);*/
     }
 
     @Override
