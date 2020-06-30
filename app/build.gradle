@@ -107,6 +107,11 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    repositories{
+        flatDir{
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
@@ -143,4 +148,5 @@ dependencies {
     implementation 'com.github.akarnokd:rxjava2-interop:0.8.0'
     // multi dex
     implementation "com.android.support:multidex:1.0.3"
+    implementation(name:'testndk-release', ext:'aar')
 }

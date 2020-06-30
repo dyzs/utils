@@ -52,7 +52,16 @@
                     android:id="@+id/tv_show_aidl_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="aidl"
                     android:layout_centerInParent="true"
+                    />
+                <TextView
+                    android:layout_below="@+id/tv_show_aidl_text"
+                    android:id="@+id/tv_show_ndk_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="ndk"
                     />
 
             </RelativeLayout>

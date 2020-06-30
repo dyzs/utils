@@ -12,11 +12,13 @@ import android.os.RemoteException;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,12 +44,14 @@ import com.dyzs.common.ui.magicruf.MagicRUF;
 import com.dyzs.common.utils.ColorUtils;
 import com.dyzs.common.utils.LogUtils;
 import com.dyzs.common.utils.ToastUtils;
+import com.dyzs.testndk.AndroidNdkBridge;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, IMainView {
+    private static final String TAG = "MainActivity";
     MainPresenter presenter = new MainPresenter(this);
 
     @BindView(R.id.lcv_yj)
@@ -66,6 +70,7 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.iv_symbol_add) ImageView mIvSymbolAdd;
 
     @BindView(R.id.tv_show_aidl_text) TextView mTvAidlText;
+    @BindView(R.id.tv_show_ndk_text) TextView mTvNdkText;
     @BindView(R.id.rl_aidl_test) RelativeLayout rl_aidl_test;
     private IMyAidlInterface iMyAidlInterface;
     @Override
@@ -97,7 +102,8 @@ public class MainActivity extends BaseActivity
     }
 
     private void loadNdk() {
-
+        AndroidNdkBridge bridge = new AndroidNdkBridge();
+        mTvNdkText.setText(bridge.getString());
     }
 
     private void initAidl() {
@@ -107,12 +113,13 @@ public class MainActivity extends BaseActivity
         bindService(intent, new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
+                Log.i(TAG, "onServiceConnected");
                 iMyAidlInterface = IMyAidlInterface.Stub.asInterface(service);
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-
+                Log.i(TAG, "onServiceDisconnected");
             }
         }, BIND_AUTO_CREATE);
     }
