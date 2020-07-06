@@ -31,7 +31,7 @@ public abstract class RoomDb extends RoomDatabase {
             synchronized (RoomDb.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room
-                            .databaseBuilder(context, RoomDb.class, "ci_sdk_db.db")
+                            .databaseBuilder(context, RoomDb.class, "db_room.db")
                             /*//.fallbackToDestructiveMigration()   //这个方法也可以迁移数据库，但会将数据摧毁导致数据的丢失*/
                             .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
                             .build();
