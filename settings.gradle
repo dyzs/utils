@@ -1,2 +1,3 @@
 include ':app', ':common', ':base', ':review', ':hardcodefinder'
 include ':aidlserver'
+include ':databases'
