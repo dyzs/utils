@@ -7,7 +7,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import com.commonsware.cwac.saferoom.SafeHelperFactory;
 import com.dyzs.db.room.dao.LoginInfoDao;
 import com.dyzs.db.room.entities.LoginInfo;
 
@@ -26,6 +28,8 @@ public abstract class RoomDb extends RoomDatabase {
 
     public abstract LoginInfoDao loginInfoDao();
 
+    private static SupportSQLiteOpenHelper.Factory SAFE_HELPER_FACTORY = new SafeHelperFactory("123456".getBytes());
+
     public static RoomDb getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (RoomDb.class) {
@@ -33,6 +37,7 @@ public abstract class RoomDb extends RoomDatabase {
                     INSTANCE = Room
                             .databaseBuilder(context, RoomDb.class, "db_room.db")
                             /*//.fallbackToDestructiveMigration()   //这个方法也可以迁移数据库，但会将数据摧毁导致数据的丢失*/
+                            .openHelperFactory(SAFE_HELPER_FACTORY)
                             .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
                             .build();
                 }

@@ -43,6 +43,12 @@ dependencies {
     // google room 数据库
     implementation "androidx.room:room-rxjava2:2.2.5"
     annotationProcessor "androidx.room:room-compiler:2.2.5"
+    // room sql cipher
+    // implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation "com.commonsware.cwac:saferoom.x:1.3.0"
 
     implementation 'org.jetbrains:annotations:15.0'
+}
+repositories {
+    mavenCentral()
 }
