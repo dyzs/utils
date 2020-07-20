@@ -12,7 +12,6 @@ import android.os.RemoteException;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,9 +33,10 @@ import android.widget.TextView;
 import com.dyzs.aidl.IMyAidlInterface;
 import com.dyzs.app.R;
 import com.dyzs.app.presenter.MainPresenter;
-import com.dyzs.app.service.CBMonitorService;
 import com.dyzs.app.view.IMainView;
 import com.dyzs.base.BaseActivity;
+import com.dyzs.common.examples.AnnotationExplainerImpl;
+import com.dyzs.common.examples.IAnnotationExplainer;
 import com.dyzs.common.ui.FullScreenDialogVer2;
 import com.dyzs.common.ui.KnockBackupView;
 import com.dyzs.common.ui.LineChartView;
@@ -99,6 +99,13 @@ public class MainActivity extends BaseActivity
         loadNdk();
 
         initAidl();
+
+        annotationTest();
+    }
+
+    private void annotationTest() {
+        IAnnotationExplainer iae = new AnnotationExplainerImpl();
+        iae.valueOfGender("hybrid");
     }
 
     private void loadNdk() {

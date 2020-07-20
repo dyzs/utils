@@ -149,4 +149,8 @@ dependencies {
     // multi dex
     implementation "com.android.support:multidex:1.0.3"
     implementation(name:'testndk-release', ext:'aar')
+    // life cycle
+    implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
 }

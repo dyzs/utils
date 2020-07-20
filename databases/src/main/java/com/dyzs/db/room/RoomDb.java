@@ -1,6 +1,7 @@
 package com.dyzs.db.room;
 
 import android.content.Context;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
@@ -38,7 +39,7 @@ public abstract class RoomDb extends RoomDatabase {
                             .databaseBuilder(context, RoomDb.class, "db_room.db")
                             /*//.fallbackToDestructiveMigration()   //这个方法也可以迁移数据库，但会将数据摧毁导致数据的丢失*/
                             .openHelperFactory(SAFE_HELPER_FACTORY)
-                            .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
+                            //.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                             .build();
                 }
             }
