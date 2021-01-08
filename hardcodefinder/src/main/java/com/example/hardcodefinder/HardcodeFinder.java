@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +31,7 @@ public class HardcodeFinder {
     //public static final String DEF_PATH = "D:\\Android\\Projects\\knock-app-android2\\app\\src\\main\\java\\com\\knocknock\\android\\mvp";
     //public static final String DEF_PATH = "D:\\Android\\Projects\\knock-app-android2\\app\\src\\main\\res\\layout";
     //public static final String DEF_PATH = "D:\\dyzs_test_all_files";
-    public static final String DEF_PATH = "D:\\dyzs\\utils\\hardcodefinder\\src\\main\\res\\outputStrings.xml";
+    public static final String DEF_PATH = "D:\\Dyzs_workspace\\owner\\utils\\hardcodefinder\\src\\main\\res\\tempdata.java";//""D:\\dyzs_output\\fileTransferEn\\outputStrings.xml";
     public static final String OUTPUT_PATH = "D:\\dyzs_output\\output.txt";
     public static final String OUTPUT_FILENAME = "output.txt";
 
@@ -103,7 +105,10 @@ public class HardcodeFinder {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
                 String line = null;
                 while((line = reader.readLine()) != null) {
-                    regexAndGetString(line);
+                    // regexAndGetString(line);
+                    // regexAndGetXmlStringContent(line);// 读取xml字符串
+                    // regexAndGetXmlStringId(line);// 读取xml字符串id
+                    getChakenErrorMsg(line);
                 }
             }
         }
@@ -187,7 +192,115 @@ public class HardcodeFinder {
         }
     }
 
+    /**
+     * 获取strings.xml内容
+     * @param line
+     */
+    private void regexAndGetXmlStringContent(String line) {
+        if (line == null || "".equals(line)) {
+            return;
+        }
+        line = line.replaceAll("</string>", "");
+        line = line.replaceAll("<string name=\"", "");
+        line = line.replaceAll("%s</xliff:g>", "")
+                .replaceAll("%d</xliff:g>", "")
+                .replaceAll("</item>", "");
+        line = line
+                .replaceAll("&#046;","")
+                .replaceAll("&#8230;", "")
+                .replaceAll("%1\\$s", "")
+                .replaceAll("”", "").replaceAll("&gt;", "").replaceAll("</xliff:g>", "");
+        int lastIndexOf = line.lastIndexOf("\">");
+        if (lastIndexOf != -1) {
+            line = line.substring(lastIndexOf);
+            line = line.replaceAll("\">","");
+            if (!"".equals(line)) {
+                System.out.println("lines===" + line + "///" + lastIndexOf);
+                mCacheRegexText.add(line.trim());
+            }
+        }
+    }
 
+    /**
+     * 获取strings.xml内容
+     * @param line
+     */
+    private void regexAndGetXmlStringId(String line) {
+        if (line == null || "".equals(line)) {
+            return;
+        }
+        line = line.replaceAll("</string>", "");
+        line = line.replaceAll("<string name=\"", "");
+        line = line.replaceAll("%s</xliff:g>", "")
+                .replaceAll("%d</xliff:g>", "")
+                .replaceAll("</item>", "");
+        line = line
+                .replaceAll("&#046;","")
+                .replaceAll("&#8230;", "")
+                .replaceAll("%1\\$s", "")
+                .replaceAll("”", "").replaceAll("&gt;", "").replaceAll("</xliff:g>", "");
+        int lastIndexOf = line.lastIndexOf("\">");
+        if (lastIndexOf != -1) {
+            line = line.substring(0, lastIndexOf);
+            line = line.replaceAll("\">","");
+            if (!"".equals(line)) {
+                System.out.println("lines===" + line + "///" + lastIndexOf);
+                mCacheRegexText.add(line.trim());
+            }
+        }
+    }
+
+    /**
+     * 获取文档中内容
+     * ERROR_APP_KEY("800001", "应用id和应用密码不匹配"),
+     * @param line
+     */
+    private void getChakenErrorCode(String line) {
+        if (line == null || "".equals(line)) {
+            return;
+        }
+        int lastIndexOf = line.lastIndexOf("(\"");
+        int lastIndexOf2 = line.lastIndexOf("\",");
+        if (lastIndexOf != -1 && lastIndexOf2 != -1) {
+            line = line.substring(lastIndexOf + 2, lastIndexOf2);
+            line = "<item>" + line + "</item>";
+            if (!"".equals(line)) {
+                System.out.println("lines===" + line + "///" + lastIndexOf);
+                mCacheRegexText.add(line.trim());
+            }
+        }
+        // System.out.println("lines===" + line + "///" + lastIndexOf);
+    }
+
+    /**
+     * 获取文档中内容
+     * ERROR_APP_KEY("800001", "应用id和应用密码不匹配"),
+     * @param line
+     */
+    private void getChakenErrorMsg(String line) {
+        if (line == null || "".equals(line)) {
+            return;
+        }
+        int lastIndexOf = line.lastIndexOf("\", \"");
+        int lastIndexOf2 = line.lastIndexOf("\")");
+        if (lastIndexOf != -1 && lastIndexOf2 != -1) {
+            line = line.substring(lastIndexOf + 4, lastIndexOf2);
+            line = "<item>" + line + "</item>";
+            if (!"".equals(line)) {
+                System.out.println("lines===" + line + "///" + lastIndexOf);
+                mCacheRegexText.add(line.trim());
+            }
+        }
+        // System.out.println("lines===" + line + "///" + lastIndexOf);
+    }
+
+
+    /**
+     * 合并去重
+     * @param file1
+     * @param file2
+     * @throws Exception
+     */
     public static void twoFilesCompareTheSameText(String file1, String file2) throws Exception {
         ArrayList<String> combineLines = new ArrayList<>();
         FileOutputStream fileOutputStream;
