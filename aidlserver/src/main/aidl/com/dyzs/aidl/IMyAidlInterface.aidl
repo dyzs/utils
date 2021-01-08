@@ -12,4 +12,6 @@ interface IMyAidlInterface {
             double aDouble, String aString);
 
     String getEncryptPwd();
+
+    void testSetDefaultDialer();
 }

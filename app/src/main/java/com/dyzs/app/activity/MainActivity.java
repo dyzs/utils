@@ -113,11 +113,12 @@ public class MainActivity extends BaseActivity
         mTvNdkText.setText(bridge.getString());
     }
 
+    private ServiceConnection serviceConnection;
     private void initAidl() {
         Intent intent = new Intent();
         intent.setAction("com.dyzs.aidl.AIDL_SERVER");// aidl server intent filter action
         intent.setPackage("com.dyzs.aidl");// aidl package name
-        bindService(intent, new ServiceConnection() {
+        serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.i(TAG, "onServiceConnected");
@@ -128,7 +129,8 @@ public class MainActivity extends BaseActivity
             public void onServiceDisconnected(ComponentName name) {
                 Log.i(TAG, "onServiceDisconnected");
             }
-        }, BIND_AUTO_CREATE);
+        };
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -228,6 +230,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void onDestroy() {
+        unbindService(serviceConnection);
         super.onDestroy();
     }
 

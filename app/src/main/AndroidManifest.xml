@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.CustomViewActivity" android:screenOrientation="portrait">
+        <activity android:name=".activity.CustomViewActivity" android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="com.dyzs.common.action.TEST" />
                 <action android:name="android.intent.action.VIEW" />

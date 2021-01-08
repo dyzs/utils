@@ -4,7 +4,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.dyzs.aidl.IMyAidlInterface;
 
@@ -25,6 +26,11 @@ public class MyService extends Service {
         @Override
         public String getEncryptPwd() throws RemoteException {
             return "this is a value of encrypt";
+        }
+
+        @Override
+        public void testSetDefaultDialer() throws RemoteException {
+
         }
     }
 }

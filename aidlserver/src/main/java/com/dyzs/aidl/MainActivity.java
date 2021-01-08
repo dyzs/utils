@@ -1,8 +1,9 @@
 package com.dyzs.aidl;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.dyzs.aidl.services.MyService;
 
