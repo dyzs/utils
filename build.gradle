@@ -10,10 +10,10 @@ buildscript {
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         google()
         jcenter()
-        maven {
+        /*maven {
             url 'https://maven.google.com/'
             name 'Google'
-        }
+        }*/
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
@@ -32,10 +32,10 @@ allprojects {
         google()
         jcenter()
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
-        maven {
+        /*maven {
             url 'https://maven.google.com/'
             name 'Google'
-        }
+        }*/
     }
 }
 

@@ -119,11 +119,11 @@ public class CBMonitorService extends Service{
         Intent intent = new Intent();
         intent.setAction("com.dyzs.common.action.TEST");
         intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.setPackage(CBMonitorService.this.getPackageName());
+        intent.setPackage(getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(CBMonitorService.this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        Notification.Builder builder = new Notification.Builder(CBMonitorService.this)
+        Notification.Builder builder = new Notification.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setContentIntent(pendingIntent);
@@ -139,8 +139,8 @@ public class CBMonitorService extends Service{
     }
 
     private void initScreenService() {
-        Intent intent = new Intent(CBMonitorService.this, ScreenUnLockMonitorService.class);
+        Intent intent = new Intent(this, ScreenUnLockMonitorService.class);
         // CBMonitorService.this.bindService(intent, new ScreenUnLockMonitorService.MyConn(), Context.BIND_AUTO_CREATE);
-        CBMonitorService.this.startService(intent);
+        startService(intent);
     }
 }
