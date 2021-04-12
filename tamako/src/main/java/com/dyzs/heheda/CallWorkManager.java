@@ -2,26 +2,23 @@ package com.dyzs.heheda;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.IBinder;
 import android.os.Message;
 import android.os.Process;
-import android.os.RemoteException;
 import android.os.SystemClock;
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-public class CallWorkService extends Service implements PhoneStateListener.StateImpl {
-    private static final String TAG = "CallWorkService";
+import java.lang.ref.WeakReference;
+
+public class CallWorkManager implements PhoneStateListener.StateImpl {
+    private static final String TAG = "CallWorkManager";
     public static final String ACTION_SEND_TOKEN = "SendCkToken";
 
     private TelephonyManager mTelephonyManager;
@@ -40,41 +37,24 @@ public class CallWorkService extends Service implements PhoneStateListener.State
     private String mCallPhone;
     private int mTotalCount = 0;
     private int currCallTimes = 0;
-    private MyBinder2 myBinder;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    private WeakReference<Activity> mActivity;
+    private ICallback iCallback;
+
+    public CallWorkManager(Activity activity) {
         Log.i(TAG, "onCreate");
+        mActivity = new WeakReference<>(activity);
         initHandlerThread();
         initPhoneTelephoneManager();
-        myBinder = new MyBinder2(this);
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "onStartCommand");
-        mCallPhone = intent.getStringExtra("phone");
-        mTotalCount = intent.getIntExtra("countOfTimes", 0);
-        currCallTimes = 0;
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        Log.i(TAG, "onBind:" + intent.getIntExtra("countOfTimes", 0));
-        mCallPhone = intent.getStringExtra("phone");
-        mTotalCount = intent.getIntExtra("countOfTimes", 0);
-        currCallTimes = 0;
-        if (myBinder != null) {
-            return myBinder;
-        }
-        return null;
+    public CallWorkManager setICallback(ICallback iCallback) {
+        this.iCallback = iCallback;
+        return this;
     }
 
     private void initPhoneTelephoneManager() {
-        mTelephonyManager = (TelephonyManager) getSystemService(Activity.TELEPHONY_SERVICE);
+        mTelephonyManager = (TelephonyManager) mActivity.get().getSystemService(Activity.TELEPHONY_SERVICE);
         myPhoneStateListener = new PhoneStateListener();
         myPhoneStateListener.setStateImpl(this);
         mTelephonyManager.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
@@ -131,9 +111,16 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         };
     }
 
-    private void sendCKToken() {
+    public void sendCKToken() {
         mUIOperatorHandler.removeCallbacks(mSendCKToken);
         mUIOperatorHandler.post(mSendCKToken);
+        ThreadPoolUtils.enqueue(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "send token thread:" + Thread.currentThread().getName());
+                if (iCallback != null)iCallback.sendCKToken();
+            }
+        });
     }
 
     private Runnable mSendCKToken = new Runnable() {
@@ -143,7 +130,7 @@ public class CallWorkService extends Service implements PhoneStateListener.State
             Log.i(TAG, "token timestamp:" + TamakoUtils.getCurrentTime(timestamp));
             Intent intent = new Intent(ACTION_SEND_TOKEN);
             intent.putExtra("timestamp", timestamp);
-            sendBroadcast(intent);
+            mActivity.get().sendBroadcast(intent);
         }
     };
 
@@ -179,7 +166,7 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         public void run() {
             try {
                 Log.i(TAG, "hang up time:" + TamakoUtils.getCurrentTime());
-                TelecomManager tm = (TelecomManager) getApplication().getSystemService(Activity.TELECOM_SERVICE);
+                TelecomManager tm = (TelecomManager) mActivity.get().getSystemService(Activity.TELECOM_SERVICE);
                 tm.endCall();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -188,7 +175,7 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         }
     };
 
-    private void endCall() {
+    public void endCall() {
         mUIOperatorHandler.removeCallbacks(mHangUpRunnable);
         mUIOperatorHandler.post(mHangUpRunnable);
     }
@@ -197,8 +184,6 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         currCallTimes++;
         if (currCallTimes > mTotalCount) {
             stopCallTask();
-
-
             return;
         }
         tickTime = 0;
@@ -226,67 +211,19 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         Uri data = Uri.parse("tel:" + mCallPhone);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setData(data);
-        startActivity(intent);
+        mActivity.get().startActivity(intent);
     }
 
-    @Override
     public void onDestroy() {
         mHandlerThread.quitSafely();
-        super.onDestroy();
     }
 
-    public static class MyBinder extends Binder {
-        private CallWorkService callService;
-        public MyBinder(Service service) {
-            this.callService = (CallWorkService) service;
-        }
-        public CallWorkService getService() {
-            return callService;
-        }
-
-        public void onTaskStar(int count, String phone) {
-            callService.mTotalCount = count;
-            callService.mCallPhone = phone;
-            callService.startCallTask();
-        }
-
-        public void onTaskStop() {
-            callService.endCall();
-            callService.stopCallTask();
-        }
+    public void resetParam(int callTimes, String callPhone) {
+        mTotalCount = callTimes;
+        mCallPhone = callPhone;
     }
 
-    public static class MyBinder2 extends ICallService.Stub {
-        private CallWorkService callService;
-        public MyBinder2(Service service) {
-            this.callService = (CallWorkService) service;
-        }
-
-        @Override
-        public void resetParam(int callTimes, String callPhone) throws RemoteException {
-            callService.mTotalCount = callTimes;
-            callService.mCallPhone = callPhone;
-        }
-
-        @Override
-        public void startCallTask() throws RemoteException {
-            callService.startCallTask();
-        }
-
-        @Override
-        public void endCallTask() throws RemoteException {
-            hangUp();
-            callService.stopCallTask();
-        }
-
-        @Override
-        public void hangUp() throws RemoteException {
-            callService.endCall();
-        }
-
-        @Override
-        public void sendCKToken() throws RemoteException {
-
-        }
+    public interface ICallback {
+        void sendCKToken();
     }
 }
