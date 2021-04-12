@@ -14,6 +14,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -50,7 +51,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 String phone = et_phone.getText().toString();
                 int count = Integer.parseInt(et_count.getText().toString());
-                mMyBinder.onTaskStar(count, phone);
+                try {
+                    mMyBinder.resetParam(count, phone);
+                    mMyBinder.startCallTask();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -66,8 +72,12 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(view.getContext(), "缺少手机号", Toast.LENGTH_LONG).show();
                     return;
                 }
-                // mMyBinder.onTaskStop();
-                execShellCmd("input text '123456'");
+                try {
+                    mMyBinder.endCallTask();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                // execShellCmd("input text '123456'");
             }
         });
         boolean lacksPermissions = checkLacks();
@@ -78,12 +88,12 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean allowUnBind = false;
 
-    private CallWorkService.MyBinder mMyBinder;
+    private ICallService mMyBinder;
     private ServiceConnection mConn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             Log.i(TAG, "my conn...service connected");
-            mMyBinder = (CallWorkService.MyBinder) iBinder;
+            mMyBinder = ICallService.Stub.asInterface(iBinder);
             allowUnBind = true;
         }
 

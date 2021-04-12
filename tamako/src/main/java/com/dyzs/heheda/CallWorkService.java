@@ -11,6 +11,8 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Process;
+import android.os.RemoteException;
+import android.os.SystemClock;
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -23,7 +25,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CallWorkService extends Service implements PhoneStateListener.StateImpl {
-    private static final String TAG = "CallWrokService";
+    private static final String TAG = "CallWorkService";
+    public static final String ACTION_SEND_TOKEN = "SendCkToken";
 
     private TelephonyManager mTelephonyManager;
     private PhoneStateListener myPhoneStateListener;
@@ -31,17 +34,17 @@ public class CallWorkService extends Service implements PhoneStateListener.State
     private HandlerThread mHandlerThread;
     private static String mHTName = "HandlerThread";
     private Handler mHandler;
-    private Handler mCallPhoneHandler;
+    private Handler mUIOperatorHandler;
     private Handler mEndCallHandler;
     private boolean mTimeDown = true;
     private static final int START_CALL = 0x110;
     private static final int END_CALL = 0x111;
     private static final int TIME_TICK = 0x112;
-    private static final int UPLOAD_TOKEN = 0x112;
+    private static final int UPLOAD_TOKEN = 0x113;
     private String mCallPhone;
     private int mTotalCount = 0;
     private int currCallTimes = 0;
-    private MyBinder myBinder;
+    private MyBinder2 myBinder;
 
     @Override
     public void onCreate() {
@@ -49,7 +52,7 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         Log.i(TAG, "onCreate");
         initHandlerThread();
         initPhoneTelephoneManager();
-        myBinder = new MyBinder(this);
+        myBinder = new MyBinder2(this);
     }
 
     @Override
@@ -84,28 +87,22 @@ public class CallWorkService extends Service implements PhoneStateListener.State
 
     @Override
     public void onCallRinging(String phoneNumber) {
-        Date date = new Date(System.currentTimeMillis());
-        Log.i(TAG, "电话响铃:" + simpleDateFormat.format(date));
+        Log.i(TAG, "电话响铃:" + DateUtils.getCurrentTime());
     }
 
     @Override
     public void onCallOffHook(String phoneNumber) {
-        Date date = new Date(System.currentTimeMillis());
-        Log.i(TAG, "电话接通:" + simpleDateFormat.format(date));
+        Log.i(TAG, "电话接通:" + DateUtils.getCurrentTime());
     }
 
     @Override
     public void onCallIdle(String phoneNumber) {
-        Date date = new Date(System.currentTimeMillis());
-        Log.i(TAG, "电话空闲:" + simpleDateFormat.format(date));
+        Log.i(TAG, "电话空闲:" + DateUtils.getCurrentTime());
         startCallTask();
     }
 
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-MM-dd hh:mm:ss", Locale.CHINA);
-
     private void initHandlerThread() {
-        mCallPhoneHandler = new Handler();
-        mEndCallHandler = new Handler();
+        mUIOperatorHandler = new Handler();
         if (mHandler == null) {
             mHandler = new Handler();
         }
@@ -115,8 +112,11 @@ public class CallWorkService extends Service implements PhoneStateListener.State
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
+                Log.i(TAG, "handle message thread:" + Thread.currentThread().getName());
                 switch (msg.what) {
                     case START_CALL:
+                        sendCKToken();
+                        SystemClock.sleep(500);
                         callPhone();
                         break;
                     case END_CALL:
@@ -135,45 +135,66 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         };
     }
 
+    private void sendCKToken() {
+        mUIOperatorHandler.removeCallbacks(mSendCKToken);
+        mUIOperatorHandler.post(mSendCKToken);
+    }
+
+    private Runnable mSendCKToken = new Runnable() {
+        @Override
+        public void run() {
+            long timestamp = System.currentTimeMillis();
+            Log.i(TAG, "token timestamp:" + DateUtils.getCurrentTime(timestamp));
+            Intent intent = new Intent(ACTION_SEND_TOKEN);
+            intent.putExtra("timestamp", timestamp);
+            sendBroadcast(intent);
+        }
+    };
 
     private void callPhone() {
         try {
-            mCallPhoneHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    /* main UI */
-                    int state = 0;
-                    if (mTelephonyManager != null) {
-                        state = mTelephonyManager.getCallState();
-                    }
-                    if (state == 0) {
-                        actionCall();
-                        startTickTime();
-                    }
-                }
-            });
+            mUIOperatorHandler.removeCallbacks(mCallPhoneRunnable);
+            mUIOperatorHandler.post(mCallPhoneRunnable);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, "call phone error:" + e.getMessage());
+            Log.i(TAG, "call phone error:" + e.getMessage());
         }
     }
 
-    private void endCall() {
-        mEndCallHandler.post(new Runnable() {
-            @SuppressLint("MissingPermission")
-            @Override
-            public void run() {
-                try {
-                    Date date = new Date(System.currentTimeMillis());
-                    Log.i(TAG, "end call time:" + simpleDateFormat.format(date));
-                    TelecomManager tm = (TelecomManager) getApplication().getSystemService(Activity.TELECOM_SERVICE);
-                    tm.endCall();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "endCallError:" + e.getMessage());
-                }
+    private Runnable mCallPhoneRunnable = new Runnable() {
+        @Override
+        public void run() {
+            /* main UI */
+            Log.i(TAG, "send call phone action");
+            int state = 0;
+            if (mTelephonyManager != null) {
+                state = mTelephonyManager.getCallState();
             }
-        });
+            if (state == 0) {
+                actionCall();
+                startTickTime();
+            }
+        }
+    };
+
+    private Runnable mHangUpRunnable = new Runnable() {
+        @SuppressLint("MissingPermission")
+        @Override
+        public void run() {
+            try {
+                Log.i(TAG, "hang up time:" + DateUtils.getCurrentTime());
+                TelecomManager tm = (TelecomManager) getApplication().getSystemService(Activity.TELECOM_SERVICE);
+                tm.endCall();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "endCallError:" + e.getMessage());
+            }
+        }
+    };
+
+    private void endCall() {
+        mUIOperatorHandler.removeCallbacks(mHangUpRunnable);
+        mUIOperatorHandler.post(mHangUpRunnable);
     }
 
     public void startCallTask() {
@@ -236,6 +257,40 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         public void onTaskStop() {
             callService.endCall();
             callService.stopCallTask();
+        }
+    }
+
+    public static class MyBinder2 extends ICallService.Stub {
+        private CallWorkService callService;
+        public MyBinder2(Service service) {
+            this.callService = (CallWorkService) service;
+        }
+
+        @Override
+        public void resetParam(int callTimes, String callPhone) throws RemoteException {
+            callService.mTotalCount = callTimes;
+            callService.mCallPhone = callPhone;
+        }
+
+        @Override
+        public void startCallTask() throws RemoteException {
+            callService.startCallTask();
+        }
+
+        @Override
+        public void endCallTask() throws RemoteException {
+            hangUp();
+            callService.stopCallTask();
+        }
+
+        @Override
+        public void hangUp() throws RemoteException {
+            callService.endCall();
+        }
+
+        @Override
+        public void sendCKToken() throws RemoteException {
+
         }
     }
 }
