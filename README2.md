@@ -3,7 +3,7 @@ Dyzs common utils
 
 # hotfix sample
 #                    output dir & res dir
-# DexPatch command : dx --dex --output=C:\Users\xuwenguang\Desktop\hotfix\classes3.dex C:\Users\xuwenguang\Desktop\hotfix
+# DexPatch command : dx --dex --output=C:\Users\xxx\Desktop\hotfix\classes3.dex C:\Users\xxx\Desktop\hotfix
 
 # 关于 android 热修复的文章
 https://www.jianshu.com/p/704cac3eb13d
