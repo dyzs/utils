@@ -108,7 +108,6 @@ public class CallWorkService extends Service implements PhoneStateListener.State
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
-                Log.i(TAG, "handle message thread:" + Thread.currentThread().getName());
                 switch (msg.what) {
                     case START_CALL:
                         sendCKToken();
@@ -161,11 +160,11 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         @Override
         public void run() {
             /* main UI */
-            Log.i(TAG, "send call phone action");
             int state = 0;
             if (mTelephonyManager != null) {
                 state = mTelephonyManager.getCallState();
             }
+            Log.i(TAG, "send call phone action, state:" + state);
             if (state == 0) {
                 actionCall();
                 startTickTime();
@@ -197,8 +196,6 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         currCallTimes++;
         if (currCallTimes > mTotalCount) {
             stopCallTask();
-
-
             return;
         }
         tickTime = 0;

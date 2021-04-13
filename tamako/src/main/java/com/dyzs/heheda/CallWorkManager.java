@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -12,8 +13,10 @@ import android.os.SystemClock;
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.lang.ref.WeakReference;
 
@@ -36,7 +39,10 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     private static final int UPLOAD_TOKEN = 0x113;
     private String mCallPhone;
     private int mTotalCount = 0;
-    private int currCallTimes = 0;
+    private int mCurrCallTimes = 0;
+    private int mTickTime = 0;
+    private int mTotalTickTimes = 10;
+    private long mSendTokenDelayTime = 500;
 
     private WeakReference<Activity> mActivity;
     private ICallback iCallback;
@@ -88,19 +94,19 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
-                Log.i(TAG, "handle message thread:" + Thread.currentThread().getName());
                 switch (msg.what) {
                     case START_CALL:
                         sendCKToken();
-                        SystemClock.sleep(500);
+                        SystemClock.sleep(mSendTokenDelayTime);
                         callPhone();
                         break;
                     case END_CALL:
                         endCall();
                         break;
                     case TIME_TICK:
-                        tickTime++;
-                        if (tickTime > 10) {
+                        mTickTime++;
+                        Log.i(TAG, "tick time down:" + (10 - mTickTime));
+                        if (mTickTime >= mTotalTickTimes) {
                             mHandler.sendEmptyMessage(END_CALL);
                             return;
                         }
@@ -126,6 +132,7 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     private Runnable mSendCKToken = new Runnable() {
         @Override
         public void run() {
+            Toast.makeText(mActivity.get(), "发送token", Toast.LENGTH_SHORT).show();
             long timestamp = System.currentTimeMillis();
             Log.i(TAG, "token timestamp:" + TamakoUtils.getCurrentTime(timestamp));
             Intent intent = new Intent(ACTION_SEND_TOKEN);
@@ -161,6 +168,7 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     };
 
     private Runnable mHangUpRunnable = new Runnable() {
+        @RequiresApi(api = Build.VERSION_CODES.P)
         @SuppressLint("MissingPermission")
         @Override
         public void run() {
@@ -181,27 +189,26 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     }
 
     public void startCallTask() {
-        currCallTimes++;
-        if (currCallTimes > mTotalCount) {
+        mCurrCallTimes++;
+        if (mCurrCallTimes > mTotalCount) {
             stopCallTask();
             return;
         }
-        tickTime = 0;
+        mTickTime = 0;
         mHandler.removeMessages(TIME_TICK);
         mHandler.removeMessages(END_CALL);
-        mHandler.sendEmptyMessageDelayed(START_CALL, 1000);
+        mHandler.sendEmptyMessage(START_CALL);
     }
 
     public void stopCallTask() {
-        currCallTimes = 0;
+        mCurrCallTimes = 0;
         mHandler.removeMessages(TIME_TICK);
         mHandler.removeMessages(END_CALL);
         mHandler.removeMessages(START_CALL);
     }
 
-    int tickTime = 0;
     public void startTickTime() {
-        tickTime = 0;
+        mTickTime = 0;
         mHandler.sendEmptyMessage(TIME_TICK);
     }
 
@@ -219,8 +226,14 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     }
 
     public void resetParam(int callTimes, String callPhone) {
-        mTotalCount = callTimes;
-        mCallPhone = callPhone;
+        this.mTotalCount = callTimes;
+        this.mCallPhone = callPhone;
+    }
+
+    public void resetParam(int callTimes, String callPhone, int totalTickTime) {
+        this.mTotalCount = callTimes;
+        this.mCallPhone = callPhone;
+        this.mTotalTickTimes = totalTickTime;
     }
 
     public interface ICallback {
