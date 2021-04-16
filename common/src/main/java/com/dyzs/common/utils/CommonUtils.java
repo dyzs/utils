@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * ================================================
  * Created by dyzs on 2018/6/26.
@@ -34,5 +37,18 @@ public class CommonUtils {
             }
         }
         return false;
+    }
+
+    public static void createFileDir(File file) {
+        try {
+            if (file.getParentFile().exists()) {
+                file.createNewFile();
+            } else {
+                file.getParentFile().mkdirs();
+                createFileDir(file);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

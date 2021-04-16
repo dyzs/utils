@@ -27,3 +27,9 @@
 # git push origin 新分支名
 # 删除远程分支
 # git push origin :develop
+
+# 修改分支名称
+git branch -m main master
+git fetch origin
+git branch -u origin/master master
+git remote set-head origin -a
