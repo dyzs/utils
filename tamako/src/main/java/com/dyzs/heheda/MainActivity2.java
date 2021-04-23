@@ -1,33 +1,15 @@
 package com.dyzs.heheda;
 
-import android.Manifest;
-import android.app.Service;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.content.ContextCompat;
 
-import com.dyzs.heheda.calllog.CallRecord;
-import com.dyzs.heheda.calllog.PhoneManager;
-
-import java.io.DataOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
+import com.dyzs.heheda.manager.CallWorkManager;
 
 public class MainActivity2 extends AppCompatActivity implements CallWorkManager.ICallback {
     static final String TAG = "MainActivity";
@@ -58,6 +40,8 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
                 }
                 String phone = et_phone.getText().toString();
                 int count = Integer.parseInt(et_count.getText().toString());
+                callWorkManager.startRecordLog();
+                callWorkManager.resetCallStateListenImpl(true);
                 callWorkManager.resetParam(count, phone);
                 callWorkManager.startCallTask();
             }
@@ -75,6 +59,7 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
                     Toast.makeText(view.getContext(), "缺少手机号", Toast.LENGTH_LONG).show();
                     return;
                 }
+                callWorkManager.resetCallStateListenImpl(false);
                 callWorkManager.endCall();
                 callWorkManager.stopCallTask();
             }

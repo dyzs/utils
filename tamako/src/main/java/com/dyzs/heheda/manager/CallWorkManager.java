@@ -1,4 +1,4 @@
-package com.dyzs.heheda;
+package com.dyzs.heheda.manager;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -18,7 +18,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.dyzs.heheda.PhoneStateListener;
+import com.dyzs.heheda.TamakoUtils;
+import com.dyzs.heheda.ThreadPoolUtils;
+import com.dyzs.heheda.runnable.WriteLogRunnable;
+
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class CallWorkManager implements PhoneStateListener.StateImpl {
     private static final String TAG = "CallWorkManager";
@@ -36,7 +42,7 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     private static final int START_CALL = 0x110;
     private static final int END_CALL = 0x111;
     private static final int TIME_TICK = 0x112;
-    private static final int UPLOAD_TOKEN = 0x113;
+    private static final int SEND_TOKEN = 0x113;
     private String mCallPhone;
     private int mTotalCount = 0;
     private int mCurrCallTimes = 0;
@@ -70,11 +76,13 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     @Override
     public void onCallRinging(String phoneNumber) {
         Log.i(TAG, "电话响铃:" + TamakoUtils.getCurrentTime());
+        LogManager.getInstance().addLog(new LogManager.MyLog(null, "电话响铃:["+TamakoUtils.getCurrentTime()+"]"));
     }
 
     @Override
     public void onCallOffHook(String phoneNumber) {
         Log.i(TAG, "电话接通:" + TamakoUtils.getCurrentTime());
+        LogManager.getInstance().addLog(new LogManager.MyLog(null, "接通时间:["+TamakoUtils.getCurrentTime()+"]"));
     }
 
     @Override
@@ -97,7 +105,6 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
                 switch (msg.what) {
                     case START_CALL:
                         sendCKToken();
-                        SystemClock.sleep(mSendTokenDelayTime);
                         callPhone();
                         break;
                     case END_CALL:
@@ -105,7 +112,6 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
                         break;
                     case TIME_TICK:
                         mTickTime++;
-                        Log.i(TAG, "tick time down:" + (10 - mTickTime));
                         if (mTickTime >= mTotalTickTimes) {
                             mHandler.sendEmptyMessage(END_CALL);
                             return;
@@ -120,29 +126,23 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     public void sendCKToken() {
         mUIOperatorHandler.removeCallbacks(mSendCKToken);
         mUIOperatorHandler.post(mSendCKToken);
-        ThreadPoolUtils.enqueue(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "send token thread:" + Thread.currentThread().getName());
-                if (iCallback != null)iCallback.sendCKToken();
-            }
-        });
     }
 
     private Runnable mSendCKToken = new Runnable() {
         @Override
         public void run() {
-            Toast.makeText(mActivity.get(), "发送token", Toast.LENGTH_SHORT).show();
-            long timestamp = System.currentTimeMillis();
-            Log.i(TAG, "token timestamp:" + TamakoUtils.getCurrentTime(timestamp));
-            Intent intent = new Intent(ACTION_SEND_TOKEN);
-            intent.putExtra("timestamp", timestamp);
-            mActivity.get().sendBroadcast(intent);
+            if (iCallback != null)iCallback.sendCKToken();
         }
     };
 
+    private void writeLogBeforeCall() {
+        List<String> logList = LogManager.getInstance().getWriteListAndClearCache();
+        ThreadPoolUtils.getThreadPoolExecutorForWriteLog(100).execute(new WriteLogRunnable(logList, LogManager.getInstance().getLogName()));
+    }
+
     private void callPhone() {
         try {
+            writeLogBeforeCall();
             mUIOperatorHandler.removeCallbacks(mCallPhoneRunnable);
             mUIOperatorHandler.post(mCallPhoneRunnable);
         } catch (Exception e) {
@@ -161,6 +161,7 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
                 state = mTelephonyManager.getCallState();
             }
             if (state == 0) {
+                LogManager.getInstance().addLog(new LogManager.MyLog(null, "拨号时间:["+TamakoUtils.getCurrentTime()+"]"));
                 actionCall();
                 startTickTime();
             }
@@ -174,6 +175,7 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
         public void run() {
             try {
                 Log.i(TAG, "hang up time:" + TamakoUtils.getCurrentTime());
+                LogManager.getInstance().addLog(new LogManager.MyLog(null, "挂断时间:["+TamakoUtils.getCurrentTime()+"]"));
                 TelecomManager tm = (TelecomManager) mActivity.get().getSystemService(Activity.TELECOM_SERVICE);
                 tm.endCall();
             } catch (Exception e) {
@@ -182,6 +184,26 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
             }
         }
     };
+
+    public void startRecordLog() {
+        String logName = "SendUdp_" + TamakoUtils.getTimeForFileName();
+        LogManager.getInstance().preparedForStart(logName);
+        LogManager.getInstance().addLog(new LogManager.MyLog(null, "===================开始日志==================="));
+    }
+
+    public void endRecordLog() {
+        LogManager.getInstance().addLog(new LogManager.MyLog(null, "===================结束日志==================="));
+        List<String> logList = LogManager.getInstance().getWriteListAndClearCache();
+        ThreadPoolUtils.getThreadPoolExecutorForWriteLog(100).execute(new WriteLogRunnable(logList, LogManager.getInstance().getLogName()));
+    }
+
+    public void resetCallStateListenImpl(boolean reset) {
+        if (reset) {
+            myPhoneStateListener.setStateImpl(this);
+        } else {
+            myPhoneStateListener.setStateImpl(null);
+        }
+    }
 
     public void endCall() {
         mUIOperatorHandler.removeCallbacks(mHangUpRunnable);
@@ -195,16 +217,20 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
             return;
         }
         mTickTime = 0;
+        mHandler.removeMessages(SEND_TOKEN);
         mHandler.removeMessages(TIME_TICK);
         mHandler.removeMessages(END_CALL);
-        mHandler.sendEmptyMessage(START_CALL);
+        mHandler.removeMessages(START_CALL);
+        mHandler.sendEmptyMessage(SEND_TOKEN);
     }
 
     public void stopCallTask() {
         mCurrCallTimes = 0;
+        mHandler.removeMessages(SEND_TOKEN);
         mHandler.removeMessages(TIME_TICK);
         mHandler.removeMessages(END_CALL);
         mHandler.removeMessages(START_CALL);
+        endRecordLog();
     }
 
     public void startTickTime() {
