@@ -20,8 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.ContextCompat;
 
+import com.dyzs.heheda.calllog.CallRecord;
+import com.dyzs.heheda.calllog.PhoneManager;
+
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class MainActivity2 extends AppCompatActivity implements CallWorkManager.ICallback {
     static final String TAG = "MainActivity";
@@ -41,7 +47,7 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
         findViewById(R.id.tv_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean lacksPermissions = checkLacks();
+                boolean lacksPermissions = TamakoUtils.checkLacks(view.getContext());
                 if (lacksPermissions) {
                     Toast.makeText(view.getContext(), "权限缺失", Toast.LENGTH_LONG).show();
                     return;
@@ -60,7 +66,7 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
         findViewById(R.id.tv_end).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean lacksPermissions = checkLacks();
+                boolean lacksPermissions = TamakoUtils.checkLacks(view.getContext());
                 if (lacksPermissions) {
                     Toast.makeText(view.getContext(), "权限缺失", Toast.LENGTH_LONG).show();
                     return;
@@ -73,7 +79,7 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
                 callWorkManager.stopCallTask();
             }
         });
-        boolean lacksPermissions = checkLacks();
+        boolean lacksPermissions = TamakoUtils.checkLacks(this);
         if (lacksPermissions) {
             Toast.makeText(this, "权限缺失", Toast.LENGTH_LONG).show();
         }
@@ -87,24 +93,6 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    private boolean checkLacks() {
-        return lacksPermissions(this, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ANSWER_PHONE_CALLS, Manifest.permission.READ_PHONE_STATE);
-    }
-
-    public static boolean lacksPermissions(Context mContexts, String... permissions) {
-        for (String permission : permissions) {
-            if (lacksPermission(mContexts, permission)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean lacksPermission(Context mContexts, String permission) {
-        return ContextCompat.checkSelfPermission(mContexts, permission) ==
-                PackageManager.PERMISSION_DENIED;
     }
 
     @Override

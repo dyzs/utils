@@ -20,8 +20,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dyzs.heheda.calllog.CallRecord;
+import com.dyzs.heheda.calllog.PhoneManager;
+
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";
@@ -84,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         if (lacksPermissions) {
             Toast.makeText(this, "权限缺失", Toast.LENGTH_LONG).show();
         }
+        // writeCallLog();
     }
 
     private boolean allowUnBind = false;
@@ -141,6 +147,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+
+    private void writeCallLog() {
+        ThreadPoolUtils.enqueue(new Runnable() {
+            @Override
+            public void run() {
+                List<CallRecord> listCallRecord = PhoneManager.getCallRecords(MainActivity.this);
+                ArrayList<String> list = new ArrayList<>();
+                for (CallRecord record : listCallRecord) {
+                    list.add("Date:["+TamakoUtils.getCurrentTime(record.getDate())+"], Phone:["+record.getPhone()+"]");
+                }
+                TamakoUtils.writeLog(list, "call_log_04_23______");
+            }
+        });
+
     }
 
 }
