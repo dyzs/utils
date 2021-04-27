@@ -7,6 +7,7 @@ import java.util.Base64;
 
 public class External {
     public static void main(String[] args) {
+        if (true)return;
         try {
             String encryptStr = "P2FjEzj8MgEVpZ8hbZrWoBEs1J93lBJJ0la6OpkffY1AVWNAMkNJfb92zJ2mY10dR64dEHo0SNY2DOr2GxpvFT3c1vWU60EGyHvxm1ZHudXCv342o88ipID027m0U9wPgFb29eTeGUvUCeqeczPhGWL5JWAgwiHDsGA8RlNCp%2Fwq+910B+6isVn2n5fWcmVrz9gGDT6bqQoBeWvPf41a%2FHFhQVp+EyBhsuGq6za9I7kGO%2FtypYb6uRmf3Kn%2FS%2FA1XYXFA+btkVhnqyZSQXHHe3ubC4Ytf9aSdWm0Uas4fBaVsO4k53f6Wru531rSviPs2TK9t9Gqx9B9P8hVKbdp2mYFwhL4553FteHundJ+8bH%2Fv9FVUF0JuqX6z%2F5iUqtrJmSgeuLZzXNoOVvKKxBRtw%3D%3D";
 
