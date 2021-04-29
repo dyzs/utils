@@ -32,6 +32,11 @@ public class TamakoUtils {
         return format.format(new Date(time));
     }
 
+    public static String getCurrentTimeMillis(long time) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.CHINA);
+        return format.format(new Date(time));
+    }
+
     public static boolean checkLacks(Context context) {
         return lacksPermissions(context, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ANSWER_PHONE_CALLS, Manifest.permission.READ_PHONE_STATE);
     }

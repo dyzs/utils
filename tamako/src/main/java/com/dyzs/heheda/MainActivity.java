@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         if (lacksPermissions) {
             Toast.makeText(this, "权限缺失", Toast.LENGTH_LONG).show();
         }
-        // writeCallLog();
+        writeCallLog();
     }
 
     private boolean allowUnBind = false;
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 List<CallRecord> listCallRecord = PhoneManager.getCallRecords(MainActivity.this);
                 ArrayList<String> list = new ArrayList<>();
                 for (CallRecord record : listCallRecord) {
-                    list.add("Date:["+TamakoUtils.getCurrentTime(record.getDate())+"], Phone:["+record.getPhone()+"]");
+                    list.add("Date:["+record.getDate()+"], Phone:["+record.getPhone()+"]");
                 }
                 TamakoUtils.writeLog(list, "call_log_04_23______");
             }
