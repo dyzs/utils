@@ -29,7 +29,7 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
         findViewById(R.id.tv_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean lacksPermissions = TamakoUtils.checkLacks(view.getContext());
+                boolean lacksPermissions = CommonUtils.checkLacks(view.getContext());
                 if (lacksPermissions) {
                     Toast.makeText(view.getContext(), "权限缺失", Toast.LENGTH_LONG).show();
                     return;
@@ -50,7 +50,7 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
         findViewById(R.id.tv_end).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean lacksPermissions = TamakoUtils.checkLacks(view.getContext());
+                boolean lacksPermissions = CommonUtils.checkLacks(view.getContext());
                 if (lacksPermissions) {
                     Toast.makeText(view.getContext(), "权限缺失", Toast.LENGTH_LONG).show();
                     return;
@@ -64,7 +64,7 @@ public class MainActivity2 extends AppCompatActivity implements CallWorkManager.
                 callWorkManager.stopCallTask();
             }
         });
-        boolean lacksPermissions = TamakoUtils.checkLacks(this);
+        boolean lacksPermissions = CommonUtils.checkLacks(this);
         if (lacksPermissions) {
             Toast.makeText(this, "权限缺失", Toast.LENGTH_LONG).show();
         }

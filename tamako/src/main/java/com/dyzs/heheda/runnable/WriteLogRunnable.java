@@ -1,6 +1,6 @@
 package com.dyzs.heheda.runnable;
 
-import com.dyzs.heheda.TamakoUtils;
+import com.dyzs.heheda.CommonUtils;
 
 import java.util.List;
 
@@ -13,6 +13,6 @@ public class WriteLogRunnable implements Runnable {
     }
     @Override
     public void run() {
-        TamakoUtils.writeLog(list, logFileName);
+        CommonUtils.writeLog(list, logFileName);
     }
 }

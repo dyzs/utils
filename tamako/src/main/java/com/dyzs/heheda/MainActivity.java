@@ -3,15 +3,13 @@ package com.dyzs.heheda;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Service;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.tv_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean lacksPermissions = TamakoUtils.checkLacks(view.getContext());
+                boolean lacksPermissions = CommonUtils.checkLacks(view.getContext());
                 if (lacksPermissions) {
                     Toast.makeText(view.getContext(), "权限缺失", Toast.LENGTH_LONG).show();
                     return;
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.tv_end).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean lacksPermissions = TamakoUtils.checkLacks(view.getContext());
+                boolean lacksPermissions = CommonUtils.checkLacks(view.getContext());
                 if (lacksPermissions) {
                     Toast.makeText(view.getContext(), "权限缺失", Toast.LENGTH_LONG).show();
                     return;
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 // execShellCmd("input text '123456'");
             }
         });
-        boolean lacksPermissions = TamakoUtils.checkLacks(this);
+        boolean lacksPermissions = CommonUtils.checkLacks(this);
         if (lacksPermissions) {
             Toast.makeText(this, "权限缺失", Toast.LENGTH_LONG).show();
         }
@@ -151,6 +149,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void writeCallLog() {
+        acceptAnswerCall();
+
+        String[] str = new String[]{
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.READ_CALL_LOG,
+        };
+        if (CommonUtils.lacksPermissions(this, str)) {
+            return;
+        }
+
         ThreadPoolUtils.enqueue(new Runnable() {
             @Override
             public void run() {
@@ -159,10 +171,23 @@ public class MainActivity extends AppCompatActivity {
                 for (CallRecord record : listCallRecord) {
                     list.add("Date:["+record.getDate()+"], Phone:["+record.getPhone()+"]");
                 }
-                TamakoUtils.writeLog(list, "call_log_04_23______");
+                CommonUtils.writeLog(list, "call_log_04_23______");
             }
         });
+    }
 
+    private void acceptAnswerCall() {
+        String[] str = new String[]{
+                Manifest.permission.ANSWER_PHONE_CALLS,
+                Manifest.permission.MODIFY_PHONE_STATE,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                Manifest.permission.LOCATION_HARDWARE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        };
+        if (CommonUtils.lacksPermissions(this, str)) {
+            ActivityCompat.requestPermissions(this, str, 10086);
+        }
     }
 
 }

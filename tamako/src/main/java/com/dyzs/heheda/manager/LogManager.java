@@ -1,7 +1,7 @@
 package com.dyzs.heheda.manager;
 
 
-import com.dyzs.heheda.TamakoUtils;
+import com.dyzs.heheda.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class LogManager {
     }
 
     public void writeLog(List<String> list) {
-        TamakoUtils.writeLog(list, getLogName());
+        CommonUtils.writeLog(list, getLogName());
     }
 
     /**
@@ -81,7 +81,7 @@ public class LogManager {
         for (MyLog log : cacheLogList) {
             list.add(log.logMsg);
         }
-        TamakoUtils.writeLog(list, getLogName());
+        CommonUtils.writeLog(list, getLogName());
     }
 
     public String getNetStringLog() {

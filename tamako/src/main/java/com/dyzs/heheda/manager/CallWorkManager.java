@@ -9,17 +9,15 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.os.Process;
-import android.os.SystemClock;
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.dyzs.heheda.PhoneStateListener;
-import com.dyzs.heheda.TamakoUtils;
+import com.dyzs.heheda.CommonUtils;
 import com.dyzs.heheda.ThreadPoolUtils;
 import com.dyzs.heheda.runnable.WriteLogRunnable;
 
@@ -75,19 +73,19 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
 
     @Override
     public void onCallRinging(String phoneNumber) {
-        Log.i(TAG, "电话响铃:" + TamakoUtils.getCurrentTime());
-        LogManager.getInstance().addLog(new LogManager.MyLog(null, "电话响铃:["+TamakoUtils.getCurrentTime()+"]"));
+        Log.i(TAG, "电话响铃:" + CommonUtils.getCurrentTime());
+        LogManager.getInstance().addLog(new LogManager.MyLog(null, "电话响铃:["+ CommonUtils.getCurrentTime()+"]"));
     }
 
     @Override
     public void onCallOffHook(String phoneNumber) {
-        Log.i(TAG, "电话接通:" + TamakoUtils.getCurrentTime());
-        LogManager.getInstance().addLog(new LogManager.MyLog(null, "接通时间:["+TamakoUtils.getCurrentTime()+"]"));
+        Log.i(TAG, "电话接通:" + CommonUtils.getCurrentTime());
+        LogManager.getInstance().addLog(new LogManager.MyLog(null, "接通时间:["+ CommonUtils.getCurrentTime()+"]"));
     }
 
     @Override
     public void onCallIdle(String phoneNumber) {
-        Log.i(TAG, "电话空闲:" + TamakoUtils.getCurrentTime());
+        Log.i(TAG, "电话空闲:" + CommonUtils.getCurrentTime());
         startCallTask();
     }
 
@@ -161,7 +159,7 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
                 state = mTelephonyManager.getCallState();
             }
             if (state == 0) {
-                LogManager.getInstance().addLog(new LogManager.MyLog(null, "拨号时间:["+TamakoUtils.getCurrentTime()+"]"));
+                LogManager.getInstance().addLog(new LogManager.MyLog(null, "拨号时间:["+ CommonUtils.getCurrentTime()+"]"));
                 actionCall();
                 startTickTime();
             }
@@ -174,8 +172,8 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
         @Override
         public void run() {
             try {
-                Log.i(TAG, "hang up time:" + TamakoUtils.getCurrentTime());
-                LogManager.getInstance().addLog(new LogManager.MyLog(null, "挂断时间:["+TamakoUtils.getCurrentTime()+"]"));
+                Log.i(TAG, "hang up time:" + CommonUtils.getCurrentTime());
+                LogManager.getInstance().addLog(new LogManager.MyLog(null, "挂断时间:["+ CommonUtils.getCurrentTime()+"]"));
                 TelecomManager tm = (TelecomManager) mActivity.get().getSystemService(Activity.TELECOM_SERVICE);
                 tm.endCall();
             } catch (Exception e) {
@@ -186,7 +184,7 @@ public class CallWorkManager implements PhoneStateListener.StateImpl {
     };
 
     public void startRecordLog() {
-        String logName = "SendUdp_" + TamakoUtils.getTimeForFileName();
+        String logName = "SendUdp_" + CommonUtils.getTimeForFileName();
         LogManager.getInstance().preparedForStart(logName);
         LogManager.getInstance().addLog(new LogManager.MyLog(null, "===================开始日志==================="));
     }

@@ -2,7 +2,9 @@ package com.dyzs.heheda;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Environment;
 
 import androidx.core.content.ContextCompat;
@@ -16,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class TamakoUtils {
+public class CommonUtils {
     public static String getTimeForFileName() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
         return format.format(new Date(System.currentTimeMillis()));
@@ -53,6 +55,22 @@ public class TamakoUtils {
     private static boolean lacksPermission(Context mContexts, String permission) {
         return ContextCompat.checkSelfPermission(mContexts, permission) ==
                 PackageManager.PERMISSION_DENIED;
+    }
+
+    private static boolean checkMyPermission(Context context, String[] str) {
+        boolean lackPermission = lacksPermissions(context, str);
+        if (lackPermission) {
+            getAppDetailSettingIntent(context);
+        }
+        return lackPermission;
+    }
+
+    private static void getAppDetailSettingIntent(Context context) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+        localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        context.startActivity(localIntent);
     }
 
     private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/tokenLog/";

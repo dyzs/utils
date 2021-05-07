@@ -83,17 +83,17 @@ public class CallWorkService extends Service implements PhoneStateListener.State
 
     @Override
     public void onCallRinging(String phoneNumber) {
-        Log.i(TAG, "电话响铃:" + TamakoUtils.getCurrentTime());
+        Log.i(TAG, "电话响铃:" + CommonUtils.getCurrentTime());
     }
 
     @Override
     public void onCallOffHook(String phoneNumber) {
-        Log.i(TAG, "电话接通:" + TamakoUtils.getCurrentTime());
+        Log.i(TAG, "电话接通:" + CommonUtils.getCurrentTime());
     }
 
     @Override
     public void onCallIdle(String phoneNumber) {
-        Log.i(TAG, "电话空闲:" + TamakoUtils.getCurrentTime());
+        Log.i(TAG, "电话空闲:" + CommonUtils.getCurrentTime());
         startCallTask();
     }
 
@@ -139,7 +139,7 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         @Override
         public void run() {
             long timestamp = System.currentTimeMillis();
-            Log.i(TAG, "token timestamp:" + TamakoUtils.getCurrentTime(timestamp));
+            Log.i(TAG, "token timestamp:" + CommonUtils.getCurrentTime(timestamp));
             Intent intent = new Intent(ACTION_SEND_TOKEN);
             intent.putExtra("timestamp", timestamp);
             sendBroadcast(intent);
@@ -177,7 +177,7 @@ public class CallWorkService extends Service implements PhoneStateListener.State
         @Override
         public void run() {
             try {
-                Log.i(TAG, "hang up time:" + TamakoUtils.getCurrentTime());
+                Log.i(TAG, "hang up time:" + CommonUtils.getCurrentTime());
                 TelecomManager tm = (TelecomManager) getApplication().getSystemService(Activity.TELECOM_SERVICE);
                 tm.endCall();
             } catch (Exception e) {
