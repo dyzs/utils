@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fingerprint_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/fingerprint_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textSize="18sp"
+        android:text="请确认指纹" />
+
+
+    <ImageView
+        android:id="@+id/fingerprint_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fingerprint_description"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/icon_symbol_add"/>
+
+    <TextView
+        android:id="@+id/fingerprint_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/fingerprint_icon"
+        android:layout_alignTop="@+id/fingerprint_icon"
+        android:gravity="center_vertical"
+        android:text="请进行指纹验证"
+        android:textColor="@color/gay_purple"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/fingerprint_icon" />
+
+</RelativeLayout>

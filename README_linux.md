@@ -10,4 +10,5 @@
 # kill -9 xxx 结束进程
 # rz -be  xFtp文件传输命令
 # sz -b  xFtp文件导出命令
-
+# nohup ... & 后台运行程序
+## nohup java -jar xxx.jar &
