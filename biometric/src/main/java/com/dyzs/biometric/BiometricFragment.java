@@ -367,15 +367,14 @@ public class BiometricFragment extends Fragment {
         // Use a fake crypto object to force Strong biometric auth prior to Android 11 (API 30).
         @BiometricManager.AuthenticatorTypes final int authenticators =
                 AuthenticatorUtils.getConsolidatedAuthenticators(info, crypto);
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && Build.VERSION.SDK_INT < Build.VERSION_CODES.R
                 && authenticators == Authenticators.BIOMETRIC_STRONG
                 && crypto == null) {
             mViewModel.setCryptoObject(CryptoObjectUtils.createFakeCryptoObject());
         } else {
             mViewModel.setCryptoObject(crypto);
-        }*/
-        mViewModel.setCryptoObject(CryptoObjectUtils.createFakeCryptoObject());
+        }
         if (isManagingDeviceCredentialButton()) {
             mViewModel.setNegativeButtonTextOverride(
                     getString(R.string.confirm_device_credential_password));
@@ -417,11 +416,11 @@ public class BiometricFragment extends Fragment {
 
             mViewModel.setPromptShowing(true);
             mViewModel.setAwaitingResult(true);
-            showFingerprintDialogForAuthentication();
-            /*if (isUsingFingerprintDialog()) {
+            if (isUsingFingerprintDialog()) {
+                showFingerprintDialogForAuthentication();
             } else {
                 showBiometricPromptForAuthentication();
-            }*/
+            }
         }
     }
 
