@@ -1,14 +1,12 @@
-package com.dyzs.heheda.calllog;
+package com.dyzs.calllogwirter;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
-import androidx.annotation.Nullable;
-
-import com.dyzs.heheda.CommonUtils;
 
 
 public class CallRecord implements Comparable<CallRecord>{
     public String ring_times;
+
     private long id;
     private String name;
     private String phone;
@@ -214,6 +212,18 @@ public class CallRecord implements Comparable<CallRecord>{
                 ", reportId='" + reportId + '\'' +
                 ", simpleDate='" + simpleDate + '\'' +
                 ", blackList=" + blackList +
+                ", ring_times=" + ring_times +
+                '}';
+    }
+
+
+    public String toStringV2() {
+        return "{" +
+                "dateStr='" + CommonUtils.getTimeYMDHMS(date) + '\'' +
+                ", phone='" + phone + '\'' +
+                ", date=" + date +
+                ", duration=" + duration +
+                ", type=" + type +
                 ", ring_times=" + ring_times +
                 '}';
     }

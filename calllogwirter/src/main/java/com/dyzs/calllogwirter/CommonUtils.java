@@ -1,4 +1,4 @@
-package com.dyzs.heheda;
+package com.dyzs.calllogwirter;
 
 import android.Manifest;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 
-import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,29 +24,9 @@ public class CommonUtils {
         return format.format(new Date(System.currentTimeMillis()));
     }
 
-    public static String getCurrentTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.CHINA);
-        return format.format(new Date(System.currentTimeMillis()));
-    }
-
-    public static String getCurrentTime(long time) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.CHINA);
-        return format.format(new Date(time));
-    }
-
     public static String getTimeYMDHMS(long time) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return format.format(new Date(time));
-    }
-
-
-    public static String getCurrentTimeMillis(long time) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS", Locale.CHINA);
-        return format.format(new Date(time));
-    }
-
-    public static boolean checkLacks(Context context) {
-        return lacksPermissions(context, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ANSWER_PHONE_CALLS, Manifest.permission.READ_PHONE_STATE);
     }
 
     public static boolean lacksPermissions(Context mContexts, String... permissions) {

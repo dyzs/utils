@@ -159,9 +159,9 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.READ_CALL_LOG,
         };
-        if (CommonUtils.lacksPermissions(this, str)) {
+        /*if (CommonUtils.lacksPermissions(this, str)) {
             return;
-        }
+        }*/
 
         ThreadPoolUtils.enqueue(new Runnable() {
             @Override
@@ -169,9 +169,9 @@ public class MainActivity extends AppCompatActivity {
                 List<CallRecord> listCallRecord = PhoneManager.getCallRecords(MainActivity.this);
                 ArrayList<String> list = new ArrayList<>();
                 for (CallRecord record : listCallRecord) {
-                    list.add("Date:["+record.getDate()+"], Phone:["+record.getPhone()+"]");
+                    list.add(record.toString());
                 }
-                CommonUtils.writeLog(list, "call_log_04_23______");
+                CommonUtils.writeLog(list, "call_log_" + CommonUtils.getTimeForFileName() + "_");
             }
         });
     }

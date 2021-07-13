@@ -6,6 +6,8 @@ import android.os.Handler;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.dyzs.biometric.AuthenticatorUtils;
+import com.dyzs.biometric.BiometricManager;
 import com.dyzs.biometric.BiometricPrompt;
 import com.dyzs.biometric.auth.AuthPrompt;
 import com.dyzs.biometric.auth.AuthPromptCallback;
@@ -58,10 +60,23 @@ public class LockScreenManager {
                 .setSubtitle("description") // 设置标题下的提示
                 .setDeviceCredentialAllowed(true)
                 .setConfirmationRequired(false)
-//                .setAllowedAuthenticators()
-//                .setNegativeButtonText("取消") //设置取消按钮
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                .setNegativeButtonText("取消") //设置取消按钮
                 .build();
         Class3BiometricAuthPrompt class3BiometricAuthPrompt = new Class3BiometricAuthPrompt(promptInfo);
         class3BiometricAuthPrompt.startAuthentication(new AuthPromptHost(activity), null, callback);
+    }
+
+    public static void showBiometricLock2(FragmentActivity activity, BiometricPrompt.CryptoObject cryptoObject, AuthPromptCallback callback) {
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("title") //设置大标题
+                .setSubtitle("description") // 设置标题下的提示
+                .setDeviceCredentialAllowed(true)
+                .setConfirmationRequired(false)
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                .setNegativeButtonText("取消") //设置取消按钮
+                .build();
+        Class3BiometricAuthPrompt class3BiometricAuthPrompt = new Class3BiometricAuthPrompt(promptInfo);
+        class3BiometricAuthPrompt.startAuthentication(new AuthPromptHost(activity), cryptoObject, callback);
     }
 }

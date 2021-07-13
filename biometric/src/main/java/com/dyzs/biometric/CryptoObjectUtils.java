@@ -48,7 +48,7 @@ import javax.crypto.SecretKey;
  * Utility class for creating and converting between different types of crypto objects that may be
  * used internally by {@link BiometricPrompt} and {@link BiometricManager}.
  */
-class CryptoObjectUtils {
+public class CryptoObjectUtils {
     private static final String TAG = "CryptoObjectUtils";
 
     /**
@@ -239,7 +239,7 @@ class CryptoObjectUtils {
     @SuppressLint("TrulyRandom")
     @RequiresApi(Build.VERSION_CODES.M)
     @Nullable
-    static BiometricPrompt.CryptoObject createFakeCryptoObject() {
+    public static BiometricPrompt.CryptoObject createFakeCryptoObject() {
         try {
             final KeyStore keystore = KeyStore.getInstance(KEYSTORE_INSTANCE);
             keystore.load(null);

@@ -1,4 +1,4 @@
-package com.dyzs.heheda.calllog;
+package com.dyzs.calllogwirter;
 
 import android.Manifest;
 import android.content.Context;
@@ -6,16 +6,54 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.provider.CallLog;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PhoneManager {
 
+    public static String getSysColumns(Context context) {
+        Cursor temp = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, CallLog.Calls.DEFAULT_SORT_ORDER);
+        String[] names = temp.getColumnNames();
+        List<String> listNames = Arrays.asList(names);
+        Log.i("PhoneManager", listNames.toString());
+        String ringTimes = "ring_times";
+        for (int i = 0; i < listNames.size(); i++) {
+            String s = listNames.get(i);
+            if (s.contains("ring")) {
+                ringTimes = s;
+                break;
+            }
+        }
+        Log.i("PhoneManager", ringTimes);
+        while (temp.moveToNext()) {
+            long id = 0;
+        }
+        temp.close();
+        return listNames.toString() + "====" + ringTimes;
+    }
 
-    public static List<CallRecord> getCallRecords(Context context) {
+    public static List<CallRecord> getCallRecords(Context context) throws Exception {
+        Cursor temp = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, CallLog.Calls.DEFAULT_SORT_ORDER);
+        String[] names = temp.getColumnNames();
+        List<String> listNames = Arrays.asList(names);
+        Log.i("PhoneManager", listNames.toString());
+        String ringTimes = "ring_times";
+        for (int i = 0; i < listNames.size(); i++) {
+            String s = listNames.get(i);
+            if (s.contains("ring")) {
+                ringTimes = s;
+                break;
+            }
+        }
+        Log.i("PhoneManager", ringTimes);
+        temp.close();
+
         String[] columns;
         if (Build.VERSION.SDK_INT > 23) {
             columns = new String[]{
@@ -28,7 +66,7 @@ public class PhoneManager {
                     , CallLog.Calls.GEOCODED_LOCATION// 归属地}
                     , CallLog.Calls.LAST_MODIFIED
                     , CallLog.Calls.PHONE_ACCOUNT_ID
-                    , "ring_times"};
+                    , ringTimes};
         } else {
             columns = new String[]{
                     CallLog.Calls._ID
@@ -38,8 +76,8 @@ public class PhoneManager {
                     , CallLog.Calls.DURATION// 通话时长
                     , CallLog.Calls.TYPE//类型
                     , CallLog.Calls.GEOCODED_LOCATION// 归属地}
-                    , CallLog.Calls.PHONE_ACCOUNT_ID,
-                    "ring_times"};
+                    , CallLog.Calls.PHONE_ACCOUNT_ID
+                    , ringTimes};
         }
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
             List<CallRecord> tempList = new ArrayList<>();
@@ -56,9 +94,9 @@ public class PhoneManager {
                 String location = "";
                 long lastModify = Build.VERSION.SDK_INT > 23 ? cursor.getLong(cursor.getColumnIndex(CallLog.Calls.LAST_MODIFIED)) : 0;
                 String subId = cursor.getString(cursor.getColumnIndex(CallLog.Calls.PHONE_ACCOUNT_ID));
-                String ringTimes = cursor.getString(cursor.getColumnIndex("ring_times"));
+                String rt = cursor.getString(cursor.getColumnIndex(ringTimes));
                 CallRecord record = new CallRecord(id, name, number, date, duration, location, type, lastModify, subId);
-                record.ring_times = ringTimes;
+                record.ring_times = rt;
                 tempList.add(record);
             }
             return tempList;

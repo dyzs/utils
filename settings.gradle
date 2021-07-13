@@ -1,3 +1,4 @@
+include ':calllogwirter'
 include ':biometrictestapp'
 include ':biometric'
 include ':app', ':common', ':base', ':review', ':hardcodefinder'

@@ -26,7 +26,7 @@ import com.dyzs.biometric.BiometricManager.Authenticators;
 /**
  * Utilities related to {@link Authenticators} constants.
  */
-class AuthenticatorUtils {
+public class AuthenticatorUtils {
     /**
      * A bitmask for the portion of an {@link BiometricManager.AuthenticatorTypes} value related to
      * biometric sensor class.
@@ -72,7 +72,7 @@ class AuthenticatorUtils {
      */
     @SuppressWarnings("deprecation")
     @BiometricManager.AuthenticatorTypes
-    static int getConsolidatedAuthenticators(
+    public static int getConsolidatedAuthenticators(
             @NonNull BiometricPrompt.PromptInfo info,
             @Nullable BiometricPrompt.CryptoObject crypto) {
 

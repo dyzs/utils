@@ -375,6 +375,7 @@ public class BiometricFragment extends Fragment {
         } else {
             mViewModel.setCryptoObject(crypto);
         }
+        // mViewModel.setCryptoObject(CryptoObjectUtils.createFakeCryptoObject());
         if (isManagingDeviceCredentialButton()) {
             mViewModel.setNegativeButtonTextOverride(
                     getString(R.string.confirm_device_credential_password));
